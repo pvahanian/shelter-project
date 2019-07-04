@@ -10,6 +10,16 @@
 | Backend   | Node.js |
 | Database  | ...     |
 
+----------------
+
+## Install
+
+After installing npm (Node Package Manager) or a virtual environment system like npx, this repo's requirements are downloaded with
+
+### `npm install`
+
+-----------------
+
 ## Available Scripts
 In the project directory, you can run:
 

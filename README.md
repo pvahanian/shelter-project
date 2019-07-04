@@ -1,6 +1,15 @@
 # Shelter Project
 *This project was bootstrapped with [Create React App].*
 
+## Tech Stack
+*An intial stab at what our tech stack will look like.*
+
+| Component | Tech    |
+|-----------|---------|
+| Frontend  | React   |
+| Backend   | Node.js |
+| Database  | ...     |
+
 ## Available Scripts
 In the project directory, you can run:
 

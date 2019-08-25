@@ -1,10 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
+//import { Link } from 'react-router';
+import Shelter from './components/shelter_info.js';
 
 function App() {
   return (
-    <div className="App">
+      <div className="shelters">
+        <Shelter
+            Name={"Example Shelter "}
+            Address={"Green Eggs and Ham Avenue, Portland, OR 97660"}
+            Website={"google.com"}
+            Resources={["Housing", "Clothing", "Medical Services"]}
+            Contact={"(503)-123-4567"}
+        />
+
+      </div>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+
+/*
+<div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -18,9 +42,9 @@ function App() {
         >
           Learn React
         </a>
+        <Link to="../pages/shelters.js">Shelters</Link>
       </header>
     </div>
-  );
-}
 
-export default App;
+
+ */

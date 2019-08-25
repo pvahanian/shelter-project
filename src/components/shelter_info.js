@@ -18,12 +18,12 @@ const Shelter = ({Name, Address, Website, Resources, Contact}) => (
 
 
 //Returns a list of the props
-function ResourceList(Resources) {
- //   const resources = props.resources;
-    console.log(Resources);
-    if(!Resources) return [];
-    const listItems = Resources.map((Resource) =>
-        <li>{Resource}</li>
+function ResourceList(props) {
+    const resources = props.Resources;
+    console.log(resources);
+    if(!resources) return [];
+    const listItems = resources.map((resource) =>
+        <li>{resource}</li>
     );
    return (
         <ul>{listItems}</ul>

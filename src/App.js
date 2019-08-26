@@ -15,6 +15,29 @@ function App() {
             Contact={"(503)-123-4567"}
         />
 
+          <Shelter
+          Name={"Example Shelter "}
+          Address={"Green Eggs and Ham Avenue, Portland, OR 97660"}
+          Website={"google.com"}
+          Resources={["Housing", "Clothing", "Medical Services"]}
+          Contact={"(503)-123-4567"}
+        />
+
+          <Shelter
+          Name={"Example Shelter "}
+          Address={"Green Eggs and Ham Avenue, Portland, OR 97660"}
+          Website={"google.com"}
+          Resources={["Housing", "Clothing", "Medical Services"]}
+          Contact={"(503)-123-4567"}
+      />
+
+       <Shelter
+          Name={"Example Shelter "}
+          Address={"Green Eggs and Ham Avenue, Portland, OR 97660"}
+          Website={"google.com"}
+          Resources={["Housing", "Clothing", "Medical Services"]}
+          Contact={"(503)-123-4567"}
+        />
       </div>
   );
 }

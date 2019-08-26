@@ -1,0 +1,28 @@
+body{
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.shelterCard {
+    margin: 0 auto;
+    border: 1px solid grey;
+
+    ul{
+            padding: 0 0 0 0; //remove's default padding a list gets
+        li{
+            list-style-type: none;//Removes the bullets 
+            display: inline; //Puts them all on the same line
+            padding-right: 10px;
+        }
+    }
+
+    .shelterName {
+        border: 1px solid grey;
+    }
+
+    .resourceList {
+        
+    }
+}
+
+
+

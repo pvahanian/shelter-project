@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
+//import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Footer from './Footer.js';
+import Footer from './components/Footer.js';
 
 ReactDOM.render(</*App*/Footer />, document.getElementById('root'));
 

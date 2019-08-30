@@ -9,11 +9,17 @@ const listOfLinks = (
   </ul>
 );
 
+const plainInfo = (
+  <div>
+    Organization, Address, Phone#
+  </div>
+);
+
 class Footer extends React.Component {
   render() {
     return(
       <footer>
-        Sneaky lil' Footer
+        {plainInfo}
         {listOfLinks}
       </footer>
     );

@@ -1,7 +1,7 @@
 /*format for the footer itself*/
 footer {
-  color: red;
-  background-color: #f1f1f1;
+  color: darkgray;
+  background-color: lightgray;
   text-align: center;
   padding: 10px;
   position: fixed;
@@ -11,3 +11,9 @@ footer {
 }
 
 /*TO-DO 3-column formatting*/
+
+a {
+  color: lightseagreen;
+  text-align: center;
+  padding: 15px;
+}

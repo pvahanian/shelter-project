@@ -1,6 +1,6 @@
 import React from 'react';
 import './Footer.css';
-//import ReactDOM from 'react-dom';
+
 const listOfLinks = (
   <ul>
     <a href="https://en.wikipedia.org/wiki/Parrot">Services(parrot)</a>
@@ -26,5 +26,4 @@ class Footer extends React.Component {
   }
 };
 
-//ReactDOM.render(<Footer />, document.getElementById('app'));
 export default Footer;

@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import NavBlock from './NavigationBlock.js';
 
 const listOfLinks = (
   <ul>
@@ -18,10 +19,13 @@ const plainInfo = (
 class Footer extends React.Component {
   render() {
     return(
-      <footer>
-        {plainInfo}
-        {listOfLinks}
-      </footer>
+      <div>
+        <footer>
+          <NavBlock />
+          {plainInfo}
+          {listOfLinks}
+        </footer>
+      </div>
     );
   }
 };

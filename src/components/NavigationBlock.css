@@ -1,0 +1,37 @@
+.nav-block a {
+  color: orange;
+  font-size: 14px;
+  padding: 2px;
+  display: list-item;
+}
+
+.nav-block h4 {
+  color: black;
+}
+
+[class*="link-col-"] {
+  float: left;
+  height: 100px;
+  width: 8.33%;
+  display: block;
+  box-sizing: border-box;
+}
+
+
+.nav-block {
+  background-color: darkgray;
+  float: left;
+  height: 240px;
+  width: 250px;
+  display: block;
+}
+
+
+/*
+.link-col-1 {
+
+}
+.link-col-2 {
+  width: 
+}
+*/

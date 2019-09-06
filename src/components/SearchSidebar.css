@@ -1,12 +1,24 @@
 
 #search-sidebar {
   /* Debug */
-  background-color: rgba(0,0,255,0.3);
+  background-color: rgba(255, 0, 135, 0.3);
 
   /* Full height and 300px wide */
   height: 100%;
   width: 300px;
 
+  /* Font style */
+  font-family: Arial;
+  font-size: 24px;
+
+  /* Allow columnar flex positioning for children */
+  display: flex;
+  flex-direction: column;
+
   /* Pull out of the page flow */
   float: left;
+}
+
+.search-sidebar-field {
+  margin-top: 10px;
 }

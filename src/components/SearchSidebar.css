@@ -1,0 +1,12 @@
+
+#search-sidebar {
+  /* Debug */
+  background-color: rgba(0,0,255,0.3);
+
+  /* Full height and 300px wide */
+  height: 100%;
+  width: 300px;
+
+  /* Pull out of the page flow */
+  float: left;
+}

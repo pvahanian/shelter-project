@@ -1,0 +1,174 @@
+
+/*************************/
+/* Dropdown List Trigger */
+/*************************/
+
+/* The dropdown list trigger is the element you click to open the list */
+
+.dropdown-list-trigger {
+  /* Let components appear in order  TODO: Make clearer */
+  display: inline-block;
+
+  /* Change cursor for obvious interactability */
+  cursor: pointer;
+
+  /* User cannot drag select the text on any browser */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  /* Set background and font color */
+  background: white;
+  color: black;
+
+  /* Round borders */
+  border: 1px solid #868686;
+  border-radius: 6px;
+
+  /* Create space between text and container */
+  padding: 0.88889rem 1.77778rem 0.94444rem 1.77778rem;
+
+  /* Animate background color changes */
+  transition: background-color 300ms ease-out;
+}
+
+.dropdown-list-trigger-text {
+  /* Appear below the image*/
+  display: inline-block;
+
+  /* Size and style */
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.dropdown-list-trigger-subtitle {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.dropdown-list-trigger:hover,
+.dropdown-list-trigger:focus {
+  /* Blue the background on hover */
+  background: #C9F1FF;
+}
+
+.dropdown-list-trigger::after {
+  /* Create down arrow using CSS borders */
+  /* Link to explanation of magic: https://css-tricks.com/snippets/css/css-triangle/ */
+  content: "";
+  display: inline-block;
+  margin-left: 20px;
+  position: relative;
+  top: 3px;
+  border-color: currentColor transparent transparent;
+  border-width: 5px 5px;
+  border-style: solid;
+}
+
+
+
+/*****************/
+/* Dropdown List */
+/*****************/
+
+/* The dropdown list is the element which contains all dropdown options */
+
+.dropdown-list {
+  /* Don't move other elements when the list appears*/
+  position: absolute;
+
+  /* Size and style */
+  background: #fff;
+  border: 1px solid #ccc;
+  margin: 2px 0 0 0;
+  max-width: 800px;
+}
+
+.dropdown-list::before {
+  /* Create up arrow using CSS borders */
+  /* Link to explanation of magic: https://css-tricks.com/snippets/css/css-triangle/ */
+  border: inset 6px;
+  content: "";
+  display: block;
+  height: 0;
+  width: 0;
+  border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #FFF rgba(0, 0, 0, 0);
+  border-bottom-style: solid;
+  position: absolute;
+  top: -12px;
+  left: 10px;
+  z-index: 89;
+}
+
+
+
+/************************/
+/* Dropdown List Option */
+/************************/
+
+/* A dropdown list option is one element which may be selected from the dropdown list */
+
+/* TODO: Unsure */
+.dropdown-list-option {
+  position: relative;
+  display: inline-block;
+
+  /* Size and styling */
+  color: #555;
+  padding: 0.5rem;
+
+  /* Change cursor for obvious interactability */
+  cursor: pointer;
+}
+
+.dropdown-list-option:hover,
+.dropdown-list-option:focus {
+  /* Darken color on hover */
+  background: #EEE;
+}
+
+.dropdown-list-option.is-selected {
+  /*  */
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dropdown-list-option::after {
+  /* Pseudo-element which sizes clickable zones dynamically to size of floated SVG */
+  /* Link: https://css-tricks.com/snippets/css/clear-fix/ */
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.dropdown-list-option-svg {
+  /* Keep left in flow*/
+  float: left;
+
+  /* Size and style */
+  width: 50px;
+  margin-top: 2px;
+}
+
+.dropdown-list-option-text {
+  /* Size and style*/
+  display: block;
+  float: left;
+  margin: 0 5px;
+}
+
+.dropdown-list-option-keyword {
+  /* Appear below the dropdown-list-option-text line */
+  display: block;
+
+  /* Size and style */
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 0 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  /* Capitalize words from their variable values */
+  text-transform: capitalize;
+}

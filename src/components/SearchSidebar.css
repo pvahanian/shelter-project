@@ -1,8 +1,5 @@
 
 #search-sidebar {
-  /* Debug */
-  background-color: rgba(255, 0, 135, 0.3);
-
   /* Full height and 300px wide */
   height: 100%;
   width: 300px;
@@ -16,9 +13,16 @@
   flex-direction: column;
 
   /* Pull out of the page flow */
+  /* TODO: Replace with three column site layout */
   float: left;
 }
 
-.search-sidebar-field {
-  margin-top: 10px;
+.search-sidebar-category {
+  /* Space out the categories */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.search-sidebar-category-label {
+
 }

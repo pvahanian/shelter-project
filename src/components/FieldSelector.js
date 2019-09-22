@@ -21,9 +21,10 @@ class FieldSelector extends React.Component {
             </div>
             <div className={"Services"}>
             </div>
-            <Footer> </Footer>
         </div>
 
         );
     }
 }
+
+export default FieldSelector;

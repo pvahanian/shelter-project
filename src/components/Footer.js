@@ -21,7 +21,6 @@ class Footer extends React.Component {
     return(
       <div>
         <footer>
-          <NavBlock />
           {plainInfo}
           {listOfLinks}
         </footer>

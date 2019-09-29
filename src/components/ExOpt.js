@@ -5,18 +5,22 @@ pressed).
 */
 
 import React from 'react';
+import './ExOpt.css';
 
-class Square extends React.Component {
+// Child component of Group used to structure and handle option buttons.
+class ExButton extends React.Component {
+/*
   constructor(props) {
     super(props);
   }
+*/
  
   render() {
     return (
       <button 
-        className={this.props.selected ? 'pick':'not'}
+        className={this.props.selected ? 'pick':'not'}  // changes CSS and appearance when an option is selected/deselected
         onClick={
-          e => {this.props.onClick(e, this.props.name)}
+          e => {this.props.onClick(e, this.props.name)} // changes the name of the pick in ExGroup's state.
         }
       >
         {this.props.name}
@@ -25,17 +29,24 @@ class Square extends React.Component {
   }
 }
 
-Square.defaultProps = {selected: false};
+// default properties for buttons in a group
+// by default no options are selected.
+ExButton.defaultProps = {selected: false};
 
-class Group extends React.Component {
+// Primary component, tracks information about selections
+// and makes the 
+class ExGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {pick: ''};
     this.handleClick = this.handleClick.bind(this);
   }
-  
+
+  // event handler passed down to ExButton so that ExGroup state can be changed
+  // thought keeping track of the currently selected option would be useful
+  // for database queries later.
   handleClick(event, name) {
-    this.setState({pick: name})
+    this.setState({pick: name}) // becuase we are calling setState, the ExGroup re-renders after this function runs in an ExButton.
   }
 
   render() {
@@ -43,11 +54,11 @@ class Group extends React.Component {
       <div> 
         {
         this.props.items.map((item, i) => 
-          <Square 
-            selected={item===this.state.pick}
+          <ExButton 
+            selected={item===this.state.pick} //indicates if the button is selected or not
             key={i} 
             name={item}
-            onClick={this.handleClick}
+            onClick={this.handleClick} //passing handleClick down to ExButton.
             />)
         }
       </div>
@@ -55,4 +66,6 @@ class Group extends React.Component {
   }
 }
 
-const names = ['Bob', 'Joe', 'Dave'];
+//const names = ['Bob', 'Joe', 'Dave']; //input array used for early testing.
+
+export default ExGroup;

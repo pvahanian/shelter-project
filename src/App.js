@@ -5,6 +5,7 @@ import FieldSelector from "./components/FieldSelector";
 import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ExGroup from "./components/ExOpt";
 
 
 const navbar = {};
@@ -19,6 +20,8 @@ navbar.links = [
   ]}
 ];
 
+const exampleOptions = ['One 1', 'Two 2', 'Three 3'];
+
 
 function App() {
   return (
@@ -26,6 +29,7 @@ function App() {
       <NavBar {...navbar} />
       <NavBlock />
       <FieldSelector />
+      <ExGroup items={exampleOptions} /> 
       <Footer />
     </div>
   );

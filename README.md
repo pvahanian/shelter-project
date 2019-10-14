@@ -20,6 +20,12 @@ After installing npm (Node Package Manager) or a virtual environment system like
 
 -----------------
 
+## Set Environment Variables
+
+We currently only use one environment variable: `REACT_APP_211_API_KEY`
+Set this to the proper value with `export REACT_APP_211_API_KEY=value`
+
+
 ## Available Scripts
 In the project directory, you can run:
 

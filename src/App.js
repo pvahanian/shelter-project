@@ -40,7 +40,7 @@ class App extends React.Component {
 
   async componentDidMount() {
     await this.timeConsuming()
-    this.getSessionID()
+    await this.getSessionID()
     this.getCategories()
   }
 
@@ -53,8 +53,8 @@ class App extends React.Component {
     );
   }
 
-  getSessionID() {
-    fetch(
+  async getSessionID() {
+    await fetch(
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${APIKey}"}`
     )
     .then(response => response.json())
@@ -63,12 +63,13 @@ class App extends React.Component {
     })
   }
 
-  getCategories() {
+  async getCategories() {
     fetch(
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip={sid: "${this.state.sessionID}", apikey: "${APIKey}"}`
     )
     .then(response => response.json())
     .then((data) => {
+      console.log(data)
       this.setState({categories: data})
     })
   }

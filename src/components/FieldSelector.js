@@ -1,11 +1,12 @@
 import React from 'react';
 import ExGroup from "./ExOpt.js";
+import '../Assets/FieldSelector.scss';
 
 class FieldSelector extends React.Component {
     render() {
         return(
-        <div className={"FieldSelector"}>
-            <ExGroup items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
+        <div className={"field-selector"}>
+            <ExGroup default='Male' items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
             <div className={"AgeSelector"}>
                 <input type={"number"} value={"2"}/>
             </div>

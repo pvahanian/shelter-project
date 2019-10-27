@@ -1,4 +1,4 @@
-/* 
+/*
 A component meant to allow the user to select only one specific option
 from a row of options (should de-select any other active option when
 pressed).
@@ -14,10 +14,10 @@ class ExButton extends React.Component {
     super(props);
   }
 */
- 
+
   render() {
     return (
-      <button 
+      <button
         className={this.props.selected ? 'pick':'not'}  // changes CSS and appearance when an option is selected/deselected
         onClick={
           e => {this.props.onClick(e, this.props.name)} // changes the name of the pick in ExGroup's state.
@@ -34,11 +34,11 @@ class ExButton extends React.Component {
 ExButton.defaultProps = {selected: false};
 
 // Primary component, tracks information about selections
-// and makes the 
+// and makes the
 class ExGroup extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {pick: ''};
+    this.state = {pick: this.props.default};
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -51,12 +51,12 @@ class ExGroup extends React.Component {
 
   render() {
     return (
-      <div> 
+      <div>
         {
-        this.props.items.map((item, i) => 
-          <ExButton 
+        this.props.items.map((item, i) =>
+          <ExButton
             selected={item===this.state.pick} //indicates if the button is selected or not
-            key={i} 
+            key={i}
             name={item}
             onClick={this.handleClick} //passing handleClick down to ExButton.
             />)

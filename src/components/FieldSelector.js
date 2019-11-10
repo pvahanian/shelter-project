@@ -5,7 +5,7 @@ class FieldSelector extends React.Component {
     render() {
         return(
         <div className={"field-selector"}>
-            <ExclusiveOption default='Male' items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
+            <ExclusiveOption items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
             <div className={"AgeSelector"}>
                 <input type={"number"} value={"2"}/>
             </div>

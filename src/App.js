@@ -7,7 +7,7 @@ import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ExGroup from "./components/ExOpt";
 import SearchResultList from "./components/SearchResultList/SearchResultList";
-
+import APIWrapper from "./APIWrapper.js";
 // API
 
 
@@ -29,7 +29,7 @@ const exampleOptions = ['One 1', 'Two 2', 'Three 3'];
 
 
 const APIKey = process.env.REACT_APP_211_API_KEY
-console.log(process.env.REACT_APP_211_API_KEY)
+const API = new APIWrapper(APIKey)
 
 class App extends React.Component {
 
@@ -39,39 +39,23 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    await this.timeConsuming()
-    await this.getSessionID()
-    this.getCategories()
-  }
+    await API.initialize()
 
-  timeConsuming = async() => {
-    return new Promise((resolve) =>
-      setTimeout(
-        () => { resolve('result') },
-        1000
-      )
-    );
-  }
+    this.setState({categories: await API.getCategories()})
 
-  async getSessionID() {
-    await fetch(
-      `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${APIKey}"}`
-    )
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({sessionID: data[0]['session_id']})
-    })
-  }
+    console.log(await API.serviceNameSearch({
+      st: API.serviceType.serviceName,
+      zip: '99504',
+      catid: '',
+      sn: 'Domestic Violence Shelters',
+      county: ''
+    }))
 
-  async getCategories() {
-    fetch(
-      `https://www.navigateopen.info/pubres/api/GetCategories/?ip={sid: "${this.state.sessionID}", apikey: "${APIKey}"}`
-    )
-    .then(response => response.json())
-    .then((data) => {
-      console.log(data)
-      this.setState({categories: data})
-    })
+    console.log(await API.getKeywords({
+      sn: 'Domestic'
+    }))
+
+//    console.log(await API.)
   }
 
 

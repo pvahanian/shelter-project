@@ -1,0 +1,22 @@
+
+/*format for the footer itself*/
+#footer {
+  grid-column-start: left-gutter;
+  grid-column-end: right-gutter;
+
+  color: darkgray;
+  background-color: lightgray;
+  text-align: center;
+  padding: 10px;
+  position: fixed;  /*pushing footer down, may change as other content added*/
+  bottom: 0;
+  box-sizing: border-box;
+}
+
+/*TO-DO 3-column formatting*/
+
+#footer a {
+  color: lightseagreen;
+  text-align: center;
+  padding: 2px;
+}

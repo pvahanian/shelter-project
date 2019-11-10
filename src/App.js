@@ -5,7 +5,7 @@ import FieldSelector from "./components/FieldSelector";
 import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ExGroup from "./components/ExOpt";
+import ExclusiveOption from "./components/ExclusiveOption";
 
 
 const navbar = {};
@@ -29,7 +29,7 @@ function App() {
       <NavBar {...navbar} />
       <NavBlock />
       <FieldSelector />
-      <ExGroup items={exampleOptions} /> 
+      <ExclusiveOption items={exampleOptions} />
       <Footer />
     </div>
   );

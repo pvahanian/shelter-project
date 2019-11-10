@@ -1,0 +1,23 @@
+
+.exclusive-group {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.exclusive-button {
+  cursor: pointer;
+  border: 0;
+  color: inherit;
+  flex-grow: 1;
+  font-size: 2em;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  background-color: rgba(255,255,255,0.05);
+}
+
+.selected {
+  background-color: rgba(0,0,255,0.2);
+}

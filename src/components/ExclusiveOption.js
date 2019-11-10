@@ -21,17 +21,12 @@ class ExclusiveButton extends React.Component {
   }
 }
 
-// default properties for buttons in a group
-// by default no options are selected.
-ExclusiveButton.defaultProps = {selected: false};
-
 // Primary component, tracks information about selections
 // and makes the
 class ExclusiveGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {selected: this.props.default};
-
     this.handleClick = this.handleClick.bind(this);
   }
 

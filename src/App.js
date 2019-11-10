@@ -30,7 +30,6 @@ function App() {
       <NavBlock />
       <FieldSelector />
       <ExclusiveOption items={exampleOptions} />
-      <Footer />
     </div>
   );
 }

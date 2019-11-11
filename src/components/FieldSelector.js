@@ -1,9 +1,6 @@
 import React from 'react';
 import ExclusiveOption from "./ExclusiveOption";
-<<<<<<< HEAD
 import '../Assets/FieldSelector.scss';
-=======
->>>>>>> 7752e0fb24bd71988fa988fd15ef85ed945406aa
 
 class FieldSelector extends React.Component {
     render() {

@@ -26,6 +26,7 @@ const exampleOptions = ['One 1', 'Two 2', 'Three 3'];
 function App() {
   return (
     <div className="App">
+<<<<<<< HEAD
       <div id='left-gutter-container'>
         Text
       </div>
@@ -38,6 +39,12 @@ function App() {
       <div id='right-gutter-container'>
         Text
       </div>
+=======
+      <NavBar {...navbar} />
+      <NavBlock />
+      <FieldSelector />
+      <ExclusiveOption items={exampleOptions} />
+>>>>>>> 7752e0fb24bd71988fa988fd15ef85ed945406aa
     </div>
   );
 }

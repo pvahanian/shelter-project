@@ -1,0 +1,61 @@
+
+.exclusive-group {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+// Round only the outermost corners of the button group
+// to improve visual cohesion
+
+.exclusive-group button:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.exclusive-group button:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+  border:1px solid transparent;
+  border-color: #aaa;
+}
+
+
+
+
+.exclusive-button {
+  flex-grow: 1;
+
+  color: inherit;
+  background: inherit;
+
+  font-size: 2em;
+  line-height: 1em;
+
+  padding: 8px 16px;
+
+  border: 1px solid transparent;
+  border-right: 0;
+  border-color: #aaa;
+
+  overflow: visible; margin:0;
+  -webkit-appearance: none;
+  box-shadow: none;
+  background-image: none;
+  vertical-align: middle;
+  color: inherit; font-family: inherit;
+  display:block;
+  cursor:pointer;
+
+  display:inline-block;
+}
+
+.selected {
+  background-color: rgba(0,0,255,0.2);
+}

@@ -6,6 +6,7 @@ import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ExclusiveOption from "./components/ExclusiveOption";
+import Section from './components/Section';
 import { ThemeContext } from './ThemeContext';
 
 const navbar = {};

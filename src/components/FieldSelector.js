@@ -3,6 +3,7 @@ import ExclusiveOption from "./ExclusiveOption";
 import NumberInput from './NumberInput';
 import '../Assets/FieldSelector.scss';
 import { ThemeContext } from '../ThemeContext';
+import Section from './Section';
 
 class FieldSelector extends React.Component {
   static contextType = ThemeContext;
@@ -33,18 +34,27 @@ class FieldSelector extends React.Component {
   render() {
     return(
       <>
-      <div className={'field-selector-' + this.context}>
+      <div className={'field-selector ' + this.context}>
         text
+
         <ExclusiveOption items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
+
         <NumberInput name='Age' onChange={this.handleAgeChange} />
-        <NumberInput name='ZIP' onChange={this.handleZIPChange} />
 
-        <button onClick={e => console.log("Then we'd try to find their location using a Google API.")}>
-          Your location
-        </button>
+        <Section name='Location'>
+          <NumberInput name='ZIP' onChange={this.handleZIPChange} />
 
-        <div className={"Services"}>
-        </div>
+          <input>
+          </input>
+
+          <button
+            id='your-location-button'
+            onClick={e => console.log("Then we'd try to find their location using a Google API.")}
+          >
+            Your location
+          </button>
+        </Section>
+
       </div>
       </>
     );

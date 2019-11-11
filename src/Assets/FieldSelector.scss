@@ -5,18 +5,23 @@
   flex-direction: column;
 
   text-align: center;
+  justify-content: center;
+  align-items: center;
 
   // Add spacing for children
   > * {
     margin-top: 20px;
   }
 
-  &-light {
+  &.light {
     background-color: $primary-color;
   }
 
-  &-dark {
+  &.dark {
     background-color: $dark-theme-primary-color;
     color: $dark-theme-font-color;
   }
+}
+
+#your-location-button {
 }

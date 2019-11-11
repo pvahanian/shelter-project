@@ -35,8 +35,6 @@ class FieldSelector extends React.Component {
     return(
       <>
       <div className={'field-selector ' + this.context}>
-        text
-
         <ExclusiveOption items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
 
         <NumberInput name='Age' onChange={this.handleAgeChange} />

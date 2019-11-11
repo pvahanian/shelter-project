@@ -28,16 +28,16 @@ function App() {
     <ThemeContext.Provider value='light'>
       <div className='App'>
         <div id='left-gutter-container'>
-          Text
+          Left Gutter
         </div>
 
         <div id='main-container'>
+          Main Container
           <FieldSelector />
-          <ExclusiveOption id='temp' items={exampleOptions} />
         </div>
 
         <div id='right-gutter-container'>
-          Text
+          Right Gutter
         </div>
       </div>
     </ThemeContext.Provider>

@@ -1,5 +1,8 @@
 
+
 .exclusive-group {
+  flex-grow: 1;
+
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -50,10 +53,7 @@
   background-image: none;
   vertical-align: middle;
   color: inherit; font-family: inherit;
-  display:block;
   cursor:pointer;
-
-  display:inline-block;
 }
 
 .selected {

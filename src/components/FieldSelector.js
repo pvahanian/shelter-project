@@ -39,7 +39,9 @@ class FieldSelector extends React.Component {
         <NumberInput name='Age' onChange={this.handleAgeChange} />
         <NumberInput name='ZIP' onChange={this.handleZIPChange} />
 
-        <a href={"google.com"}>Your location</a>
+        <button onClick={e => console.log("Then we'd try to find their location using a Google API.")}>
+          Your location
+        </button>
 
         <div className={"Services"}>
         </div>

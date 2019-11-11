@@ -27,34 +27,28 @@
 }
 
 
+button {
+  background-color: inherit;
+  transition: background-color 0.3s;
+  cursor: pointer;
 
+  font-size: inherit;
+  line-height: 1em;
+  padding: 8px 16px;
+
+
+  border: 1px solid transparent;
+  border-color: $dark-border-color;
+  border-radius: 5px;
+}
 
 .exclusive-button {
   flex-grow: 1;
 
-  color: inherit;
-  background: inherit;
-  transition: background-color 0.3s;
-
-  font-size: inherit;
-  line-height: 1em;
-
-  padding: 8px 16px;
-
+  border-radius: 0;
   border: 1px solid transparent;
   border-right: 0;
   border-color: $dark-border-color;
-
-  overflow: visible; margin:0;
-  -webkit-appearance: none;
-  box-shadow: none;
-  background-image: none;
-  vertical-align: middle;
-  color: inherit; font-family: inherit;
-  display:block;
-  cursor:pointer;
-
-  display:inline-block;
 }
 
 .selected {

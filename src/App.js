@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import FieldSelector from "./components/FieldSelector";
 import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";
@@ -29,7 +29,7 @@ function App() {
       <NavBar {...navbar} />
       <NavBlock />
       <FieldSelector />
-      <ExGroup items={exampleOptions} /> 
+      <ExGroup items={exampleOptions} />
       <Footer />
     </div>
   );

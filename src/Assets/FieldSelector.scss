@@ -1,5 +1,4 @@
 
 .field-selector {
-  grid-column-start: left-gutter;
-  grid-column-end: right-gutter;
+  flex-grow: 1;
 }

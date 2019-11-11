@@ -3,10 +3,32 @@
 .App {
   display: grid;
 
-  grid-template-columns: [left-edge] 150px [left-gutter] auto [right-gutter] 150px [right-edge];
+  grid-template-columns: [left-edge] 10% [left-gutter] auto [right-gutter] 10% [right-edge];
+  grid-template-rows: [top-edge] 10% [top-gutter] auto [bottom-gutter] 10% [bottom-edge];
   background-color: $primary-color;
+
 
 //  @include for(smaller-than-phone) {background-color: red;}
 //  @include for(phone-to-laptop) {background-color: yellow;}
 //  @include for(larger-than-laptop) {background-color: green;}
+}
+
+#left-gutter-container {
+  grid-column-start: left-edge;
+  grid-column-end: left-gutter;
+}
+
+#main-container {
+  // Position the container
+  grid-column-start: left-gutter;
+  grid-column-end: right-gutter;
+
+  // Let elements inside use flex positioning
+  display: flex;
+  flex-direction: column;
+}
+
+#right-gutter-container {
+  grid-column-start: right-gutter;
+  grid-column-end: right-edge;
 }

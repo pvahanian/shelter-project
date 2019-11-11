@@ -5,7 +5,7 @@ import FieldSelector from "./components/FieldSelector";
 import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ExGroup from "./components/ExOpt";
+import ExclusiveOption from "./components/ExclusiveOption";
 
 
 const navbar = {};
@@ -26,11 +26,18 @@ const exampleOptions = ['One 1', 'Two 2', 'Three 3'];
 function App() {
   return (
     <div className="App">
-      <NavBar {...navbar} />
-      <NavBlock />
-      <FieldSelector />
-      <ExGroup items={exampleOptions} />
-      <Footer />
+      <div id='left-gutter-container'>
+        Text
+      </div>
+
+      <div id='main-container'>
+        <FieldSelector />
+        <ExclusiveOption id='temp' items={exampleOptions} />
+      </div>
+
+      <div id='right-gutter-container'>
+        Text
+      </div>
     </div>
   );
 }

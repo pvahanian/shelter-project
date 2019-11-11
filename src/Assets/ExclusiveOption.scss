@@ -1,0 +1,55 @@
+@import '../GlobalStyle/globals';
+
+.exclusive-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+// Round only the outermost corners of the button group
+// to improve visual cohesion
+
+.exclusive-group button:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.exclusive-group button:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+  border:1px solid transparent;
+  border-color: $dark-border-color;
+}
+
+
+button {
+  background-color: inherit;
+  transition: background-color 0.2s;
+  cursor: pointer;
+
+  font-size: inherit;
+  line-height: 1em;
+  padding: 8px 16px;
+
+  border: 1px solid transparent;
+  border-color: $dark-border-color;
+  border-radius: 5px;
+}
+
+.exclusive-button {
+  flex-grow: 1;
+
+  border-radius: 0;
+  border: 1px solid transparent;
+  border-right: 0;
+  border-color: $dark-border-color;
+}
+
+.selected {
+  background-color: rgba(0,0,255,0.2);
+}

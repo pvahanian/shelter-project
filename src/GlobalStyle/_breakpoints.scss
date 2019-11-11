@@ -1,6 +1,6 @@
 
-$phone: 800px;
-$laptop: 1200px;
+$phone: 600px;
+$laptop: 1000px;
 
 @mixin for($media) {
   @if $media == smaller-than-phone {

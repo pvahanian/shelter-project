@@ -1,0 +1,17 @@
+
+.section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  text-align: left;
+
+  // Add spacing for children
+  > * {
+    margin-top: 20px;
+  }
+}
+
+.section-name {
+
+}

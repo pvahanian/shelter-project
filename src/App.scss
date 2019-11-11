@@ -3,24 +3,38 @@
 .App {
   display: grid;
 
-  grid-template-columns: [left-edge] 150px [left-gutter] auto [right-gutter] 150px [right-edge];
+  @include for(smaller-than-phone) {
+    grid-template-columns: [left-edge] 0 [left-gutter] 100% [right-gutter] 0 [right-edge];
+    font-size: $small-font-size;
+  }
 
-  @include for(smaller-than-phone) {background-color: red;}
-  @include for(phone-to-laptop) {background-color: yellow;}
-  @include for(larger-than-laptop) {background-color: green;}
+  @include for(phone-to-laptop) {
+    grid-template-columns: [left-edge] auto [left-gutter] 500px [right-gutter] auto [right-edge];
+    font-size: $medium-font-size;
+  }
 
+  @include for(larger-than-laptop) {
+    grid-template-columns: [left-edge] auto [left-gutter] 650px [right-gutter] auto [right-edge];
+    font-size: $big-font-size;
+  }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#left-gutter-container {
+  grid-column-start: left-edge;
+  grid-column-end: left-gutter;
+}
+
+#main-container {
+  // Position the container
+  grid-column-start: left-gutter;
+  grid-column-end: right-gutter;
+
+  // Let elements inside use flex positioning
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#right-gutter-container {
+  grid-column-start: right-gutter;
+  grid-column-end: right-edge;
 }

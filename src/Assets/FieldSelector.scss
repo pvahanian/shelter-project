@@ -2,6 +2,11 @@
 .field-selector {
   display: flex;
   flex-direction: column;
-  
-  width: 100%;
+
+  text-align: center;
+
+  // Add spacing for children
+  > * {
+    margin-top: 20px;
+  }
 }

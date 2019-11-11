@@ -4,7 +4,7 @@
 
 
 * {
-  @include for(smaller-than-phone) {background-color: red;}
-  @include for(phone-to-laptop) {background-color: yellow;}
-  @include for(larger-than-laptop) {background-color: green;}
+//  @include for(smaller-than-phone) {background-color: red;}
+//  @include for(phone-to-laptop) {background-color: yellow;}
+//  @include for(larger-than-laptop) {background-color: green;}
 }

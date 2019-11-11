@@ -1,0 +1,12 @@
+@import 'GlobalStyle/globals';
+
+.App {
+  display: grid;
+
+  grid-template-columns: [left-edge] 150px [left-gutter] auto [right-gutter] 150px [right-edge];
+  background-color: $primary-color;
+
+//  @include for(smaller-than-phone) {background-color: red;}
+//  @include for(phone-to-laptop) {background-color: yellow;}
+//  @include for(larger-than-laptop) {background-color: green;}
+}

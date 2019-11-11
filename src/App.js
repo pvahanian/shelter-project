@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import FieldSelector from "./components/FieldSelector";
 import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";

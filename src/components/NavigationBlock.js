@@ -1,5 +1,5 @@
 import React from 'react';
-import './NavigationBlock.css';
+import '../Assets/NavigationBlock.css';
 
 class NavBlock extends React.Component {
   render() {

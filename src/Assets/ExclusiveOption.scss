@@ -7,6 +7,18 @@
   margin-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
+
+  @include for(smaller-than-phone) {
+    flex-wrap: wrap;
+  }
+}
+
+.exclusive-button {
+  flex-grow: 1;
+
+  border-radius: 0;
+  border: 1px solid $dark-border-color;
+  border-right: 0;
 }
 
 
@@ -16,6 +28,11 @@
 .exclusive-group button:first-child {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+
+  @include for(smaller-than-phone) {
+    border: 1px solid $dark-border-color;
+    border-radius: 0;
+  }
 }
 
 .exclusive-group button:last-child {
@@ -24,6 +41,11 @@
 
   border:1px solid transparent;
   border-color: $dark-border-color;
+
+  @include for(smaller-than-phone) {
+    border: 1px solid $dark-border-color;
+    border-radius: 0;
+  }
 }
 
 
@@ -39,15 +61,6 @@ button {
   border: 1px solid transparent;
   border-color: $dark-border-color;
   border-radius: 5px;
-}
-
-.exclusive-button {
-  flex-grow: 1;
-
-  border-radius: 0;
-  border: 1px solid transparent;
-  border-right: 0;
-  border-color: $dark-border-color;
 }
 
 .selected {

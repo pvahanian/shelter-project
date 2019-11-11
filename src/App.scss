@@ -3,14 +3,22 @@
 .App {
   display: grid;
 
-  grid-template-columns: [left-edge] 10% [left-gutter] auto [right-gutter] 10% [right-edge];
-  grid-template-rows: [top-edge] 10% [top-gutter] auto [bottom-gutter] 10% [bottom-edge];
+  @include for(smaller-than-phone) {
+    grid-template-columns: [left-edge] 0 [left-gutter] 100% [right-gutter] 0 [right-edge];
+    font-size: $small-font-size;
+  }
+
+  @include for(phone-to-laptop) {
+    grid-template-columns: [left-edge] auto [left-gutter] 500px [right-gutter] auto [right-edge];
+    font-size: $medium-font-size;
+  }
+
+  @include for(larger-than-laptop) {
+    grid-template-columns: [left-edge] auto [left-gutter] 650px [right-gutter] auto [right-edge];
+    font-size: $big-font-size;
+  }
+
   background-color: $primary-color;
-
-
-//  @include for(smaller-than-phone) {background-color: red;}
-//  @include for(phone-to-laptop) {background-color: yellow;}
-//  @include for(larger-than-laptop) {background-color: green;}
 }
 
 #left-gutter-container {

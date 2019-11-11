@@ -2,7 +2,6 @@
 .exclusive-group {
   display: flex;
   flex-direction: row;
-  width: 100%;
   justify-content: center;
   margin-top: 10px;
   padding-left: 10px;
@@ -34,8 +33,9 @@
 
   color: inherit;
   background: inherit;
+  transition: background-color 0.3s;
 
-  font-size: 2em;
+  font-size: inherit;
   line-height: 1em;
 
   padding: 8px 16px;

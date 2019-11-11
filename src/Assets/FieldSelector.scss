@@ -1,3 +1,4 @@
+@import '../GlobalStyle/globals';
 
 .field-selector {
   display: flex;
@@ -8,5 +9,14 @@
   // Add spacing for children
   > * {
     margin-top: 20px;
+  }
+
+  &-light {
+    background-color: $primary-color;
+  }
+
+  &-dark {
+    background-color: $dark-theme-primary-color;
+    color: $dark-theme-font-color;
   }
 }

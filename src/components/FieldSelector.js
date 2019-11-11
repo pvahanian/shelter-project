@@ -2,8 +2,11 @@ import React from 'react';
 import ExclusiveOption from "./ExclusiveOption";
 import NumberInput from './NumberInput';
 import '../Assets/FieldSelector.scss';
+import { ThemeContext } from '../ThemeContext';
 
 class FieldSelector extends React.Component {
+  static contextType = ThemeContext;
+
   constructor(props) {
     super(props)
 
@@ -29,7 +32,8 @@ class FieldSelector extends React.Component {
 
   render() {
     return(
-      <div className='field-selector'>
+      <>
+      <div className={'field-selector-' + this.context}>
         text
         <ExclusiveOption items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
         <NumberInput name='Age' onChange={this.handleAgeChange} />
@@ -40,6 +44,7 @@ class FieldSelector extends React.Component {
         <div className={"Services"}>
         </div>
       </div>
+      </>
     );
   }
 }

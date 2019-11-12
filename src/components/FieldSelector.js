@@ -54,6 +54,9 @@ class FieldSelector extends React.Component {
       .then(data => this.setState(
         {county: data[0]['county']}
       ))
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   validZIP() {

@@ -21,9 +21,9 @@ class FieldSelector extends React.Component {
     super(props)
 
     this.state = {
-      age: null,
-      zip: null,
-      county: null
+      age: '',
+      zip: '',
+      county: ''
     }
 
     this.handleAgeChange = this.handleAgeChange.bind(this)
@@ -39,8 +39,9 @@ class FieldSelector extends React.Component {
   }
 
   validAge() {
-    let isPositiveInteger = str => /^(0|[1-9]\d*)$/.test(str);
-    return isPositiveInteger(this.state.age)
+    let age = this.onlyNumbers(this.state.age)
+    let isPositiveInteger = str => /^[1-9](0|[1-9]*)$/.test(str);
+    return isPositiveInteger(age)
   }
 
   async handleZIPChange(e) {
@@ -85,6 +86,12 @@ class FieldSelector extends React.Component {
     })
   }
 
+  onlyNumbers(str) {
+    let characterArray = str.split('')
+    let numberArray = characterArray.filter(character => '0123456789'.indexOf(character) !== -1)
+    return numberArray.join('')
+  }
+
   render() {
     return(
       <>
@@ -94,6 +101,7 @@ class FieldSelector extends React.Component {
         <TextInput
           name='Age'
           value={this.state.age}
+          filter={this.onlyNumbers}
           placeholder='32'
           onChange={this.handleAgeChange}
           validEntry={this.state.age ? (this.validAge(this.state.age) ? true : false) : null }
@@ -111,6 +119,7 @@ class FieldSelector extends React.Component {
           <TextInput
             name='ZIP'
             value={this.state.zip}
+            filter={this.onlyNumbers}
             placeholder='97205'
             onChange={this.handleZIPChange}
             validEntry={this.state.zip ? (this.validZIP(this.state.zip) ? true : false) : null }

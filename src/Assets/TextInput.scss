@@ -19,7 +19,7 @@
   transition: background-color 0.2s linear;
 
   &.good-entry:focus {
-    background-color: rgba(0,255,0,.1);
+//    background-color: rgba(0,255,0,.1);
   }
 
   &.bad-entry {
@@ -38,9 +38,7 @@
   height: 1px;
   transform: scale(0, 1);
   transition: all 0.2s linear;
-}
 
-.underline {
   &.good-entry {
     background-color: green;
   }

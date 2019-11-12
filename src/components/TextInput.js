@@ -11,15 +11,19 @@ class TextInput extends React.Component {
     else if(this.props.validEntry === null)
       validEntryClass = ''
 
+    let value = this.props.value
+    if(this.props.filter)
+      value = this.props.filter(value)
+
     return(
-      <div className='number-input-container'>
+      <div className={'number-input-container ' + validEntryClass}>
         <div className='number-input-label'>
           { this.props.name }
         </div>
         <input
-          value={this.props.value}
+          value={value}
           placeholder={this.props.placeholder}
-          className={'number-input ' + validEntryClass }
+          className={'number-input ' + validEntryClass}
           onChange={this.props.onChange}
           type='text'
         />

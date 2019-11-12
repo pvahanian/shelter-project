@@ -21,6 +21,7 @@ class FieldSelector extends React.Component {
     super(props)
 
     this.state = {
+      gender: '',
       age: '',
       zip: '',
       county: '',
@@ -28,10 +29,12 @@ class FieldSelector extends React.Component {
     }
 
     // Bind all functions which are called from child inputs
+    this.handleGenderChange = this.handleGenderChange.bind(this)
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
 
+    this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
     this.validZIP = this.validZIP.bind(this)
     this.validCounty = this.validCounty.bind(this)
@@ -40,6 +43,20 @@ class FieldSelector extends React.Component {
     this.goBehavior = this.goBehavior.bind(this)
   }
 
+
+  validGender(gender) {
+    let message = ''
+
+    let empty = gender === ''
+    if(empty)
+      message = 'Required entry.'
+
+    let valid = !empty
+
+    return {valid, message}
+  }
+
+  handleGenderChange = gender => this.setState({ gender: gender })
 
   handleAgeChange = age => this.setState({ age: age })
 
@@ -144,13 +161,14 @@ class FieldSelector extends React.Component {
   }
 
   async goBehavior() {
+    // TODO: This is not the smart way to do validation once and stop
     await this.setState({ doValidation: true })
+    await this.setState({ doValidation: false })
 
-    await this.setState({doValidation: false})
-
+    // REMOVE! JUST FOR DEBUG PURPOSES
     await this.sleep(2000)
-
     console.log({
+      gender: this.state.gender,
       age: this.state.age,
       zip: this.state.zip,
       county: this.state.county
@@ -161,7 +179,12 @@ class FieldSelector extends React.Component {
     return(
       <>
       <div className={'field-selector ' + this.context}>
-        <ExclusiveOption items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
+        <ExclusiveOption
+          items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}
+          validator={this.validGender}
+          shouldValidate={this.state.doValidation}
+          onChange={this.handleGenderChange}
+        />
 
         <TextInput
           name='Age'

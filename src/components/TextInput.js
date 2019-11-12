@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Assets/TextInput.scss';
+import InvalidEntryMessage from './InvalidEntryMessage';
 
 class TextInput extends React.Component {
   constructor(props) {
@@ -47,10 +48,8 @@ class TextInput extends React.Component {
       value = this.props.filter(value)
 
     // If we've been asked to validate, do it
-    if(this.props.shouldValidate) {
-      let validityObject = this.validate()
-      console.log(validityObject)
-    }
+    if(this.props.shouldValidate)
+      this.validate()
 
 
     return(
@@ -72,9 +71,7 @@ class TextInput extends React.Component {
           type='text'
         />
         <div class={'underline ' + validEntryClass}></div>
-        <div class='invalid-entry-message'>
-          {this.invalidEntryMessage}
-        </div>
+        <InvalidEntryMessage message={this.invalidEntryMessage} />
       </div>
     );
   }

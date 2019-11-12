@@ -6,6 +6,8 @@ pressed).
 
 import React from 'react';
 import '../Assets/ExclusiveOption.scss';
+import InvalidEntryMessage from './InvalidEntryMessage';
+
 
 // Child component of Group used to structure and handle option buttons.
 class ExclusiveButton extends React.Component {
@@ -21,34 +23,69 @@ class ExclusiveButton extends React.Component {
   }
 }
 
-// Primary component, tracks information about selections
-// and makes the
+
 class ExclusiveGroup extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {selected: this.props.default};
+    this.state = {selected: this.props.default ? this.props.default : ''};
     this.handleClick = this.handleClick.bind(this);
   }
 
+  valid = null
+  invalidEntryMessage = ''
+
   handleClick(event, name) {
     this.setState({selected: name})
+    this.props.onChange(name)
+  }
+
+  validate() {
+    if(!this.props.validator)
+      return {valid: true, message: ''}
+
+    let value = this.state.selected
+    let validEntryClass = ''
+    let invalidEntryMessage = ''
+
+    // Check if given value is valid
+    let validityObject = this.props.validator(value)
+
+    // Note the results for reference in the render
+    this.valid = validityObject.valid
+    console.log(value)
+    console.log(this.valid)
+
+    if(validityObject.valid === false)
+      this.invalidEntryMessage = validityObject.message
+
+    if(validityObject.valid === true)
+      this.invalidEntryMessage = ''
+
   }
 
   render() {
+    if(this.props.shouldValidate)
+      this.validate()
+
+
     return (
-      <div
-        className='exclusive-group'
-      >
-        {
-          this.props.items.map((item, i) =>
-            <ExclusiveButton
-              selected={item===this.state.selected}
-              key={i}
-              name={item}
-              onClick={this.handleClick}
-            />
-          )
-        }
+      <div className='exclusive-group-container'>
+        <div
+          className='exclusive-group'
+        >
+          {
+            this.props.items.map((item, i) =>
+              <ExclusiveButton
+                selected={item===this.state.selected}
+                key={i}
+                name={item}
+                onClick={this.handleClick}
+              />
+            )
+          }
+        </div>
+
+        <InvalidEntryMessage message={this.invalidEntryMessage} />
       </div>
     );
   }

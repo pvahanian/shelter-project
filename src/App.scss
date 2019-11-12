@@ -1,0 +1,40 @@
+@import 'GlobalStyle/globals';
+
+.App {
+  display: grid;
+
+  @include for(smaller-than-phone) {
+    grid-template-columns: [left-edge] 0 [left-gutter] 100% [right-gutter] 0 [right-edge];
+    font-size: $small-font-size;
+  }
+
+  @include for(phone-to-laptop) {
+    grid-template-columns: [left-edge] auto [left-gutter] 500px [right-gutter] auto [right-edge];
+    font-size: $medium-font-size;
+  }
+
+  @include for(larger-than-laptop) {
+    grid-template-columns: [left-edge] auto [left-gutter] 650px [right-gutter] auto [right-edge];
+    font-size: $big-font-size;
+  }
+}
+
+#left-gutter-container {
+  grid-column-start: left-edge;
+  grid-column-end: left-gutter;
+}
+
+#main-container {
+  // Position the container
+  grid-column-start: left-gutter;
+  grid-column-end: right-gutter;
+
+  // Let elements inside use flex positioning
+  display: flex;
+  flex-direction: column;
+}
+
+#right-gutter-container {
+  grid-column-start: right-gutter;
+  grid-column-end: right-edge;
+}

@@ -1,0 +1,27 @@
+@import '../GlobalStyle/globals';
+
+.field-selector {
+  display: flex;
+  flex-direction: column;
+
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  // Add spacing for children
+  > * {
+    margin-top: 20px;
+  }
+
+  &.light {
+    background-color: $primary-color;
+  }
+
+  &.dark {
+    background-color: $dark-theme-primary-color;
+    color: $dark-theme-font-color;
+  }
+}
+
+#your-location-button {
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.css';
+import '../Assets/Footer.scss';
 import NavBlock from './NavigationBlock.js';
 
 const listOfLinks = (

@@ -1,15 +1,14 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import FieldSelector from "./components/FieldSelector";
 import NavBlock from "./components/NavigationBlock";
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ExGroup from "./components/ExOpt";
-import SearchResultList from "./components/SearchResultList/SearchResultList";
 import APIWrapper from "./APIWrapper.js";
-// API
-
+import ExclusiveOption from "./components/ExclusiveOption";
+import Section from './components/Section';
+import { ThemeContext } from './ThemeContext';
 
 const navbar = {};
 navbar.brand = {linkTo: "#", text: "Portland Shelters"};
@@ -26,7 +25,6 @@ navbar.links = [
 ];
 
 const exampleOptions = ['One 1', 'Two 2', 'Three 3'];
-
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
@@ -57,20 +55,27 @@ class App extends React.Component {
 
 //    console.log(await API.)
   }
+}
 
+function App() {
+  return (
+    <ThemeContext.Provider value='light'>
+      <div className='App'>
+        <div id='left-gutter-container'>
+          Left Gutter
+        </div>
 
-  render() {
-    return (
-      <div className="App">
-        <NavBar {...navbar} />
-        <NavBlock />
-        <FieldSelector />
-        <SearchResultList categories={this.state.categories} />
-        <ExGroup items={exampleOptions} />
-        {/*<Footer />*/}
+        <div id='main-container'>
+          Main Container
+          <FieldSelector />
+        </div>
+
+        <div id='right-gutter-container'>
+          Right Gutter
+        </div>
       </div>
-    );
-  }
+    </ThemeContext.Provider>
+  );
 }
 
 export default App;

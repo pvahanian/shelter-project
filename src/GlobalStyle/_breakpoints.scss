@@ -1,0 +1,15 @@
+
+$phone: 600px;
+$laptop: 1000px;
+
+@mixin for($media) {
+  @if $media == smaller-than-phone {
+    @media only screen and (max-width: $phone) { @content; }
+  }
+  @else if $media == phone-to-laptop {
+    @media only screen and (min-width: $phone + 1) and (max-width: $laptop - 1) { @content; }
+  }
+  @else if $media == larger-than-laptop {
+    @media only screen and (min-width: $laptop) { @content; }
+  }
+}

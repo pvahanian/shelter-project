@@ -18,11 +18,11 @@
 
   transition: background-color 0.2s linear;
 
-  &.good-entry:focus {
+  &.valid-entry:focus {
 //    background-color: rgba(0,255,0,.1);
   }
 
-  &.bad-entry {
+  &.invalid-entry {
     background-color: rgba(255,0,0,.1);
   }
 }
@@ -39,11 +39,11 @@
   transform: scale(0, 1);
   transition: all 0.2s linear;
 
-  &.good-entry {
+  &.valid-entry {
     background-color: green;
   }
 
-  &.bad-entry {
+  &.invalid-entry {
     background-color: red;
     transform: scale(1);
   }

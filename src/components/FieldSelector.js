@@ -23,32 +23,54 @@ class FieldSelector extends React.Component {
     this.state = {
       age: '',
       zip: '',
-      county: ''
+      county: '',
+      doValidation: false
     }
 
+    // Bind all functions which are called from child inputs
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
+
+    this.validAge = this.validAge.bind(this)
+    this.validZIP = this.validZIP.bind(this)
+    this.validCounty = this.validCounty.bind(this)
+
     this.findLocation = this.findLocation.bind(this)
+    this.goBehavior = this.goBehavior.bind(this)
   }
 
-  handleAgeChange(e) {
-    let age = e.currentTarget.value
 
-    this.setState({ age: age })
+  handleAgeChange = age => this.setState({ age: age })
+
+  validAge(age) {
+    let message = ''
+
+    if(!age)
+      return { valid: false, message: 'Required entry.'}
+
+    // Using a regex here to recognize positive non-leading zero integers
+    let isPositiveInteger = /^[1-9](0|[1-9]*)$/.test(age)
+    if(!isPositiveInteger)
+      message = 'Please enter a positive round number like 18 or 56.'
+
+    // TODO: Maybe remove this case.
+    let isReallyOld = parseInt(age) >= 120
+    if(isReallyOld)
+      message = "It's unlikely this age is correct. Is this a typo?"
+
+    let valid = isPositiveInteger && !isReallyOld
+
+    return {valid, message}
   }
 
-  validAge() {
-    let age = this.onlyNumbers(this.state.age)
-    let isPositiveInteger = str => /^[1-9](0|[1-9]*)$/.test(str);
-    return isPositiveInteger(age)
-  }
 
-  async handleZIPChange(e) {
-    let zip = e.currentTarget.value
+
+
+  async handleZIPChange(zip) {
     await this.setState({ zip: zip })
 
-    if(this.validZIP())
+    if(this.validZIP(zip).valid)
       await API.getCountyByZipCode({
         zip: this.state.zip
       })
@@ -56,25 +78,49 @@ class FieldSelector extends React.Component {
         {county: data[0]['county']}
       ))
       .catch(err => {
+        // TODO: we'll probably want to take action here to resolve the error
         console.log(err)
       })
   }
 
-  validZIP() {
-    let isPositiveInteger = str => /^(0|[1-9]\d*)$/.test(str);
-    return this.state.zip.length === 5 && isPositiveInteger(this.state.zip)
+  validZIP(zip) {
+    let message = ''
+
+    if(!zip)
+      return { valid: false, message: 'Required entry.'}
+
+    let isPositiveInteger = /^(0|[1-9]\d*)$/.test(zip);
+    if(!isPositiveInteger)
+      message = 'Please only use numbers in the ZIP code.'
+
+    // TODO: Verify this assumption. ZIPs can be very weird
+    let correctLength = zip.length === 5;
+    if(!correctLength)
+      message = 'ZIP codes are usually 5 digits long. Is this mistyped?'
+
+    let valid = correctLength && isPositiveInteger
+
+    return {valid, message}
   }
 
-  handleCountyChange(e) {
-    let county = e.currentTarget.value
-    this.setState({ county: county })
-  }
 
-  validCounty() {
-    return (
-      this.state.county.toLowerCase() === 'multnomah' ||
-      this.state.county.toLowerCase() === 'clackamas'
-    )
+
+  handleCountyChange = county => this.setState({ county: county })
+
+  validCounty(county) {
+    let message = ''
+
+    if(!county)
+      return { valid: false, message: 'Required entry.'}
+
+    // TODO: Add better county validation & add suggested correct spellings of counties
+    let knownCounty = (county.toLowerCase() === 'multnomah' || county.toLowerCase() === 'clackamas')
+    if(!knownCounty)
+      message = "We don't know this county. Is this mistyped?"
+
+    let valid = knownCounty
+
+    return {valid, message}
   }
 
   findLocation() {
@@ -92,6 +138,23 @@ class FieldSelector extends React.Component {
     return numberArray.join('')
   }
 
+  // FOR DEBUGGING ONLY, DELETE!!!
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async goBehavior() {
+    await this.setState({ doValidation: true })
+
+    await this.sleep(2000)
+
+    console.log({
+      age: this.state.age,
+      zip: this.state.zip,
+      county: this.state.county
+    })
+  }
+
   render() {
     return(
       <>
@@ -102,27 +165,31 @@ class FieldSelector extends React.Component {
           name='Age'
           value={this.state.age}
           filter={this.onlyNumbers}
+          validator={this.validAge}
           placeholder='32'
           onChange={this.handleAgeChange}
-          validEntry={this.state.age ? (this.validAge(this.state.age) ? true : false) : null }
+          shouldValidate={this.state.doValidation}
         />
 
         <Section name='Location'>
-          <TextInput
-            name='County'
-            value={this.state.county}
-            placeholder='Multnomah'
-            onChange={this.handleCountyChange}
-            validEntry={this.state.county ? (this.validCounty(this.state.county) ? true : false) : null }
-          />
 
           <TextInput
             name='ZIP'
             value={this.state.zip}
             filter={this.onlyNumbers}
+            validator={this.validZIP}
             placeholder='97205'
             onChange={this.handleZIPChange}
-            validEntry={this.state.zip ? (this.validZIP(this.state.zip) ? true : false) : null }
+            shouldValidate={this.state.doValidation}
+          />
+
+          <TextInput
+            name='County'
+            value={this.state.county}
+            validator={this.validCounty}
+            placeholder='Multnomah'
+            onChange={this.handleCountyChange}
+            shouldValidate={this.state.doValidation}
           />
 
           <button
@@ -133,6 +200,11 @@ class FieldSelector extends React.Component {
           </button>
         </Section>
 
+        <button
+          onClick={this.goBehavior}
+        >
+          Go
+        </button>
       </div>
       </>
     );

@@ -2,18 +2,45 @@ import React from 'react';
 import '../Assets/TextInput.scss';
 
 class TextInput extends React.Component {
-  render() {
-    let validEntryClass = ''
-    if(this.props.validEntry === true)
-      validEntryClass = 'good-entry'
-    else if(this.props.validEntry === false)
-      validEntryClass = 'bad-entry'
-    else if(this.props.validEntry === null)
-      validEntryClass = ''
+
+  onChangeWrapper() {
+
+  }
+
+  validate() {
+    if(!this.props.validator)
+      return 'good-entry'
 
     let value = this.props.value
+    console.log(value)
+
+    // Check if given value is valid
+    let validityObject = null
+    if(this.props.validator) {
+      validityObject = this.props.validator(value)
+      console.log(validityObject)
+    }
+
+    // Find the correct validity class to add to our elements
+    let validEntryClass = ''
+    if(validityObject.valid === true)
+      validEntryClass = 'valid-entry'
+    if(validityObject.valid === false)
+      validEntryClass = 'invalid-entry'
+
+    return validEntryClass
+  }
+
+
+  render() {
+    let value = this.props.value
+
+    // Apply filter to entry, if one exists
     if(this.props.filter)
       value = this.props.filter(value)
+
+    // If we've been asked to validate, do it
+    let validEntryClass = this.props.shouldValidate ? this.validate() : ''
 
     return(
       <div className={'number-input-container ' + validEntryClass}>
@@ -24,7 +51,13 @@ class TextInput extends React.Component {
           value={value}
           placeholder={this.props.placeholder}
           className={'number-input ' + validEntryClass}
-          onChange={this.props.onChange}
+          onChange={ e => {
+              let newValue = e.currentTarget.value
+              if(this.props.filter)
+                newValue = this.props.filter(newValue)
+              this.props.onChange(newValue)
+            }
+          }
           type='text'
         />
         <div class={'underline ' + validEntryClass}></div>

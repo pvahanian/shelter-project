@@ -2,45 +2,56 @@ import React from 'react';
 import '../Assets/TextInput.scss';
 
 class TextInput extends React.Component {
-
-  onChangeWrapper() {
-
+  constructor(props) {
+    super(props)
   }
+
+  invalidEntryMessage = ''
+  valid = null
+
 
   validate() {
     if(!this.props.validator)
-      return 'good-entry'
+      return {valid: true, message: ''}
 
     let value = this.props.value
-    console.log(value)
+    let validEntryClass = ''
+    let invalidEntryMessage = ''
 
     // Check if given value is valid
-    let validityObject = null
-    if(this.props.validator) {
-      validityObject = this.props.validator(value)
-      console.log(validityObject)
-    }
+    let validityObject = this.props.validator(value)
 
-    // Find the correct validity class to add to our elements
-    let validEntryClass = ''
-    if(validityObject.valid === true)
-      validEntryClass = 'valid-entry'
+    // Note the results for reference in the render
+    this.valid = validityObject.valid
+
     if(validityObject.valid === false)
-      validEntryClass = 'invalid-entry'
+      this.invalidEntryMessage = validityObject.message
 
-    return validEntryClass
+    if(validityObject.valid === true)
+      this.invalidEntryMessage = ''
   }
 
 
   render() {
     let value = this.props.value
+    let validEntryClass = ''
+
+    // Find the correct validity class to add to our elements
+    if(this.valid === true)
+      validEntryClass = 'valid-entry'
+    if(this.valid === false)
+      validEntryClass = 'invalid-entry'
 
     // Apply filter to entry, if one exists
     if(this.props.filter)
       value = this.props.filter(value)
 
     // If we've been asked to validate, do it
-    let validEntryClass = this.props.shouldValidate ? this.validate() : ''
+    if(this.props.shouldValidate) {
+      let validityObject = this.validate()
+      console.log(validityObject)
+    }
+
 
     return(
       <div className={'number-input-container ' + validEntryClass}>
@@ -61,6 +72,9 @@ class TextInput extends React.Component {
           type='text'
         />
         <div class={'underline ' + validEntryClass}></div>
+        <div class='invalid-entry-message'>
+          {this.invalidEntryMessage}
+        </div>
       </div>
     );
   }

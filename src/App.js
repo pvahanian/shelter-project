@@ -24,58 +24,37 @@ navbar.links = [
   }
 ];
 
-const exampleOptions = ['One 1', 'Two 2', 'Three 3'];
+
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
 class App extends React.Component {
-
   state = {
     sessionID: null,
     categories: []
   }
 
-  async componentDidMount() {
-    await API.initialize()
+  render() {
+    return (
+      <ThemeContext.Provider value='light'>
+        <div className='App'>
+          <div id='left-gutter-container'>
+            Left Gutter
+          </div>
 
-    this.setState({categories: await API.getCategories()})
+          <div id='main-container'>
+            Main Container
+            <FieldSelector />
+          </div>
 
-    console.log(await API.serviceNameSearch({
-      st: API.serviceType.serviceName,
-      zip: '99504',
-      catid: '',
-      sn: 'Domestic Violence Shelters',
-      county: ''
-    }))
-
-    console.log(await API.getKeywords({
-      sn: 'Domestic'
-    }))
-
-//    console.log(await API.)
+          <div id='right-gutter-container'>
+            Right Gutter
+          </div>
+        </div>
+      </ThemeContext.Provider>
+    );
   }
-}
-
-function App() {
-  return (
-    <ThemeContext.Provider value='light'>
-      <div className='App'>
-        <div id='left-gutter-container'>
-          Left Gutter
-        </div>
-
-        <div id='main-container'>
-          Main Container
-          <FieldSelector />
-        </div>
-
-        <div id='right-gutter-container'>
-          Right Gutter
-        </div>
-      </div>
-    </ThemeContext.Provider>
-  );
 }
 
 export default App;

@@ -4,9 +4,18 @@ import TextInput from './TextInput';
 import '../Assets/FieldSelector.scss';
 import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
+import APIWrapper from "../APIWrapper.js";
+
+
+const APIKey = process.env.REACT_APP_211_API_KEY
+const API = new APIWrapper(APIKey)
 
 class FieldSelector extends React.Component {
   static contextType = ThemeContext;
+
+  async componentDidMount() {
+    await API.initialize()
+  }
 
   constructor(props) {
     super(props)
@@ -34,9 +43,17 @@ class FieldSelector extends React.Component {
     return isPositiveInteger(this.state.age)
   }
 
-  handleZIPChange(e) {
+  async handleZIPChange(e) {
     let zip = e.currentTarget.value
-    this.setState({ zip: zip })
+    await this.setState({ zip: zip })
+
+    if(this.validZIP())
+      await API.getCountyByZipCode({
+        zip: this.state.zip
+      })
+      .then(data => this.setState(
+        {county: data[0]['county']}
+      ))
   }
 
   validZIP() {

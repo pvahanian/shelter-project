@@ -1,22 +1,37 @@
 # Shelter Project
 *This project was bootstrapped with [Create React App].*
 
+This project (currently in the mockup stage), is intended to replace the current resource navigator which 211 provides on their [website](https://www.211info.org/).
+
+
+## Background
+
+2-1-1 is a reserved telephone number in the US which is intended to make finding social services easier. Depending on your location when you make the call, 2-1-1 will lead to one of approximately 250 different organizations. For Oregon, and Washington counties Cowlitz, Skamania, Clark, and Wahkiakum 2-1-1 leads to [211info](https://www.211info.org/).
+
+
 ## Tech Stack
-*An intial stab at what our tech stack will look like.*
 
 | Component | Tech    |
 |-----------|---------|
 | Frontend  | React   |
 | Backend   | Node.js |
-| Database  | ...     |
 
 ----------------
 
-## Install
+## Install & Setup
 
 After installing npm (Node Package Manager) or a virtual environment system like npx, this repo's requirements are downloaded with
 
 ### `npm install`
+
+## Set Environment Variables
+
+We currently only use one environment variable: `REACT_APP_211_API_KEY`
+Set this to the proper value with
+
+`export REACT_APP_211_API_KEY=J7R0W5XK`
+
+Usually it would be **VERY** bad practice to expose the API key in your README, or anywhere else in your code. However the way this API is constructed means that your key is always public. Our project will build using standard secure patterns, but know that this key is not secure.
 
 -----------------
 

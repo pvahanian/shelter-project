@@ -1,7 +1,7 @@
 import React from 'react';
-import '../Assets/NumberInput.scss';
+import '../Assets/TextInput.scss';
 
-class NumberInput extends React.Component {
+class TextInput extends React.Component {
   render() {
     return(
       <div className='number-input-container'>
@@ -9,13 +9,15 @@ class NumberInput extends React.Component {
           { this.props.name }
         </div>
         <input
+          value={this.props.value}
           className='number-input'
           onChange={this.props.onChange}
           type='text'
         />
+        <div class='underline'></div>
       </div>
     );
   }
 };
 
-export default NumberInput;
+export default TextInput;

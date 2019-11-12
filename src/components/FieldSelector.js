@@ -1,6 +1,6 @@
 import React from 'react';
 import ExclusiveOption from "./ExclusiveOption";
-import NumberInput from './NumberInput';
+import TextInput from './TextInput';
 import '../Assets/FieldSelector.scss';
 import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
@@ -13,11 +13,13 @@ class FieldSelector extends React.Component {
 
     this.state = {
       age: 25,
-      zip: 97205
+      zip: 97205,
+      county: 'Multnomah'
     }
 
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
+    this.handleCountyChange = this.handleCountyChange.bind(this)
   }
 
   handleAgeChange(e) {
@@ -30,22 +32,30 @@ class FieldSelector extends React.Component {
     this.setState({ zip: zip })
   }
 
+  handleCountyChange(e) {
+    let county = e.currentTarget.value
+    this.setState({ county: county })
+  }
 
   render() {
     return(
       <>
       <div className={'field-selector ' + this.context}>
-        text
-
         <ExclusiveOption items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}/>
 
-        <NumberInput name='Age' onChange={this.handleAgeChange} />
+        <TextInput name='Age' onChange={this.handleAgeChange} />
 
         <Section name='Location'>
-          <NumberInput name='ZIP' onChange={this.handleZIPChange} />
-
-          <input>
-          </input>
+          <TextInput
+            name='County'
+            value={this.state.county}
+            onChange={this.handleCountyChange}
+          />
+          <TextInput
+            name='ZIP'
+            value={this.state.zip}
+            onChange={this.handleZIPChange}
+          />
 
           <button
             id='your-location-button'

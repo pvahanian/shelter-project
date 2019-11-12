@@ -21,6 +21,7 @@ class FieldSelector extends React.Component {
     super(props)
 
     this.state = {
+      service: '',
       gender: '',
       age: '',
       zip: '',
@@ -29,6 +30,7 @@ class FieldSelector extends React.Component {
     }
 
     // Bind all functions which are called from child inputs
+    this.handleServiceChange = this.handleServiceChange.bind(this)
     this.handleGenderChange = this.handleGenderChange.bind(this)
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
@@ -43,6 +45,7 @@ class FieldSelector extends React.Component {
     this.goBehavior = this.goBehavior.bind(this)
   }
 
+  handleServiceChange = service => this.setState({ service: service })
 
   validGender(gender) {
     let message = ''
@@ -168,6 +171,7 @@ class FieldSelector extends React.Component {
     // REMOVE! JUST FOR DEBUG PURPOSES
     await this.sleep(2000)
     console.log({
+      service: this.state.service,
       gender: this.state.gender,
       age: this.state.age,
       zip: this.state.zip,
@@ -177,8 +181,21 @@ class FieldSelector extends React.Component {
 
   render() {
     return(
-      <>
       <div className={'field-selector ' + this.context}>
+        <ExclusiveOption
+          items={[
+            {
+              label: 'doggie',
+              image: '../dog.svg'
+            },
+            {
+              label: 'kitty',
+              image: '../cat.svg'
+            }
+          ]}
+          onChange={this.handleServiceChange}
+        />
+
         <ExclusiveOption
           items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}
           validator={this.validGender}
@@ -231,7 +248,6 @@ class FieldSelector extends React.Component {
           Go
         </button>
       </div>
-      </>
     );
   }
 }

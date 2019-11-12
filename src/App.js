@@ -33,7 +33,6 @@ function App() {
 
         <div id='main-container'>
           <FieldSelector />
-          <ExclusiveOption id='temp' items={exampleOptions} />
         </div>
 
         <div id='right-gutter-container'>

@@ -4,7 +4,7 @@
   display: grid;
 
   @include for(smaller-than-phone) {
-    grid-template-columns: [left-edge] 0 [left-gutter] 100% [right-gutter] 0 [right-edge];
+    grid-template-columns: [left-edge] 15px [left-gutter] 100% [right-gutter] 15px [right-edge];
     font-size: $small-font-size;
   }
 

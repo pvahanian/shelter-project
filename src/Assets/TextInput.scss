@@ -1,0 +1,56 @@
+@import '../GlobalStyle/globals';
+
+.number-input-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: calc(50px + $big-font-size);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.number-input {
+  text-align: center;
+
+  border: 0;
+  border-bottom: 1px solid $dark-border-color;
+
+  transition: background-color 0.2s linear;
+
+  &.good-entry:focus {
+    background-color: rgba(0,255,0,.1);
+  }
+
+  &.bad-entry {
+    background-color: rgba(255,0,0,.1);
+  }
+}
+
+.number-input-label {
+  font-size: 16px;
+  text-align: left;
+}
+
+.underline {
+  background-color: $accent-color;
+  margin-top: -1px;
+  height: 1px;
+  transform: scale(0, 1);
+  transition: all 0.2s linear;
+}
+
+.underline {
+  &.good-entry {
+    background-color: green;
+  }
+
+  &.bad-entry {
+    background-color: red;
+    transform: scale(1);
+  }
+}
+
+.number-input:focus+.underline {
+  transform: scale(1);
+}

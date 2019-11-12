@@ -20,6 +20,7 @@ class FieldSelector extends React.Component {
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
+    this.findLocation = this.findLocation.bind(this)
   }
 
   handleAgeChange(e) {
@@ -49,7 +50,19 @@ class FieldSelector extends React.Component {
   }
 
   validCounty() {
-    return this.state.county.toLowerCase() === 'multnomah'
+    return (
+      this.state.county.toLowerCase() === 'multnomah' ||
+      this.state.county.toLowerCase() === 'clackamas'
+    )
+  }
+
+  findLocation() {
+    console.log("Then we'd try to find their location using a Google API. For now...")
+
+    this.setState({
+      zip: '97086',
+      county: 'Clackamas'
+    })
   }
 
   render() {
@@ -60,6 +73,7 @@ class FieldSelector extends React.Component {
 
         <TextInput
           name='Age'
+          value={this.state.age}
           placeholder='32'
           onChange={this.handleAgeChange}
           validEntry={this.state.age ? (this.validAge(this.state.age) ? true : false) : null }
@@ -68,6 +82,7 @@ class FieldSelector extends React.Component {
         <Section name='Location'>
           <TextInput
             name='County'
+            value={this.state.county}
             placeholder='Multnomah'
             onChange={this.handleCountyChange}
             validEntry={this.state.county ? (this.validCounty(this.state.county) ? true : false) : null }
@@ -75,6 +90,7 @@ class FieldSelector extends React.Component {
 
           <TextInput
             name='ZIP'
+            value={this.state.zip}
             placeholder='97205'
             onChange={this.handleZIPChange}
             validEntry={this.state.zip ? (this.validZIP(this.state.zip) ? true : false) : null }
@@ -82,7 +98,7 @@ class FieldSelector extends React.Component {
 
           <button
             id='your-location-button'
-            onClick={e => console.log("Then we'd try to find their location using a Google API.")}
+            onClick={this.findLocation}
           >
             Your location
           </button>

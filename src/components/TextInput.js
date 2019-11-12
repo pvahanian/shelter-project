@@ -17,8 +17,9 @@ class TextInput extends React.Component {
           { this.props.name }
         </div>
         <input
+          value={this.props.value}
           placeholder={this.props.placeholder}
-          className={'number-input ' + validEntryClass } 
+          className={'number-input ' + validEntryClass }
           onChange={this.props.onChange}
           type='text'
         />

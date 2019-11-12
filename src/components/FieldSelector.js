@@ -65,8 +65,6 @@ class FieldSelector extends React.Component {
   }
 
 
-
-
   async handleZIPChange(zip) {
     await this.setState({ zip: zip })
 
@@ -97,6 +95,8 @@ class FieldSelector extends React.Component {
     let correctLength = zip.length === 5;
     if(!correctLength)
       message = 'ZIP codes are usually 5 digits long. Is this mistyped?'
+
+
 
     let valid = correctLength && isPositiveInteger
 
@@ -145,6 +145,8 @@ class FieldSelector extends React.Component {
 
   async goBehavior() {
     await this.setState({ doValidation: true })
+
+    await this.setState({doValidation: false})
 
     await this.sleep(2000)
 

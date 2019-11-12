@@ -3,6 +3,7 @@
 .number-input-container {
   display: flex;
   flex-direction: column;
+  text-align: left;
 
   width: 100%;
   height: calc(50px + $big-font-size);
@@ -47,6 +48,10 @@
     background-color: red;
     transform: scale(1);
   }
+}
+
+.invalid-entry-message {
+  font-size: $small-font-size - 4px;
 }
 
 .number-input:focus+.underline {

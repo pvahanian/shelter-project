@@ -181,6 +181,8 @@ class FieldSelector extends React.Component {
   }
 
   render() {
+    const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
+
     return(
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
@@ -188,11 +190,11 @@ class FieldSelector extends React.Component {
             items={[
               {
                 label: 'doggie',
-                image: '../dog.svg'
+                image: '../dog' + svgPathEndings
               },
               {
                 label: 'kitty',
-                image: '../cat.svg'
+                image: '../cat' + svgPathEndings
               }
             ]}
             onChange={this.handleServiceChange}

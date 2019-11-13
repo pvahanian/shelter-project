@@ -30,6 +30,8 @@ const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
 class App extends React.Component {
+  themeColor = 'light'
+
   state = {
     sessionID: null,
     categories: []
@@ -37,8 +39,8 @@ class App extends React.Component {
 
   render() {
     return (
-      <ThemeContext.Provider value='light'>
-        <div className='App'>
+      <ThemeContext.Provider value={this.themeColor}>
+        <div className={'app ' + this.themeColor }>
           <div id='left-gutter-container'>
             Left Gutter
           </div>

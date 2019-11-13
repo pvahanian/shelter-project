@@ -30,18 +30,24 @@ const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
 class App extends React.Component {
-  themeColor = 'light'
 
   state = {
+    themeColor: 'light',
     sessionID: null,
     categories: []
   }
 
   render() {
     return (
-      <ThemeContext.Provider value={this.themeColor}>
-        <div className={'app ' + this.themeColor }>
+      <ThemeContext.Provider value={this.state.themeColor}>
+        <div className={'app ' + this.state.themeColor }>
           <div id='left-gutter-container'>
+            <button onClick={e => this.setState({
+              themeColor: this.state.themeColor === 'light' ? 'dark' : 'light'
+            })}>
+              Swap Theme
+            </button>
+
             Left Gutter
           </div>
 

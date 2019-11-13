@@ -4,7 +4,7 @@
   display: grid;
 
   @include for(smaller-than-phone) {
-    grid-template-columns: [left-edge] 15px [left-gutter] 100% [right-gutter] 15px [right-edge];
+    grid-template-columns: [left-edge] 15px [left-gutter] auto [right-gutter] 15px [right-edge];
     font-size: $small-font-size;
   }
 
@@ -22,6 +22,9 @@
 #left-gutter-container {
   grid-column-start: left-edge;
   grid-column-end: left-gutter;
+
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
 #main-container {
@@ -37,4 +40,7 @@
 #right-gutter-container {
   grid-column-start: right-gutter;
   grid-column-end: right-edge;
+
+  word-wrap: break-word;
+  overflow: hidden;
 }

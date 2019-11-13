@@ -2,6 +2,7 @@
 
 .exclusive-group {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
   margin-top: 10px;
@@ -9,7 +10,6 @@
   padding-right: 10px;
 
   @include for(smaller-than-phone) {
-    flex-wrap: wrap;
   }
 }
 

@@ -86,10 +86,6 @@ class ExclusiveGroup extends React.Component {
     if(this.props.shouldValidate)
       this.validate()
 
-    console.log('selected', this.state.selected)
-
-
-
     return (
       <div className='exclusive-group-container'>
         <div className='exclusive-group'>

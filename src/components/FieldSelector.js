@@ -201,7 +201,7 @@ class FieldSelector extends React.Component {
 
         <InputLabel label='Gender'>
           <ExclusiveOption
-            items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}
+            items={['Male', 'Female', 'Trans Male', 'Trans Female']}
             validator={this.validGender}
             shouldValidate={this.state.doValidation}
             onChange={this.handleGenderChange}

@@ -6,49 +6,106 @@ pressed).
 
 import React from 'react';
 import '../Assets/ExclusiveOption.scss';
+import InvalidEntryMessage from './InvalidEntryMessage';
 
-// Child component of Group used to structure and handle option buttons.
+
+// Child component of ExclusiveGroup
 class ExclusiveButton extends React.Component {
   render() {
+    // For buttons with SVG images
+    if(typeof(this.props.data) !== 'string') {
+      // Assume object like {label, image} and build an SVG button
+      return (
+        <button
+          className={'exclusive-button ' + (this.props.selected ? 'selected' : '')}  // changes CSS and appearance when an option is selected/deselected
+          onClick={e => {this.props.onClick(e, this.props.data)}}    // changes the name of the pick in ExGroup's state.
+        >
+          <img src={this.props.data.image}>
+          </img>
+          {this.props.data.label}
+        </button>
+      )
+    }
+
+
     return (
       <button
         className={'exclusive-button ' + (this.props.selected ? 'selected' : '')}  // changes CSS and appearance when an option is selected/deselected
-        onClick={e => {this.props.onClick(e, this.props.name)}}    // changes the name of the pick in ExGroup's state.
+        onClick={e => {this.props.onClick(e, this.props.data)}}    // changes the name of the pick in ExGroup's state.
       >
-        {this.props.name}
+        {this.props.data}
       </button>
     );
   }
 }
 
-// Primary component, tracks information about selections
-// and makes the
+
 class ExclusiveGroup extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {selected: this.props.default};
+    this.state = {selected: this.props.default ? this.props.default : ''};
+
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(event, name) {
-    this.setState({selected: name})
+  valid = null
+  invalidEntryMessage = ''
+
+  handleClick(event, data) {
+
+    this.setState({selected: data})
+    if(typeof(data) === 'string')
+      this.props.onChange(data)
+    else
+      this.props.onChange(data.label)
+  }
+
+  validate() {
+    if(!this.props.validator)
+      return {valid: true, message: ''}
+
+    let value = this.state.selected
+    let validEntryClass = ''
+    let invalidEntryMessage = ''
+
+    // Check if given value is valid
+    let validityObject = this.props.validator(value)
+
+    // Note the results for reference in the render
+    this.valid = validityObject.valid
+
+    if(validityObject.valid === false)
+      this.invalidEntryMessage = validityObject.message
+
+    if(validityObject.valid === true)
+      this.invalidEntryMessage = ''
+
   }
 
   render() {
+    if(this.props.shouldValidate)
+      this.validate()
+
+    console.log('selected', this.state.selected)
+
+
+
     return (
-      <div
-        className='exclusive-group'
-      >
-        {
-          this.props.items.map((item, i) =>
-            <ExclusiveButton
-              selected={item===this.state.selected}
-              key={i}
-              name={item}
-              onClick={this.handleClick}
-            />
-          )
-        }
+      <div className='exclusive-group-container'>
+        <div className='exclusive-group'>
+          {
+            this.props.items.map((item, i) =>
+              <ExclusiveButton
+                selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
+                key={i}
+                data={item}
+                onClick={this.handleClick}
+              />
+            )
+          }
+        </div>
+
+        <InvalidEntryMessage message={this.invalidEntryMessage} />
       </div>
     );
   }

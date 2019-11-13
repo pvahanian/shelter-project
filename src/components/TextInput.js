@@ -1,19 +1,56 @@
 import React from 'react';
 import '../Assets/TextInput.scss';
+import InvalidEntryMessage from './InvalidEntryMessage';
 
 class TextInput extends React.Component {
-  render() {
-    let validEntryClass = ''
-    if(this.props.validEntry === true)
-      validEntryClass = 'good-entry'
-    else if(this.props.validEntry === false)
-      validEntryClass = 'bad-entry'
-    else if(this.props.validEntry === null)
-      validEntryClass = ''
+  constructor(props) {
+    super(props)
+  }
+
+  invalidEntryMessage = ''
+  valid = null
+
+
+  validate() {
+    if(!this.props.validator)
+      return {valid: true, message: ''}
 
     let value = this.props.value
+    let validEntryClass = ''
+    let invalidEntryMessage = ''
+
+    // Check if given value is valid
+    let validityObject = this.props.validator(value)
+
+    // Note the results for reference in the render
+    this.valid = validityObject.valid
+
+    if(validityObject.valid === false)
+      this.invalidEntryMessage = validityObject.message
+
+    if(validityObject.valid === true)
+      this.invalidEntryMessage = ''
+  }
+
+
+  render() {
+    let value = this.props.value
+    let validEntryClass = ''
+
+    // Find the correct validity class to add to our elements
+    if(this.valid === true)
+      validEntryClass = 'valid-entry'
+    if(this.valid === false)
+      validEntryClass = 'invalid-entry'
+
+    // Apply filter to entry, if one exists
     if(this.props.filter)
       value = this.props.filter(value)
+
+    // If we've been asked to validate, do it
+    if(this.props.shouldValidate)
+      this.validate()
+
 
     return(
       <div className={'number-input-container ' + validEntryClass}>
@@ -24,10 +61,17 @@ class TextInput extends React.Component {
           value={value}
           placeholder={this.props.placeholder}
           className={'number-input ' + validEntryClass}
-          onChange={this.props.onChange}
+          onChange={ e => {
+              let newValue = e.currentTarget.value
+              if(this.props.filter)
+                newValue = this.props.filter(newValue)
+              this.props.onChange(newValue)
+            }
+          }
           type='text'
         />
         <div class={'underline ' + validEntryClass}></div>
+        <InvalidEntryMessage message={this.invalidEntryMessage} />
       </div>
     );
   }

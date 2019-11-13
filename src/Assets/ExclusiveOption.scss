@@ -19,6 +19,14 @@
   border-radius: 0;
   border: 1px solid $dark-border-color;
   border-right: 0;
+
+  img {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 

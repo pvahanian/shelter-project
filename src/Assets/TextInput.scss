@@ -1,17 +1,6 @@
 @import '../GlobalStyle/globals';
 
-.number-input-container {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-
-  width: 100%;
-  height: calc(50px + $big-font-size);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.number-input {
+.text-input {
   text-align: center;
 
   border: 0;
@@ -28,10 +17,6 @@
   }
 }
 
-.number-input-label {
-  font-size: 16px;
-  text-align: left;
-}
 
 .underline {
   background-color: $accent-color;

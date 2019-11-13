@@ -53,14 +53,12 @@ class TextInput extends React.Component {
 
 
     return(
-      <div className={'number-input-container ' + validEntryClass}>
-        <div className='number-input-label'>
-          { this.props.name }
-        </div>
+      <>
         <input
           value={value}
           placeholder={this.props.placeholder}
-          className={'number-input ' + validEntryClass}
+          id={this.props.name.toLowerCase()+'-input'}
+          className={'text-input ' + validEntryClass}
           onChange={ e => {
               let newValue = e.currentTarget.value
               if(this.props.filter)
@@ -72,7 +70,7 @@ class TextInput extends React.Component {
         />
         <div class={'underline ' + validEntryClass}></div>
         <InvalidEntryMessage message={this.invalidEntryMessage} />
-      </div>
+      </>
     );
   }
 };

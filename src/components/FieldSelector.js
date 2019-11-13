@@ -5,6 +5,7 @@ import '../Assets/FieldSelector.scss';
 import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
+import InputLabel from './InputLabel';
 
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -70,7 +71,7 @@ class FieldSelector extends React.Component {
       return { valid: false, message: 'Required entry.'}
 
     // Using a regex here to recognize positive non-leading zero integers
-    let isPositiveInteger = /^[1-9](0|[1-9]*)$/.test(age)
+    let isPositiveInteger = /^[1-9]([0-9]*)$/.test(age)
     if(!isPositiveInteger)
       message = 'Please enter a positive round number like 18 or 56.'
 
@@ -182,65 +183,74 @@ class FieldSelector extends React.Component {
   render() {
     return(
       <div className={'field-selector ' + this.context}>
-        <ExclusiveOption
-          items={[
-            {
-              label: 'doggie',
-              image: '../dog.svg'
-            },
-            {
-              label: 'kitty',
-              image: '../cat.svg'
-            }
-          ]}
-          onChange={this.handleServiceChange}
-        />
+        <InputLabel label='Service'>
+          <ExclusiveOption
+            items={[
+              {
+                label: 'doggie',
+                image: '../dog.svg'
+              },
+              {
+                label: 'kitty',
+                image: '../cat.svg'
+              }
+            ]}
+            onChange={this.handleServiceChange}
+          />
+        </InputLabel>
 
-        <ExclusiveOption
-          items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}
-          validator={this.validGender}
-          shouldValidate={this.state.doValidation}
-          onChange={this.handleGenderChange}
-        />
+        <InputLabel label='Gender'>
+          <ExclusiveOption
+            items={['Male', 'Female', 'Transgender Male', 'Transgender Female']}
+            validator={this.validGender}
+            shouldValidate={this.state.doValidation}
+            onChange={this.handleGenderChange}
+          />
+        </InputLabel>
 
-        <TextInput
-          name='Age'
-          value={this.state.age}
-          filter={this.onlyNumbers}
-          validator={this.validAge}
-          placeholder='32'
-          onChange={this.handleAgeChange}
-          shouldValidate={this.state.doValidation}
-        />
-
-        <Section name='Location'>
-
+        <InputLabel label='Age'>
           <TextInput
-            name='ZIP'
-            value={this.state.zip}
+            name='Age'
+            value={this.state.age}
             filter={this.onlyNumbers}
-            validator={this.validZIP}
-            placeholder='97205'
-            onChange={this.handleZIPChange}
+            validator={this.validAge}
+            placeholder='32'
+            onChange={this.handleAgeChange}
             shouldValidate={this.state.doValidation}
           />
+        </InputLabel>
 
-          <TextInput
-            name='County'
-            value={this.state.county}
-            validator={this.validCounty}
-            placeholder='Multnomah'
-            onChange={this.handleCountyChange}
-            shouldValidate={this.state.doValidation}
-          />
+        <div id='zip-and-county'>
+          <InputLabel label='ZIP'>
+            <TextInput
+              name='ZIP'
+              value={this.state.zip}
+              filter={this.onlyNumbers}
+              validator={this.validZIP}
+              placeholder='97205'
+              onChange={this.handleZIPChange}
+              shouldValidate={this.state.doValidation}
+            />
+          </InputLabel>
 
-          <button
-            id='your-location-button'
-            onClick={this.findLocation}
-          >
-            Your location
-          </button>
-        </Section>
+          <InputLabel label='County'>
+            <TextInput
+              name='County'
+              value={this.state.county}
+              validator={this.validCounty}
+              placeholder='Multnomah'
+              onChange={this.handleCountyChange}
+              shouldValidate={this.state.doValidation}
+            />
+          </InputLabel>
+        </div>
+
+        <button
+          id='your-location-button'
+          onClick={this.findLocation}
+        >
+          Your location
+        </button>
 
         <button
           onClick={this.goBehavior}

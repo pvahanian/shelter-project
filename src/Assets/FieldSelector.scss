@@ -1,5 +1,23 @@
 @import '../GlobalStyle/globals';
 
+#zip-and-county {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  > * {
+//    width: 40%;
+  }
+}
+
+
+#age-input-container {
+  width: 100%;
+}
+
+
+
 .field-selector {
   display: flex;
   flex-direction: column;

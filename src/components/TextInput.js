@@ -68,7 +68,7 @@ class TextInput extends React.Component {
           }
           type='text'
         />
-        <div class={'underline ' + validEntryClass}></div>
+        <div className={'underline ' + validEntryClass}></div>
         <InvalidEntryMessage message={this.invalidEntryMessage} />
       </>
     );

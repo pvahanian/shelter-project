@@ -1,12 +1,14 @@
 import React from 'react';
 import '../Assets/TextInput.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
+import {ThemeContext} from '../ThemeContext';
 
 class TextInput extends React.Component {
   constructor(props) {
     super(props)
   }
 
+  static contextType = ThemeContext
   invalidEntryMessage = ''
   valid = null
 
@@ -39,9 +41,9 @@ class TextInput extends React.Component {
 
     // Find the correct validity class to add to our elements
     if(this.valid === true)
-      validEntryClass = 'valid-entry'
+      validEntryClass = 'valid-entry '
     if(this.valid === false)
-      validEntryClass = 'invalid-entry'
+      validEntryClass = 'invalid-entry '
 
     // Apply filter to entry, if one exists
     if(this.props.filter)
@@ -53,14 +55,12 @@ class TextInput extends React.Component {
 
 
     return(
-      <div className={'number-input-container ' + validEntryClass}>
-        <div className='number-input-label'>
-          { this.props.name }
-        </div>
+      <>
         <input
           value={value}
           placeholder={this.props.placeholder}
-          className={'number-input ' + validEntryClass}
+          id={this.props.name.toLowerCase()+'-input'}
+          className={'text-input ' + validEntryClass + this.context}
           onChange={ e => {
               let newValue = e.currentTarget.value
               if(this.props.filter)
@@ -70,9 +70,9 @@ class TextInput extends React.Component {
           }
           type='text'
         />
-        <div class={'underline ' + validEntryClass}></div>
+        <div className={'underline ' + validEntryClass + this.context}></div>
         <InvalidEntryMessage message={this.invalidEntryMessage} />
-      </div>
+      </>
     );
   }
 };

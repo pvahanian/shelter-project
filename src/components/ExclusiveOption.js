@@ -7,17 +7,20 @@ pressed).
 import React from 'react';
 import '../Assets/ExclusiveOption.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
+import { ThemeContext } from '../ThemeContext';
 
 
 // Child component of ExclusiveGroup
 class ExclusiveButton extends React.Component {
+  static contextType = ThemeContext
+
   render() {
     // For buttons with SVG images
     if(typeof(this.props.data) !== 'string') {
       // Assume object like {label, image} and build an SVG button
       return (
         <button
-          className={'exclusive-button ' + (this.props.selected ? 'selected' : '')}  // changes CSS and appearance when an option is selected/deselected
+          className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
           onClick={e => {this.props.onClick(e, this.props.data)}}    // changes the name of the pick in ExGroup's state.
         >
           <img src={this.props.data.image}>
@@ -30,7 +33,7 @@ class ExclusiveButton extends React.Component {
 
     return (
       <button
-        className={'exclusive-button ' + (this.props.selected ? 'selected' : '')}  // changes CSS and appearance when an option is selected/deselected
+        className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
         onClick={e => {this.props.onClick(e, this.props.data)}}    // changes the name of the pick in ExGroup's state.
       >
         {this.props.data}
@@ -85,10 +88,6 @@ class ExclusiveGroup extends React.Component {
   render() {
     if(this.props.shouldValidate)
       this.validate()
-
-    console.log('selected', this.state.selected)
-
-
 
     return (
       <div className='exclusive-group-container'>

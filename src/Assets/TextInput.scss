@@ -1,17 +1,6 @@
 @import '../GlobalStyle/globals';
 
-.number-input-container {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-
-  width: 100%;
-  height: calc(50px + $big-font-size);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.number-input {
+.text-input {
   text-align: center;
 
   border: 0;
@@ -19,37 +8,41 @@
 
   transition: background-color 0.2s linear;
 
-  &.valid-entry:focus {
-//    background-color: rgba(0,255,0,.1);
-  }
+  // Color of the input field (defaults to white, so inheritance is needed)
+  background-color: inherit;
 
+  // Background color when invalid entries are submitted
   &.invalid-entry {
-    background-color: rgba(255,0,0,.1);
+    &.light { background-color: rgba(255,0,0,.1); }
+    &.dark { background-color: inherit; }
   }
 }
 
-.number-input-label {
-  font-size: 16px;
-  text-align: left;
-}
 
 .underline {
-  background-color: $accent-color;
   margin-top: -1px;
   height: 1px;
   transform: scale(0, 1);
   transition: all 0.2s linear;
 
+  // Underline color when selected
+  &.light { background-color: $accent-color; }
+  &.dark { background-color: white; }
+
+  // Underline color for good entries when selected
   &.valid-entry {
-    background-color: green;
+    &.light { background-color: green; }
+    &.dark { background-color: rgb(150,255,150); }
   }
 
+  // Underline color for bad entries always
   &.invalid-entry {
-    background-color: red;
+    &.light { background-color: red; }
+    &.dark { background-color: rgb(255,100,100); }
     transform: scale(1);
   }
 }
 
-.number-input:focus+.underline {
+.text-input:focus+.underline {
   transform: scale(1);
 }

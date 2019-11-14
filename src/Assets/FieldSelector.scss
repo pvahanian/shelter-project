@@ -1,5 +1,28 @@
 @import '../GlobalStyle/globals';
 
+#zip-and-county {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  // Zip and County will always divide the width evenly and have a 20px space between them
+  justify-content: space-between;
+  > * {
+    width: calc(50% - 20px);
+  }
+}
+
+
+#age-input-container {
+  width: 100%;
+}
+
+#gender-input-container {
+  width: 100%;
+}
+
+
+
 .field-selector {
   display: flex;
   flex-direction: column;

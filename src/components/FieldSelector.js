@@ -189,12 +189,20 @@ class FieldSelector extends React.Component {
           <ExclusiveOption
             items={[
               {
-                label: 'doggie',
-                image: '../dog' + svgPathEndings
+                label: 'Housing',
+                image: '../housing' + svgPathEndings
               },
               {
-                label: 'kitty',
-                image: '../cat' + svgPathEndings
+                label: 'Finance',
+                image: '../finance' + svgPathEndings
+              },
+              {
+                label: 'Food',
+                image: '../food' + svgPathEndings
+              },
+              {
+                label: 'Medical',
+                image: '../medical' + svgPathEndings
               }
             ]}
             onChange={this.handleServiceChange}

@@ -6,11 +6,11 @@ class InputLabel extends React.Component {
   render() {
     return(
       <div
-        id={this.props.label.toLowerCase() + '-input-container'}
+        id={this.props.label.toLowerCase().replace(' ', '-') + '-input-container'}
         className='input-container'
       >
         <div
-          id={this.props.label.toLowerCase() + '-input-label'}
+          id={this.props.label.toLowerCase().replace(' ', '-') + '-input-label'}
           className='input-label'
         >
           { this.props.label }

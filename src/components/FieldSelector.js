@@ -1,3 +1,4 @@
+//changed lines so far 44, 182, 250
 import React from 'react';
 import ExclusiveOption from "./ExclusiveOption";
 import TextInput from './TextInput';
@@ -22,11 +23,13 @@ class FieldSelector extends React.Component {
     super(props)
 
     this.state = {
+
       service: '',
       gender: '',
       age: '',
       zip: '',
       county: '',
+      familySize: '', //Eric Changed Here
       doValidation: false
     }
 
@@ -36,17 +39,37 @@ class FieldSelector extends React.Component {
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
+    this.handleFamilySizeChange = this.handleFamilySizeChange.bind(this)
 
     this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
     this.validZIP = this.validZIP.bind(this)
     this.validCounty = this.validCounty.bind(this)
-
+    this.validFamilySize = this.validFamilySize.bind(this)
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
   }
 
   handleServiceChange = service => this.setState({ service: service })
+
+  handleFamilySizeChange = familysize => this.setState({familySize: familysize})
+
+  handleGenderChange = gender => this.setState({ gender: gender })
+
+  handleAgeChange = age => this.setState({ age: age })
+
+  validFamilySize(familySize) {
+    console.log(familySize)
+
+    let message = ''
+    let empty = familySize === ''
+    if(empty)
+      return { valid: false, message: 'Required entry.'}
+    let valid = familySize >= 0 && familySize <= 16
+      if(!valid)
+        message = 'You don have that many chilren!'
+    return {valid, message}
+  }
 
   validGender(gender) {
     let message = ''
@@ -59,10 +82,6 @@ class FieldSelector extends React.Component {
 
     return {valid, message}
   }
-
-  handleGenderChange = gender => this.setState({ gender: gender })
-
-  handleAgeChange = age => this.setState({ age: age })
 
   validAge(age) {
     let message = ''
@@ -176,7 +195,8 @@ class FieldSelector extends React.Component {
       gender: this.state.gender,
       age: this.state.age,
       zip: this.state.zip,
-      county: this.state.county
+      county: this.state.county,
+      familySize: this.state.familySize,
     })
   }
 
@@ -245,7 +265,19 @@ class FieldSelector extends React.Component {
               shouldValidate={this.state.doValidation}
             />
           </InputLabel>
+          <InputLabel label ='Family Size'>
+            <TextInput
+              name='famliysize'
+              value ={this.state.familySize}
+              validator ={this.validFamilySize}
+              placeholder='How many people are in your family?'
+              onChange={this.handleFamilySizeChange}
+              shouldValidate={this.state.doValidation}
+            />
+          </InputLabel>
         </div>
+
+
 
         <button
           id='your-location-button'

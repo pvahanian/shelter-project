@@ -1,3 +1,4 @@
+import { storeResult, fetchResult } from './components/SearchResult/ResultStorage'
 
 class APIWrapper {
 
@@ -44,7 +45,10 @@ class APIWrapper {
     let response = await fetch(
         `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
     )
-    return await response.json()
+
+    let rvalue = await response.json();
+    storeResult(rvalue, 'getResource');
+    return rvalue;
   }
 
   async getCountyByZipCode(obj) {

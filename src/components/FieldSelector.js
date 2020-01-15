@@ -28,7 +28,8 @@ class FieldSelector extends React.Component {
       age: '',
       zip: '',
       county: '',
-      doValidation: false
+      doValidation: false,
+      possibleCounties: ''
     }
 
     // Bind all functions which are called from child inputs
@@ -95,12 +96,37 @@ class FieldSelector extends React.Component {
         zip: this.state.zip
       })
       .then(data => this.setState(
-        {county: data[0]['county']},
+        {county: data[0]['county']}
       ))
       .catch(err => {
         // TODO: we'll probably want to take action here to resolve the error
         console.log(err)
       })
+
+    if(this.validZIP(zip).valid){
+      await API.getCountyByZipCode({
+        zip: this.state.zip
+      }).then(data => {
+        this.setState({ possibleCounties: Object.values(data).map(value => { return value['county']})});
+          console.log(this.state.possibleCounties);
+      })
+    }
+  }
+
+
+  async generateCountyOptionsList(zip) {
+    await this.setState({zip : zip})
+
+    if(this.validZIP(zip).valid){
+      await API.getCountyByZipCode({
+        zip: this.state.zip
+      }).then(data => { let values = Object.values(data).map(value => { return value['county']});
+          console.log(values);
+      })
+
+
+
+    }
   }
 
   validZIP(zip) {
@@ -109,7 +135,7 @@ class FieldSelector extends React.Component {
     if(!zip)
       return { valid: false, message: 'Required entry.'}
 
-    let isPositiveInteger = /^(0|[1-9]\d*)$/.test(zip);
+    let isPositiveInteger = /^([0-9]\d*)$/.test(zip);
     if(!isPositiveInteger)
       message = 'Please only use numbers in the ZIP code.'
 
@@ -236,29 +262,30 @@ class FieldSelector extends React.Component {
             />
           </InputLabel>
 
-
-          <InputLabel label = 'County'>
-            <CountySelect
-              name = 'County'
-              value={this.state.county}
-              validator={this.validCounty}
-              onChange={this.handleCountyChange}
-              shouldValidate={this.state.doValidation}
-              >
-            </CountySelect>
-          </InputLabel>
-
-
-          <InputLabel label='County'>
-            <TextInput
-              name='County'
-              value={this.state.county}
-              validator={this.validCounty}
-              placeholder='Multnomah'
-              onChange={this.handleCountyChange}
-              shouldValidate={this.state.doValidation}
-            />
-          </InputLabel>
+          {
+            this.state.zip && !this.state.county ?
+            <InputLabel label = 'County'>
+              <CountySelect
+                name = 'County'
+                value={this.state.county}
+                validator={this.validCounty}
+                onChange={this.handleCountyChange}
+                shouldValidate={this.state.doValidation}
+                >
+              </CountySelect>
+            </InputLabel>
+            :
+            <InputLabel label='County'>
+              <TextInput
+                name='County'
+                value={this.state.county}
+                validator={this.validCounty}
+                placeholder='Multnomah'
+                onChange={this.handleCountyChange}
+                shouldValidate={this.state.doValidation}
+              />
+            </InputLabel>
+          }
 
 
         </div>

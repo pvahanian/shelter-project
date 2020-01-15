@@ -53,11 +53,14 @@ class ZipSelect extends React.Component {
       value = {value}
       id= {this.props.name.toLowerCase()+'input'}
       className= {'text-input' + validEntryClass + this.context + ' county-select'}
-      //Needs ONCHANGE FIXED!!
-
-      onChange >
-
-
+      onChange= {e => {
+          let newValue = e.currentTarget.value
+          if(this.props.filter)
+            newValue = this.props.filter(newValue)
+          this.props.onChange(newValue)
+        }
+      }
+      >
         <option value = '' disabled selected>Choose your county:</option>
         <option>DropDown2</option>
         <option>DropDown3</option>

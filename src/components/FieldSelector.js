@@ -6,6 +6,7 @@ import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
+import CountySelect from './CountySelect'
 
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -94,7 +95,7 @@ class FieldSelector extends React.Component {
         zip: this.state.zip
       })
       .then(data => this.setState(
-        {county: data[0]['county']}
+        {county: data[0]['county']},
       ))
       .catch(err => {
         // TODO: we'll probably want to take action here to resolve the error
@@ -229,11 +230,24 @@ class FieldSelector extends React.Component {
               value={this.state.zip}
               filter={this.onlyNumbers}
               validator={this.validZIP}
-              placeholder='97205'
+              placeholder='97333'
               onChange={this.handleZIPChange}
               shouldValidate={this.state.doValidation}
             />
           </InputLabel>
+
+
+          <InputLabel label = 'County'>
+            <CountySelect
+              name = 'County'
+              value={this.state.county}
+              validator={this.validCounty}
+              onChange={this.handleCountyChange}
+              shouldValidate={this.state.doValidation}
+              >
+            </CountySelect>
+          </InputLabel>
+
 
           <InputLabel label='County'>
             <TextInput
@@ -245,7 +259,11 @@ class FieldSelector extends React.Component {
               shouldValidate={this.state.doValidation}
             />
           </InputLabel>
+
+
         </div>
+
+
 
         <button
           id='your-location-button'

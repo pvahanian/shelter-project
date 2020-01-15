@@ -210,6 +210,38 @@ class FieldSelector extends React.Component {
   render() {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
 
+
+    let county = null;
+    if(this.state.possibleCounties){
+      county = (
+        <InputLabel label = 'County'>
+          <CountySelect
+            name = 'County'
+            value={this.state.county}
+            validator={this.validCounty}
+            onChange={this.handleCountyChange}
+            shouldValidate={this.state.doValidation}
+            counties = {this.state.possibleCounties}
+            >
+          </CountySelect>
+        </InputLabel>
+      )
+    } else {
+      county = (
+        <InputLabel label='County'>
+          <TextInput
+            name='County'
+            value={this.state.county}
+            validator={this.validCounty}
+            placeholder='Multnomah'
+            onChange={this.handleCountyChange}
+            shouldValidate={this.state.doValidation}
+          />
+        </InputLabel>
+      )
+    }
+
+
     return(
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
@@ -262,30 +294,8 @@ class FieldSelector extends React.Component {
             />
           </InputLabel>
 
-          {
-            this.state.zip && !this.state.county ?
-            <InputLabel label = 'County'>
-              <CountySelect
-                name = 'County'
-                value={this.state.county}
-                validator={this.validCounty}
-                onChange={this.handleCountyChange}
-                shouldValidate={this.state.doValidation}
-                >
-              </CountySelect>
-            </InputLabel>
-            :
-            <InputLabel label='County'>
-              <TextInput
-                name='County'
-                value={this.state.county}
-                validator={this.validCounty}
-                placeholder='Multnomah'
-                onChange={this.handleCountyChange}
-                shouldValidate={this.state.doValidation}
-              />
-            </InputLabel>
-          }
+          {county}
+
 
 
         </div>

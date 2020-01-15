@@ -47,6 +47,8 @@ class ZipSelect extends React.Component {
       this.validate()
 
 
+
+
     return (
 
       <select
@@ -60,10 +62,14 @@ class ZipSelect extends React.Component {
           this.props.onChange(newValue)
         }
       }
+      counties = {this.props.counties}
       >
         <option value = '' disabled selected>Choose your county:</option>
-        <option>DropDown2</option>
-        <option>DropDown3</option>
+        {this.props.counties.map(county => {
+          return (
+            <option value = {county}>{county}</option>
+          )
+        })}
       </select>
     )
   }

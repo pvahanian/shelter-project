@@ -11,7 +11,7 @@ class ZipSelect extends React.Component {
   static contextType = ThemeContext
   invalidEntryMessage = ''
   valid = null
-
+//Does this need validation, being we are already pulling the information from an API?
   validate() {
     if(!this.props.validator)
       return {valid: true, message: ''}
@@ -64,10 +64,10 @@ class ZipSelect extends React.Component {
       }
       counties = {this.props.counties}
       >
-        <option value = '' disabled selected>Choose your county:</option>
-        {this.props.counties.map(county => {
+        <option value = '' disabled>Choose your county:</option>
+        {this.props.counties.map((county,index) => {
           return (
-            <option value = {county}>{county}</option>
+            <option key = {index} value = {county}>{county}</option>
           )
         })}
       </select>

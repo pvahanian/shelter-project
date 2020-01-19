@@ -12,6 +12,7 @@ class ZipSelect extends React.Component {
   invalidEntryMessage = ''
   valid = null
 //Does this need validation, being we are already pulling the information from an API?
+
   validate() {
     if(!this.props.validator)
       return {valid: true, message: ''}

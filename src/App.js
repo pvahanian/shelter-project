@@ -49,6 +49,7 @@ class App extends React.Component {
   render() {
     return (
       <ThemeContext.Provider value={this.state.themeColor}>
+      <Router>
         <div className={'app ' + this.state.themeColor }>
           <div id='left-gutter-container'>
             <button onClick={e => this.setState({
@@ -79,6 +80,7 @@ class App extends React.Component {
             Right Gutter
           </div>
         </div>
+        </Router>
       </ThemeContext.Provider>
     );
   }

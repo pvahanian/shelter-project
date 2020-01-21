@@ -9,6 +9,15 @@ import APIWrapper from "./APIWrapper.js";
 import ExclusiveOption from "./components/ExclusiveOption";
 import Section from './components/Section';
 import { ThemeContext } from './ThemeContext';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
+import Shelter from './components/shelter_info'
+
 
 const navbar = {};
 navbar.brand = {linkTo: "#", text: "Portland Shelters"};
@@ -53,7 +62,17 @@ class App extends React.Component {
 
           <div id='main-container'>
             Main Container
-            <FieldSelector />
+            <Route
+              exact path="/"
+            >
+              <FieldSelector changeAPIData={this.handleApiDataChange}/>
+            </Route>
+
+            <Route
+              path="/info"
+            >
+              <Shelter appProps={this.state}/>
+            </Route>
           </div>
 
           <div id='right-gutter-container'>

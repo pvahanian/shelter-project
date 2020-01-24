@@ -28,6 +28,7 @@ class FieldSelector extends React.Component {
       age: '',
       zip: '',
       county: '',
+      validCounty: 'null',
       doValidation: false,
       possibleCounties: ''
     }
@@ -43,7 +44,6 @@ class FieldSelector extends React.Component {
     this.validAge = this.validAge.bind(this)
     this.validZIP = this.validZIP.bind(this)
     this.validCounty = this.validCounty.bind(this)
-    this.validateCountyWithAPI = this.validateCountyWithAPI.bind(this)
 
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
@@ -145,57 +145,16 @@ class FieldSelector extends React.Component {
   handleCountyChange = county => this.setState({ county: county })
 
 
-  validateCountyWithAPI = (countyToValidate) => {
+  validCounty = (county) => {
+    let valid = null;
     let message = '';
-
-
-    if(!countyToValidate)
-      return { valid: false, message: 'Required entry.'}
-    //Need to remove the proxy https://cors-anywhere.herokuapp.com by SOLVING THE CORS ERROR!!
-  fetch(
-    `https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`, {
-  crossDomain: true,
-  method: 'GET',
-  headers: {'Content-Type': 'application/json'},
-}
-  ).then(result => {
-    return result.json();
-  }).then(data => {
-    const countiesORWA = [];
-    data.forEach(el => countiesORWA.push(el[0]
-      .toLowerCase()
-      .split('')
-      .reverse()
-      .slice(7)
-      .reverse()
-      .join('')));
-    countiesORWA.shift();
-    if (countiesORWA.includes(countyToValidate.toLowerCase())){
-      return {countyToValidate, message};
-    } else {
-      return {valid: false, message: 'We don\'t know this county, is it mistyped?'}
+    if(!county) {
+      return { valid: false, message: 'Required entry.'};
+    } else if (this.state.validCounty) {
+      return {valid, message};
+    } else if (!this.state.validCounty) {
+      return {valid: false, message: "This is not an OR or WA county."};
     }
-  })
-  .catch(err =>{
-    console.log(err);
-  })
-}
-
-
-  validCounty(county) {
-    let message = ''
-
-    if(!county)
-      return { valid: false, message: 'Required entry.'}
-
-    // TODO: Add better county validation & add suggested correct spellings of counties
-    let knownCounty = (county.toLowerCase() === 'multnomah' || county.toLowerCase() === 'clackamas')
-    if(!knownCounty)
-      message = "We don't know this county. Is this mistyped?"
-
-    let valid = knownCounty
-
-    return {valid, message}
   }
 
   findLocation() {
@@ -219,7 +178,33 @@ class FieldSelector extends React.Component {
   }
 
   async goBehavior() {
-    // TODO: This is not the smart way to do validation once and stop
+     await fetch(
+      `https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`, {
+    crossDomain: true,
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+    })
+    .then(result => {
+      return result.json();
+    }).then(data => {
+      const countiesORWA = [];
+      data.forEach(el => countiesORWA.push(el[0]
+        .toLowerCase()
+        .split('')
+        .reverse()
+        .slice(7)
+        .reverse()
+        .join('')));
+      countiesORWA.shift();
+      if (countiesORWA.includes(this.state.county.toLowerCase())){
+        this.setState({validCounty: true})
+      } else {
+        this.setState({validCounty: false})
+      }
+    })
+    .catch(err =>{
+      console.log(err);
+    })
     await this.setState({ doValidation: true })
     await this.setState({ doValidation: false })
 
@@ -245,7 +230,7 @@ class FieldSelector extends React.Component {
           <CountySelect
             name = 'County'
             value={this.state.county}
-            validator={this.validateCountyWithAPI}
+            validator={this.validCounty}
             onChange={this.handleCountyChange}
             shouldValidate={this.state.doValidation}
             counties = {this.state.possibleCounties}
@@ -259,7 +244,7 @@ class FieldSelector extends React.Component {
           <TextInput
             name='County'
             value={this.state.county}
-            validator={this.validateCountyWithAPI}
+            validator={this.validCounty}
             placeholder='Multnomah'
             onChange={this.handleCountyChange}
             shouldValidate={this.state.doValidation}

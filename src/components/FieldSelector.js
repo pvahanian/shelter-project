@@ -108,8 +108,6 @@ class FieldSelector extends React.Component {
         zip: this.state.zip
       }).then(data => {
         this.setState({ possibleCounties: Object.values(data).map(value => { return value['county']})});
-          //this needs deleted, only here so that people see it is indeed working.
-          console.log(this.state.possibleCounties);
       })
     }
 

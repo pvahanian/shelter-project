@@ -3,12 +3,11 @@ import ShelterCard from './shelterCard'
 import PropTypes from "prop-types"
 
 const Shelters = ({ shelters }) => (
-  <div>
-    {console.log(shelters)}
+  <div style={{margin: '0,auto'}}>
     <h1> Relevant Shelters </h1>
-    <ul className="shetlerList">
+    <ul className="shetlerList" style={{listStyleType: 'none'}}>
       {shelters && shelters.map(shelter => (
-        <li key={shelter.Id}>
+        <li key={shelter.Id} style={{border: '1px solid black', padding: "0 0 10px 0"}}>
           <ShelterCard {...shelter} />
         </li>
       ))}

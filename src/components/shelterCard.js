@@ -1,7 +1,7 @@
 import React from 'react';
-import './shelter_info.scss';
+//import './shelterCard.scss';
 
-const Shelter = ({Name, Address, Website, Resources, Contact}) => (
+const ShelterCard = ({ID, Name, Address, Website, Resources, Contact}) => (
     <div className="shelterCard">
         <h1 className="shelterName"> {Name} </h1>
         <h4 className="shelterAddress"> {Address} </h4>
@@ -29,4 +29,4 @@ function ResourceList(props) {
         ));
 }
 
-export default Shelter;
+export default ShelterCard;

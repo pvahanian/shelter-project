@@ -44,6 +44,7 @@ class FieldSelector extends React.Component {
     this.validAge = this.validAge.bind(this)
     this.validZIP = this.validZIP.bind(this)
     this.validCounty = this.validCounty.bind(this)
+    this.countyAPICall = this.countyAPICall.bind(this)
 
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
@@ -102,7 +103,11 @@ class FieldSelector extends React.Component {
         // TODO: we'll probably want to take action here to resolve the error
         console.log(err)
       })
+    this.getAllPossibleCountiesByZip(zip);
+  }
 
+  async getAllPossibleCountiesByZip(zip) {
+    await this.setState({zip : zip})
     if(this.validZIP(zip).valid){
       await API.getCountyByZipCode({
         zip: this.state.zip
@@ -175,34 +180,47 @@ class FieldSelector extends React.Component {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  async countyAPICall() {
+    await fetch(
+      /*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost 
+      this proxy prevents cors errors from being thrown by chrome. When the project is hosted somewhere, these errors
+      won't be an issue.*/
+     `https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`, {
+   crossDomain: true,
+   method: 'GET',
+   headers: {'Content-Type': 'application/json'},
+   })
+   .then(result => {
+     return result.json();
+   }).then(data => {
+     const countiesORWA = [];
+     data.forEach(el => countiesORWA.push(el[0]
+       .toLowerCase()
+       .split('')
+       .reverse()
+       .slice(7)
+       .reverse()
+       .join('')));
+     countiesORWA.shift();
+     if (countiesORWA.includes(this.state.county.toLowerCase())){
+       this.setState({validCounty: true})
+     } else {
+       this.setState({validCounty: false})
+     }
+   })
+   //Hardcoding here is a backup list of all counties serviced in case api fails.
+   .catch(err =>{
+    const countiesORWA = ["baker", "benton", "clackamas", "clatsop", "columbia", "coos", "crook", "curry", "deschutes", "douglas", "gilliam", "grant", "harney", "hood river", "jackson", "jefferson", "josephine", "klamath", "lake", "lane", "lincoln", "linn", "malheur", "marion", "morrow", "multnomah", "polk", "sherman", "tillamook", "umatilla", "union", "wallowa", "wasco", "washington", "wheeler", "yamhill", "clark", "cowlitz", "skamania", "wahkiakum"]
+    if (countiesORWA.includes(this.state.county.toLowerCase())){
+      this.setState({validCounty: true})
+    } else {
+      this.setState({validCounty: false})
+    }
+   })
+  }
+
   async goBehavior() {
-     await fetch(
-      `https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`, {
-    crossDomain: true,
-    method: 'GET',
-    headers: {'Content-Type': 'application/json'},
-    })
-    .then(result => {
-      return result.json();
-    }).then(data => {
-      const countiesORWA = [];
-      data.forEach(el => countiesORWA.push(el[0]
-        .toLowerCase()
-        .split('')
-        .reverse()
-        .slice(7)
-        .reverse()
-        .join('')));
-      countiesORWA.shift();
-      if (countiesORWA.includes(this.state.county.toLowerCase())){
-        this.setState({validCounty: true})
-      } else {
-        this.setState({validCounty: false})
-      }
-    })
-    .catch(err =>{
-      console.log(err);
-    })
+    await this.countyAPICall(); 
     await this.setState({ doValidation: true })
     await this.setState({ doValidation: false })
 

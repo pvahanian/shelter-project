@@ -1,9 +1,5 @@
 import React from 'react';
-<<<<<<< HEAD:src/components/shelter_info.js
-import '../Assets/shelter_info.scss';
-=======
-//import './shelterCard.scss';
->>>>>>> 4cf406a8d5804f8d683f4f142e3ff594f9982f23:src/components/shelterCard.js
+//import '../Assets/shelter_info.scss';
 
 const ShelterCard = ({ID, Name, Address, Website, Resources, Contact}) => (
     <div className="shelterCard">

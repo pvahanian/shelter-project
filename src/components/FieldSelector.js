@@ -6,6 +6,7 @@ import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
+import SubmitButton from './SubmitButton/SubmitButton.js'
 
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -44,6 +45,7 @@ class FieldSelector extends React.Component {
 
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
+    this.isPageDataValid = this.isPageDataValid.bind(this)
   }
 
   handleServiceChange = service => this.setState({ service: service })
@@ -180,6 +182,11 @@ class FieldSelector extends React.Component {
     })
   }
 
+  isPageDataValid(){
+    return this.validCounty(this.state.county).valid &&  this.validGender(this.state.gender).valid
+    && this.validAge(this.state.age).valid && this.validZIP(this.state.zip).valid
+  }
+
   render() {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
 
@@ -254,11 +261,9 @@ class FieldSelector extends React.Component {
           Your location
         </button>
 
-        <button
-          onClick={this.goBehavior}
-        >
-          Go
-        </button>
+        <SubmitButton goBehavior={this.goBehavior} changeAPIData={this.props.changeAPIData} isPageDataValid={this.isPageDataValid}
+          fieldSelectorState={this.state}
+        />
       </div>
     );
   }

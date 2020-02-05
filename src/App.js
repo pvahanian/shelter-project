@@ -16,7 +16,7 @@ import {
   Link,
   Redirect
 } from "react-router-dom";
-import Shelter from './components/shelter_info'
+import Shelter from './components/shetler.js'
 
 
 const navbar = {};
@@ -33,7 +33,7 @@ navbar.links = [
   }
 ];
 
-
+const fakeShelter = [{ID: 1, Name: "Shelter 1", Address: "123 SE Sesame Street", Website: "https://www.google.com", Resources: ["Housing", "Clothing", "Food"] }, { ID: 2 ,Name: "Shelter 2", Address: "123 SE Sesame Street", Website: "https://www.google.com", Resources: ["Housing", "Clothing", "Food"] }]
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
@@ -47,6 +47,8 @@ class App extends React.Component {
   }
 
   render() {
+
+
     return (
       <ThemeContext.Provider value={this.state.themeColor}>
       <Router>
@@ -83,6 +85,7 @@ class App extends React.Component {
         </Router>
       </ThemeContext.Provider>
     );
+
   }
 }
 

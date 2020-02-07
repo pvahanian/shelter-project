@@ -6,8 +6,8 @@ import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
+import SubmitButton from './SubmitButton/SubmitButton.js'
 import CountySelect from './CountySelect'
-
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
@@ -48,6 +48,7 @@ class FieldSelector extends React.Component {
 
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
+    this.isPageDataValid = this.isPageDataValid.bind(this)
   }
 
   handleServiceChange = service => this.setState({ service: service })
@@ -182,7 +183,7 @@ class FieldSelector extends React.Component {
 
   async countyAPICall() {
     await fetch(
-      /*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost 
+      /*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost
       this proxy prevents cors errors from being thrown by chrome. When the project is hosted somewhere, these errors
       won't be an issue.*/
      `https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`, {
@@ -220,7 +221,7 @@ class FieldSelector extends React.Component {
   }
 
   async goBehavior() {
-    await this.countyAPICall(); 
+    await this.countyAPICall();
     await this.setState({ doValidation: true })
     await this.setState({ doValidation: false })
 
@@ -233,6 +234,11 @@ class FieldSelector extends React.Component {
       zip: this.state.zip,
       county: this.state.county
     })
+  }
+
+  isPageDataValid(){
+    return this.validCounty(this.state.county).valid &&  this.validGender(this.state.gender).valid
+    && this.validAge(this.state.age).valid && this.validZIP(this.state.zip).valid
   }
 
   render() {
@@ -337,11 +343,9 @@ class FieldSelector extends React.Component {
           Your location
         </button>
 
-        <button
-          onClick={this.goBehavior}
-        >
-          Go
-        </button>
+        <SubmitButton goBehavior={this.goBehavior} changeAPIData={this.props.changeAPIData} isPageDataValid={this.isPageDataValid}
+          fieldSelectorState={this.state}
+        />
       </div>
     );
   }

@@ -9,6 +9,15 @@ import APIWrapper from "./APIWrapper.js";
 import ExclusiveOption from "./components/ExclusiveOption";
 import Section from './components/Section';
 import { ThemeContext } from './ThemeContext';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
+import Shelter from './components/shetler.js'
+
 
 const navbar = {};
 navbar.brand = {linkTo: "#", text: "Portland Shelters"};
@@ -24,7 +33,7 @@ navbar.links = [
   }
 ];
 
-
+const fakeShelter = [{ID: 1, Name: "Shelter 1", Address: "123 SE Sesame Street", Website: "https://www.google.com", Resources: ["Housing", "Clothing", "Food"] }, { ID: 2 ,Name: "Shelter 2", Address: "123 SE Sesame Street", Website: "https://www.google.com", Resources: ["Housing", "Clothing", "Food"] }]
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
@@ -38,8 +47,11 @@ class App extends React.Component {
   }
 
   render() {
+
+
     return (
       <ThemeContext.Provider value={this.state.themeColor}>
+      <Router>
         <div className={'app ' + this.state.themeColor }>
           <div id='left-gutter-container'>
             <button onClick={e => this.setState({
@@ -53,15 +65,27 @@ class App extends React.Component {
 
           <div id='main-container'>
             Main Container
-            <FieldSelector />
+            <Route
+              exact path="/"
+            >
+              <FieldSelector changeAPIData={this.handleApiDataChange}/>
+            </Route>
+
+            <Route
+              path="/info"
+            >
+              <Shelter appProps={this.state}/>
+            </Route>
           </div>
 
           <div id='right-gutter-container'>
             Right Gutter
           </div>
         </div>
+        </Router>
       </ThemeContext.Provider>
     );
+
   }
 }
 

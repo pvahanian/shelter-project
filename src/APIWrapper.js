@@ -35,8 +35,14 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(parameters)}`
     )
     let data = await response.json()
+    /*console.log(data)
+    let services = data.map((datum) =>
+      datum['category']
+    );
+    console.log(services)*/
     return data
   }
+
 //TODO: This function will have to loop/map to different shelter info components or shelter info maps them
   async getResource(obj){
     let parameters = {...this.credentials,...obj}
@@ -87,7 +93,7 @@ class APIWrapper {
     let data = await response.json()
     return data
   }
-  
+
 }
 
 export default APIWrapper;

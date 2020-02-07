@@ -14,8 +14,6 @@ function SubmitButton(props) {
     async function handleClick() {
       await props.goBehavior();
         if(props.isPageDataValid()){
-          await API.initialize()
-          //await props.changeAPIData(API.getCategories());
           history.push("/info");
         }
     }

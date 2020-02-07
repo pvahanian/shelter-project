@@ -7,7 +7,7 @@ import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
 import SubmitButton from './SubmitButton/SubmitButton.js'
-
+import CategorySelector from './categorySelector/categorySelector.js'
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
@@ -15,20 +15,23 @@ const API = new APIWrapper(APIKey)
 class FieldSelector extends React.Component {
   static contextType = ThemeContext;
 
-  async componentDidMount() {
+  async callAPI() {
     await API.initialize()
+    this.setState({apiCategories: await API.getCategories()});
+    console.log(this.state.apiCategories)
   }
 
-  constructor(props) {
+   constructor(props) {
     super(props)
-
+    API.initialize()
     this.state = {
       service: '',
       gender: '',
       age: '',
       zip: '',
       county: '',
-      doValidation: false
+      doValidation: false,
+      apiCategories: []
     }
 
     // Bind all functions which are called from child inputs
@@ -46,6 +49,10 @@ class FieldSelector extends React.Component {
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
     this.isPageDataValid = this.isPageDataValid.bind(this)
+    this.callAPI = this.callAPI.bind(this)
+    this.callAPI()
+    console.log('field constructor')
+
   }
 
   handleServiceChange = service => this.setState({ service: service })
@@ -189,22 +196,12 @@ class FieldSelector extends React.Component {
 
   render() {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
-
     return(
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
-          <ExclusiveOption
-            items={[
-              {
-                label: 'doggie',
-                image: '../dog' + svgPathEndings
-              },
-              {
-                label: 'kitty',
-                image: '../cat' + svgPathEndings
-              }
-            ]}
+          <CategorySelector
             onChange={this.handleServiceChange}
+            apiCategories = {this.state.apiCategories}
           />
         </InputLabel>
 

@@ -31,7 +31,8 @@ class FieldSelector extends React.Component {
       zip: '',
       county: '',
       doValidation: false,
-      apiCategories: []
+      apiCategories: [],
+      catID : ''
     }
 
     // Bind all functions which are called from child inputs
@@ -40,6 +41,8 @@ class FieldSelector extends React.Component {
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
+    this.handleCatIDChange = this.handleCatIDChange.bind(this)
+
 
     this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
@@ -56,6 +59,7 @@ class FieldSelector extends React.Component {
   }
 
   handleServiceChange = service => this.setState({ service: service })
+  handleCatIDChange = catID => this.setState({ catID: catID })
 
   validGender(gender) {
     let message = ''
@@ -202,6 +206,7 @@ class FieldSelector extends React.Component {
           <CategorySelector
             onChange={this.handleServiceChange}
             apiCategories = {this.state.apiCategories}
+            handleCatIDChange={this.handleCatIDChange}
           />
         </InputLabel>
 
@@ -258,8 +263,12 @@ class FieldSelector extends React.Component {
           Your location
         </button>
 
-        <SubmitButton goBehavior={this.goBehavior} changeAPIData={this.props.changeAPIData} isPageDataValid={this.isPageDataValid}
+        <SubmitButton
+          goBehavior={this.goBehavior}
+          changeAPIData={this.props.changeAPIData}
+          isPageDataValid={this.isPageDataValid}
           fieldSelectorState={this.state}
+          setResources={this.props.setResources}
         />
       </div>
     );

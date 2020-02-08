@@ -18,25 +18,18 @@ class CategorySelector extends React.Component{
     let newCategory = this.state.category.slice();
     let categories = []
 
+
+    if(this.state.category.length > row + 1){
+      for(let i = 0; i < this.state.category.length - row - 2 ; i++){
+        newCategory.pop()
+      }
+    }
     if (row == 0) {
       newCategory[row + 1] = await this.props.apiCategories.map((category) =>
         category['category']
       )
       this.setState({category:newCategory})
       console.log('pushed')
-      return
-    }
-    if(this.state.category.length > row + 1){
-      newCategory[row + 1] = await this.props.apiCategories[id]['subcat'].map((subcat) =>
-        subcat['subcategory']
-      )
-      console.log(this.props.apiCategories)
-
-      for(let i = 0; i < this.state.category.length - row - 2 ; i++){
-        newCategory.pop()
-      }
-      this.setState({category:newCategory})
-      console.log('greater')
       return
     }
     if(row >= 2){
@@ -47,6 +40,8 @@ class CategorySelector extends React.Component{
         subcat['subcategory']
       )
       this.setState({category:newCategory})
+      console.log(id)
+      this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
       console.log('pushed')
     }
 

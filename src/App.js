@@ -42,11 +42,13 @@ class App extends React.Component {
       this.state = {
         themeColor: 'light',
         sessionID: null,
-        categories: []
+        categories: [],
+        resources: []
       }
       //this.apiCaller = this.apiCaller.bind(this)
+      this.setResources = this.setResources.bind(this)
     }
-
+    setResources = resources => this.setState({ resources: resources })
   /*async apiCaller() {
     await API.initialize()
     this.setState({categories: await API.getCategories()});
@@ -79,13 +81,13 @@ class App extends React.Component {
             <Route
               exact path="/"
             >
-              <FieldSelector changeAPIData={this.handleApiDataChange}/>
+              <FieldSelector setResources={this.setResources}/>
             </Route>
 
             <Route
               path="/info"
             >
-              <Shelter appProps={this.state}/>
+              <Shelter shelters={this.state.resources}/>
             </Route>
           </div>
 

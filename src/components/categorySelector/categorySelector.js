@@ -1,24 +1,37 @@
 import React from 'react';
 import ExclusiveOption from "../ExclusiveOption";
+import { ThemeContext } from '../../ThemeContext';
 
 
 class CategorySelector extends React.Component{
-   constructor(props){
+  static contextType = ThemeContext;
+
+  componentWillMount(){
+    const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg';
+    let newCategory = this.state.category.slice();
+    newCategory[0] = [{label: 'Crisis Hotlines',
+    image: '../dog' + svgPathEndings},
+    {label: 'Basics',
+    image: '../dog' + svgPathEndings},
+    {label: 'Shelter',
+    image: '../dog' + svgPathEndings},
+    {label: 'Seasonal',
+    image: '../dog' + svgPathEndings}]
+    this.setState({category: newCategory})
+  }
+  constructor(props){
     super(props)
     this.state = {
-      category: [['Crisis Hotlines', 'Basics', 'Shelter', 'Seasonal']],
-      count : 0
+    category: []
     }
-    this.increment = this.increment.bind(this)
     this.appendCategory = this.appendCategory.bind(this)
-    console.log('category constructor')
+
   }
 
    async appendCategory(row, id){
     let newCategory = this.state.category.slice();
-    let categories = []
 
-
+    //Remove buttons if user selects previous options
     if(this.state.category.length > row + 1){
       for(let i = 0; i < this.state.category.length - row - 2 ; i++){
         newCategory.pop()
@@ -26,10 +39,9 @@ class CategorySelector extends React.Component{
     }
     if (row == 0) {
       newCategory[row + 1] = await this.props.apiCategories.map((category) =>
-        category['category']
+        category['category'],
       )
       this.setState({category:newCategory})
-      console.log('pushed')
       return
     }
     if(row >= 2){
@@ -40,19 +52,11 @@ class CategorySelector extends React.Component{
         subcat['subcategory']
       )
       this.setState({category:newCategory})
-      console.log(id)
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
-      console.log('pushed')
     }
 
     }
 
-
-
-  increment(){
-    let i = this.state.count;
-    this.setState({count: i+ 1})
-  }
   render(){
     return(
       this.state.category.map((category, i) =>

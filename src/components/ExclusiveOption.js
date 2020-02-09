@@ -19,6 +19,20 @@ class ExclusiveButton extends React.Component {
   }
 
   render() {
+    if(typeof(this.props.data) !== 'string' && this.props.appendCategory) {
+      // Assume object like {label, image} and build an SVG button
+      console.log('category button')
+      return (
+        <button
+          className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
+          onClick={e => {this.props.onClick(e, this.props.data, this.props.id)}}    // changes the name of the pick in ExGroup's state.
+        >
+          <img src={this.props.data.image}>
+          </img>
+          {this.props.data.label}
+        </button>
+      )
+    }
     // For buttons with SVG images
     if(typeof(this.props.data) !== 'string') {
       // Assume object like {label, image} and build an SVG button
@@ -33,6 +47,7 @@ class ExclusiveButton extends React.Component {
         </button>
       )
     }
+
 
 
     return (
@@ -63,8 +78,6 @@ class ExclusiveGroup extends React.Component {
     this.setState({selected: data})
     if(typeof(data) === 'string' && this.props.appendCategory){
       this.props.onChange(data)
-      console.log('button id ')
-      console.log(id)
       this.props.appendCategory(this.props.row, id)
     }
     else if (typeof(data) === 'string') {
@@ -100,7 +113,7 @@ class ExclusiveGroup extends React.Component {
   render() {
     if(this.props.shouldValidate)
       this.validate()
-
+    console.log(typeof(this.props.appendCategory))
     if(typeof(this.props.appendCategory) == 'function' ){
 
     return (
@@ -117,7 +130,6 @@ class ExclusiveGroup extends React.Component {
                 id = {i}
                 row = {this.props.row}
               />,
-
             )
           }
         </div>

@@ -35,11 +35,12 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(parameters)}`
     )
     let data = await response.json()
-    /*console.log(data)
-    let services = data.map((datum) =>
-      datum['category']
-    );
-    console.log(services)*/
+    const arrayToObject = (data) =>
+     data.reduce((obj, item) => {
+       obj[item.category] = item
+       return obj
+     }, {})
+     console.log(arrayToObject)
     return data
   }
 
@@ -81,6 +82,7 @@ class APIWrapper {
     )
 
     let data = await response.json()
+
     return data
   }
 
@@ -93,6 +95,7 @@ class APIWrapper {
     let data = await response.json()
     return data
   }
+
 
 }
 

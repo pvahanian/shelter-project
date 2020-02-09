@@ -83,8 +83,15 @@ class ExclusiveGroup extends React.Component {
     else if (typeof(data) === 'string') {
       this.props.onChange(data)
     }
-    else
+    else if (this.props.appendCategory){
       this.props.onChange(data.label)
+      this.props.appendCategory(this.props.row, id)
+
+    }
+    else{
+      this.props.onChange(data.label)
+
+    }
 
   }
 

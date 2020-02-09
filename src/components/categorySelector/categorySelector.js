@@ -9,7 +9,8 @@ class CategorySelector extends React.Component{
   componentWillMount(){
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg';
     let newCategory = this.state.category.slice();
-    newCategory[0] = [{label: 'Crisis Hotlines',
+    newCategory[0] = [
+    {label: 'Crisis Hotlines',
     image: '../dog' + svgPathEndings},
     {label: 'Basics',
     image: '../dog' + svgPathEndings},
@@ -30,7 +31,7 @@ class CategorySelector extends React.Component{
 
    async appendCategory(row, id){
     let newCategory = this.state.category.slice();
-
+    console.log('appendCategory')
     //Remove buttons if user selects previous options
     if(this.state.category.length > row + 1){
       for(let i = 0; i < this.state.category.length - row - 2 ; i++){

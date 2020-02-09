@@ -11,20 +11,20 @@ function SubmitButton(props) {
     const API = new APIWrapper(APIKey)
     API.initialize()
     let obj ={
-      //sn : props.fieldSelectorState.service,
-      st: 'sc',
-      //age: Number(props.fieldSelectorState.age),
-      //gender: props.fieldSelectorState.gender,
+      sn : props.fieldSelectorState.service,
+      st: 's',
+      age: Number(props.fieldSelectorState.age),
+      gender: props.fieldSelectorState.gender,
       zip: Number(props.fieldSelectorState.zip),
       county: props.fieldSelectorState.county,
-      catid: props.fieldSelectorState.catID
+      //catid: props.fieldSelectorState.catID
     }
 
     async function handleClick() {
       await props.goBehavior();
         if(props.isPageDataValid()){
           console.log(props.fieldSelectorState)
-          props.setResources(await API.getResource(obj))
+          props.setResources(await API.getKeywords(obj))
           history.push("/info");
         }
     }

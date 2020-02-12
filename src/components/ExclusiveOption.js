@@ -21,7 +21,6 @@ class ExclusiveButton extends React.Component {
   render() {
     if(typeof(this.props.data) !== 'string' && this.props.appendCategory) {
       // Assume object like {label, image} and build an SVG button
-      console.log('category button')
       return (
         <button
           className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
@@ -120,7 +119,6 @@ class ExclusiveGroup extends React.Component {
   render() {
     if(this.props.shouldValidate)
       this.validate()
-    console.log(typeof(this.props.appendCategory))
     if(typeof(this.props.appendCategory) == 'function' ){
 
     return (
@@ -158,7 +156,6 @@ class ExclusiveGroup extends React.Component {
               onClick={this.handleClick}
               id = {i}
             />,
-            console.log('nonCategoryButton')
           )
         }
       </div>

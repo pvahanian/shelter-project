@@ -18,7 +18,6 @@ class FieldSelector extends React.Component {
   async callAPI() {
     await API.initialize()
     this.setState({apiCategories: await API.getCategories()});
-    console.log(this.state.apiCategories)
   }
 
    constructor(props) {
@@ -54,7 +53,6 @@ class FieldSelector extends React.Component {
     this.isPageDataValid = this.isPageDataValid.bind(this)
     this.callAPI = this.callAPI.bind(this)
     this.callAPI()
-    console.log('field constructor')
 
   }
 

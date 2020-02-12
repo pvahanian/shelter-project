@@ -26,32 +26,43 @@ class CategorySelector extends React.Component{
     category: []
     }
     this.appendCategory = this.appendCategory.bind(this)
+    this.createLabelWithImage = this.createLabelWithImage.bind(this)
 
+  }
+   //categoryType needs to be 'category' or 'subcategory'
+   createLabelWithImage(array, categoryType){
+    const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg';
+    let objArray = [];
+      for(const item of array){
+        let obj = {};
+        obj['label'] = item[categoryType];
+        obj['image'] = '../dog' + svgPathEndings;
+        objArray.push(obj)
+      }
+    return objArray
   }
 
    async appendCategory(row, id){
     let newCategory = this.state.category.slice();
-    console.log('appendCategory')
     //Remove buttons if user selects previous options
     if(this.state.category.length > row + 1){
       for(let i = 0; i < this.state.category.length - row - 2 ; i++){
         newCategory.pop()
       }
     }
+    //if first for map to category
     if (row == 0) {
-      newCategory[row + 1] = await this.props.apiCategories.map((category) =>
-        category['category'],
-      )
+      newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories, 'category')
       this.setState({category:newCategory})
       return
     }
+    //to stop buttons from growing
     if(row >= 2){
       return
     }
+    //else map to subCategory
     else{
-      newCategory[row + 1] = await this.props.apiCategories[id]['subcat'].map((subcat) =>
-        subcat['subcategory']
-      )
+      newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
       this.setState({category:newCategory})
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
     }

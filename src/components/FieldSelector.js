@@ -7,6 +7,8 @@ import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
 
+require('dotenv').config();
+
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
@@ -25,6 +27,8 @@ class FieldSelector extends React.Component {
       service: '',
       gender: '',
       age: '',
+      latitude: '',
+      longitude: '',
       zip: '',
       county: '',
       doValidation: false
@@ -43,6 +47,8 @@ class FieldSelector extends React.Component {
     this.validCounty = this.validCounty.bind(this)
 
     this.findLocation = this.findLocation.bind(this)
+    this.findCoordinates = this.findCoordinates.bind(this)
+    this.reverseGeocodeCoordinates = this.reverseGeocodeCoordinates.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
   }
 
@@ -145,12 +151,57 @@ class FieldSelector extends React.Component {
   }
 
   findLocation() {
-    console.log("Then we'd try to find their location using a Google API. For now...")
+    /*console.log("Then we'd try to find their location using a Google API. For now...")
 
     this.setState({
       zip: '97086',
       county: 'Clackamas'
     })
+    */
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.findCoordinates, this.handleLocationError);
+    } else {
+      alert("Geolocation not supported by this browser.");
+    }
+  }
+
+  findCoordinates(position) {
+    this.setState({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    })
+    this.reverseGeocodeCoordinates();
+  }
+
+  reverseGeocodeCoordinates() {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.latitude},${this.state.longitude}&sensor=false&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
+    .then(response => response.json())
+    //.then(data => console.log(data)) //log for testing, needs to be commented out for split and set state to work.
+    .then(data => data.results[4].formatted_address.split(','))
+    .then(data => this.setState({
+      county: data[0],
+      zip: data[1].match(/\d+/)[0]
+    }))
+    .catch(error => alert(error))
+  }
+
+  handleLocationError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        alert("User denied the request for Geolocation.")
+        break;
+      case error.POSITION_UNAVAILABLE:
+        alert("Location information is unavailable.")
+        break;
+      case error.TIMEOUT:
+        alert("The request to get user location timed out.")
+        break;
+      case error.UNKNOWN_ERROR:
+        alert("An unknown error occurred.")
+        break;
+      default:
+        alert("An unknown error occurred.")
+    }
   }
 
   onlyNumbers(str) {

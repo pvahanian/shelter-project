@@ -155,7 +155,7 @@ class FieldSelector extends React.Component {
     if(!county) {
       return { valid: false, message: 'Required entry.'};
     } else if (this.state.validCounty) {
-      return {valid, message};
+      return {valid: true, message};
     } else if (!this.state.validCounty) {
       return {valid: false, message: "This is not an OR or WA county."};
     }

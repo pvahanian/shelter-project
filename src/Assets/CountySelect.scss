@@ -1,0 +1,17 @@
+@import '../GlobalStyle/globals';
+
+.county-select {
+  color: black;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid $dark-border-color;
+
+&.light {
+
+  background-color: $dark-theme-primary-color;
+}
+&.dark {
+  background-color: $primary-color;
+
+}
+}

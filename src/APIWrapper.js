@@ -37,6 +37,15 @@ class APIWrapper {
     let data = await response.json()
     return data
   }
+//TODO: This function will have to loop/map to different shelter info components or shelter info maps them
+  async getResource(obj){
+    let parameters = {...this.credentials,...obj}
+    console.log(JSON.stringify(parameters))
+    let response = await fetch(
+        `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
+    )
+    return await response.json()
+  }
 
   async getCountyByZipCode(obj) {
     let parameters = {...obj, ...this.credentials}

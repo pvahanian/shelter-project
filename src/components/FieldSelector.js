@@ -7,8 +7,9 @@ import { ThemeContext } from '../ThemeContext';
 import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
-
-
+import SubmitButton from './SubmitButton/SubmitButton.js'
+import CountySelect from './CountySelect'
+const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
@@ -28,9 +29,11 @@ class FieldSelector extends React.Component {
       gender: '',
       age: '',
       zip: '',
+      doValidation: false,
+      validCounty: 'null',
+      possibleCounties: '',
       county: '',
-      familySize: '', //Eric Changed Here
-      doValidation: false
+      familySize: ''
     }
 
     // Bind all functions which are called from child inputs
@@ -48,6 +51,7 @@ class FieldSelector extends React.Component {
     this.validFamilySize = this.validFamilySize.bind(this)
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
+    this.isPageDataValid = this.isPageDataValid.bind(this)
   }
 
   handleServiceChange = service => this.setState({ service: service })
@@ -59,15 +63,16 @@ class FieldSelector extends React.Component {
   handleAgeChange = age => this.setState({ age: age })
 
   validFamilySize(familySize) {
-    console.log(familySize)
-
     let message = ''
     let empty = familySize === ''
+
     if(empty)
       return { valid: false, message: 'Required entry.'}
+
     let valid = familySize >= 0 && familySize <= 16
-      if(!valid)
-        message = 'You don have that many chilren!'
+    if(!valid)
+      message = 'You don have that many chilren!'
+
     return {valid, message}
   }
 
@@ -107,7 +112,6 @@ class FieldSelector extends React.Component {
 
   async handleZIPChange(zip) {
     await this.setState({ zip: zip })
-
     if(this.validZIP(zip).valid)
       await API.getCountyByZipCode({
         zip: this.state.zip
@@ -119,6 +123,22 @@ class FieldSelector extends React.Component {
         // TODO: we'll probably want to take action here to resolve the error
         console.log(err)
       })
+    this.getAllPossibleCountiesByZip(zip);
+  }
+
+  async getAllPossibleCountiesByZip(zip) {
+    await this.setState({zip : zip})
+    if(this.validZIP(zip).valid){
+      await API.getCountyByZipCode({
+        zip: this.state.zip
+      }).then(data => {
+        this.setState({ possibleCounties: Object.values(data).map(value => { return value['county']})});
+      })
+    }
+
+    if(this.state.zip.length < 6){
+      this.state.possibleCounties = '';
+    }
   }
 
   validZIP(zip) {
@@ -127,7 +147,7 @@ class FieldSelector extends React.Component {
     if(!zip)
       return { valid: false, message: 'Required entry.'}
 
-    let isPositiveInteger = /^(0|[1-9]\d*)$/.test(zip);
+    let isPositiveInteger = /^([0-9]\d*)$/.test(zip);
     if(!isPositiveInteger)
       message = 'Please only use numbers in the ZIP code.'
 
@@ -147,20 +167,17 @@ class FieldSelector extends React.Component {
 
   handleCountyChange = county => this.setState({ county: county })
 
-  validCounty(county) {
-    let message = ''
 
-    if(!county)
-      return { valid: false, message: 'Required entry.'}
-
-    // TODO: Add better county validation & add suggested correct spellings of counties
-    let knownCounty = (county.toLowerCase() === 'multnomah' || county.toLowerCase() === 'clackamas')
-    if(!knownCounty)
-      message = "We don't know this county. Is this mistyped?"
-
-    let valid = knownCounty
-
-    return {valid, message}
+  validCounty = (county) => {
+    let valid = null;
+    let message = '';
+    if(!county) {
+      return { valid: false, message: 'Required entry.'};
+    } else if (this.state.validCounty) {
+      return {valid: true, message};
+    } else if (!this.state.validCounty) {
+      return {valid: false, message: "This is not an OR or WA county."};
+    }
   }
 
   findLocation() {
@@ -183,8 +200,47 @@ class FieldSelector extends React.Component {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  async countyAPICall() {
+    await fetch(
+      /*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost
+      this proxy prevents cors errors from being thrown by chrome. When the project is hosted somewhere, these errors
+      won't be an issue.*/
+     `https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`, {
+   crossDomain: true,
+   method: 'GET',
+   headers: {'Content-Type': 'application/json'},
+   })
+   .then(result => {
+     return result.json();
+   }).then(data => {
+     const countiesORWA = [];
+     data.forEach(el => countiesORWA.push(el[0]
+       .toLowerCase()
+       .split('')
+       .reverse()
+       .slice(7)
+       .reverse()
+       .join('')));
+     countiesORWA.shift();
+     if (countiesORWA.includes(this.state.county.toLowerCase())){
+       this.setState({validCounty: true})
+     } else {
+       this.setState({validCounty: false})
+     }
+   })
+   //Hardcoding here is a backup list of all counties serviced in case api fails.
+   .catch(err =>{
+    const countiesORWA = ["baker", "benton", "clackamas", "clatsop", "columbia", "coos", "crook", "curry", "deschutes", "douglas", "gilliam", "grant", "harney", "hood river", "jackson", "jefferson", "josephine", "klamath", "lake", "lane", "lincoln", "linn", "malheur", "marion", "morrow", "multnomah", "polk", "sherman", "tillamook", "umatilla", "union", "wallowa", "wasco", "washington", "wheeler", "yamhill", "clark", "cowlitz", "skamania", "wahkiakum"]
+    if (countiesORWA.includes(this.state.county.toLowerCase())){
+      this.setState({validCounty: true})
+    } else {
+      this.setState({validCounty: false})
+    }
+   })
+  }
+
   async goBehavior() {
-    // TODO: This is not the smart way to do validation once and stop
+    await this.countyAPICall();
     await this.setState({ doValidation: true })
     await this.setState({ doValidation: false })
 
@@ -198,6 +254,12 @@ class FieldSelector extends React.Component {
       county: this.state.county,
       familySize: this.state.familySize,
     })
+  }
+
+  isPageDataValid(){
+    return this.validCounty(this.state.county).valid &&  this.validGender(this.state.gender).valid
+    && this.validAge(this.state.age).valid && this.validZIP(this.state.zip).valid
+    && this.validFamilySize(this.state.familySize).valid
   }
 
   render() {
@@ -249,22 +311,40 @@ class FieldSelector extends React.Component {
               value={this.state.zip}
               filter={this.onlyNumbers}
               validator={this.validZIP}
-              placeholder='97205'
+              placeholder='97333'
               onChange={this.handleZIPChange}
               shouldValidate={this.state.doValidation}
             />
           </InputLabel>
 
-          <InputLabel label='County'>
-            <TextInput
-              name='County'
-              value={this.state.county}
-              validator={this.validCounty}
-              placeholder='Multnomah'
-              onChange={this.handleCountyChange}
-              shouldValidate={this.state.doValidation}
-            />
-          </InputLabel>
+
+          {
+            this.state.possibleCounties ?
+              <InputLabel label = 'County'>
+                <CountySelect
+                  name = 'County'
+                  value={this.state.county}
+                  validator={this.validCounty}
+                  onChange={this.handleCountyChange}
+                  shouldValidate={this.state.doValidation}
+                  counties = {this.state.possibleCounties}
+                  >
+                </CountySelect>
+              </InputLabel>
+            :
+              <InputLabel label='County'>
+                <TextInput
+                  name='County'
+                  value={this.state.county}
+                  validator={this.validCounty}
+                  placeholder='Multnomah'
+                  onChange={this.handleCountyChange}
+                  shouldValidate={this.state.doValidation}
+                />
+              </InputLabel>
+          }
+
+
           <InputLabel label ='Family Size'>
             <TextInput
               name='famliysize'
@@ -275,6 +355,7 @@ class FieldSelector extends React.Component {
               shouldValidate={this.state.doValidation}
             />
           </InputLabel>
+
         </div>
 
 
@@ -286,11 +367,9 @@ class FieldSelector extends React.Component {
           Your location
         </button>
 
-        <button
-          onClick={this.goBehavior}
-        >
-          Go
-        </button>
+        <SubmitButton goBehavior={this.goBehavior} changeAPIData={this.props.changeAPIData} isPageDataValid={this.isPageDataValid}
+          fieldSelectorState={this.state}
+        />
       </div>
     );
   }

@@ -1,3 +1,4 @@
+//changed lines so far 44, 182, 250
 import React from 'react';
 import ExclusiveOption from "./ExclusiveOption";
 import TextInput from './TextInput';
@@ -23,14 +24,16 @@ class FieldSelector extends React.Component {
     super(props)
 
     this.state = {
+
       service: '',
       gender: '',
       age: '',
       zip: '',
-      county: '',
-      validCounty: 'null',
       doValidation: false,
-      possibleCounties: ''
+      validCounty: 'null',
+      possibleCounties: '',
+      county: '',
+      familySize: ''
     }
 
     // Bind all functions which are called from child inputs
@@ -39,19 +42,39 @@ class FieldSelector extends React.Component {
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
+    this.handleFamilySizeChange = this.handleFamilySizeChange.bind(this)
 
     this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
     this.validZIP = this.validZIP.bind(this)
     this.validCounty = this.validCounty.bind(this)
-    this.countyAPICall = this.countyAPICall.bind(this)
-
+    this.validFamilySize = this.validFamilySize.bind(this)
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
     this.isPageDataValid = this.isPageDataValid.bind(this)
   }
 
   handleServiceChange = service => this.setState({ service: service })
+
+  handleFamilySizeChange = familysize => this.setState({familySize: familysize})
+
+  handleGenderChange = gender => this.setState({ gender: gender })
+
+  handleAgeChange = age => this.setState({ age: age })
+
+  validFamilySize(familySize) {
+    let message = ''
+    let empty = familySize === ''
+
+    if(empty)
+      return { valid: false, message: 'Required entry.'}
+
+    let valid = familySize >= 0 && familySize <= 16
+    if(!valid)
+      message = 'You don have that many chilren!'
+
+    return {valid, message}
+  }
 
   validGender(gender) {
     let message = ''
@@ -64,10 +87,6 @@ class FieldSelector extends React.Component {
 
     return {valid, message}
   }
-
-  handleGenderChange = gender => this.setState({ gender: gender })
-
-  handleAgeChange = age => this.setState({ age: age })
 
   validAge(age) {
     let message = ''
@@ -232,49 +251,19 @@ class FieldSelector extends React.Component {
       gender: this.state.gender,
       age: this.state.age,
       zip: this.state.zip,
-      county: this.state.county
+      county: this.state.county,
+      familySize: this.state.familySize,
     })
   }
 
   isPageDataValid(){
     return this.validCounty(this.state.county).valid &&  this.validGender(this.state.gender).valid
     && this.validAge(this.state.age).valid && this.validZIP(this.state.zip).valid
+    && this.validFamilySize(this.state.familySize).valid
   }
 
   render() {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
-
-
-    let county = null;
-    if(this.state.possibleCounties){
-      county = (
-        <InputLabel label = 'County'>
-          <CountySelect
-            name = 'County'
-            value={this.state.county}
-            validator={this.validCounty}
-            onChange={this.handleCountyChange}
-            shouldValidate={this.state.doValidation}
-            counties = {this.state.possibleCounties}
-            >
-          </CountySelect>
-        </InputLabel>
-      )
-    } else {
-      county = (
-        <InputLabel label='County'>
-          <TextInput
-            name='County'
-            value={this.state.county}
-            validator={this.validCounty}
-            placeholder='Multnomah'
-            onChange={this.handleCountyChange}
-            shouldValidate={this.state.doValidation}
-          />
-        </InputLabel>
-      )
-    }
-
 
     return(
       <div className={'field-selector ' + this.context}>
@@ -336,9 +325,44 @@ class FieldSelector extends React.Component {
             />
           </InputLabel>
 
-          {county}
+
+          {
+            this.state.possibleCounties ?
+              <InputLabel label = 'County'>
+                <CountySelect
+                  name = 'County'
+                  value={this.state.county}
+                  validator={this.validCounty}
+                  onChange={this.handleCountyChange}
+                  shouldValidate={this.state.doValidation}
+                  counties = {this.state.possibleCounties}
+                  >
+                </CountySelect>
+              </InputLabel>
+            :
+              <InputLabel label='County'>
+                <TextInput
+                  name='County'
+                  value={this.state.county}
+                  validator={this.validCounty}
+                  placeholder='Multnomah'
+                  onChange={this.handleCountyChange}
+                  shouldValidate={this.state.doValidation}
+                />
+              </InputLabel>
+          }
 
 
+          <InputLabel label ='Family Size'>
+            <TextInput
+              name='famliysize'
+              value ={this.state.familySize}
+              validator ={this.validFamilySize}
+              placeholder='How many people are in your family?'
+              onChange={this.handleFamilySizeChange}
+              shouldValidate={this.state.doValidation}
+            />
+          </InputLabel>
 
         </div>
 

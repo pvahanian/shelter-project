@@ -16,17 +16,17 @@ class CountySelect extends React.Component {
     return (
 
       <select
-      value = {value}
-      id= {this.props.name.toLowerCase()+'input'}
-      className= {'text-input' + this.context + ' county-select'}
-      onChange= {e => {
-          let newValue = e.currentTarget.value
-          if(this.props.filter)
-            newValue = this.props.filter(newValue)
-          this.props.onChange(newValue)
+        value = {value}
+        id= {this.props.name.toLowerCase()+'input'}
+        className= {'text-input' + this.context + ' county-select'}
+        onChange= {e => {
+            let newValue = e.currentTarget.value
+            if(this.props.filter)
+              newValue = this.props.filter(newValue)
+            this.props.onChange(newValue)
+          }
         }
-      }
-      counties = {this.props.counties}
+       counties = {this.props.counties}
       >
         <option value = '' disabled>Choose your county:</option>
         {this.props.counties.map((county,index) => {

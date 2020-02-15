@@ -8,21 +8,24 @@ import Section from './Section';
 import APIWrapper from "../APIWrapper.js";
 import InputLabel from './InputLabel';
 import SubmitButton from './SubmitButton/SubmitButton.js'
+import CategorySelector from './categorySelector/categorySelector.js'
 import CountySelect from './CountySelect'
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
+
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
 class FieldSelector extends React.Component {
   static contextType = ThemeContext;
 
-  async componentDidMount() {
+  async callAPI() {
     await API.initialize()
+    this.setState({apiCategories: await API.getCategories()});
   }
 
-  constructor(props) {
+   constructor(props) {
     super(props)
-
+    API.initialize()
     this.state = {
 
       service: '',
@@ -33,6 +36,9 @@ class FieldSelector extends React.Component {
       validCounty: 'null',
       possibleCounties: '',
       county: '',
+      doValidation: false,
+      apiCategories: [],
+      catID : '',
       familySize: ''
     }
 
@@ -42,7 +48,9 @@ class FieldSelector extends React.Component {
     this.handleAgeChange = this.handleAgeChange.bind(this)
     this.handleZIPChange = this.handleZIPChange.bind(this)
     this.handleCountyChange = this.handleCountyChange.bind(this)
+    this.handleCatIDChange = this.handleCatIDChange.bind(this)
     this.handleFamilySizeChange = this.handleFamilySizeChange.bind(this)
+
 
     this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
@@ -52,9 +60,13 @@ class FieldSelector extends React.Component {
     this.findLocation = this.findLocation.bind(this)
     this.goBehavior = this.goBehavior.bind(this)
     this.isPageDataValid = this.isPageDataValid.bind(this)
+    this.callAPI = this.callAPI.bind(this)
+    this.callAPI()
+
   }
 
   handleServiceChange = service => this.setState({ service: service })
+  handleCatIDChange = catID => this.setState({ catID: catID })
 
   handleFamilySizeChange = familysize => this.setState({familySize: familysize})
 
@@ -264,30 +276,13 @@ class FieldSelector extends React.Component {
 
   render() {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
-
     return(
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
-          <ExclusiveOption
-            items={[
-              {
-                label: 'Housing',
-                image: '../housing' + svgPathEndings
-              },
-              {
-                label: 'Finance',
-                image: '../finance' + svgPathEndings
-              },
-              {
-                label: 'Food',
-                image: '../food' + svgPathEndings
-              },
-              {
-                label: 'Medical',
-                image: '../medical' + svgPathEndings
-              }
-            ]}
+          <CategorySelector
             onChange={this.handleServiceChange}
+            apiCategories = {this.state.apiCategories}
+            handleCatIDChange={this.handleCatIDChange}
           />
         </InputLabel>
 
@@ -375,8 +370,12 @@ class FieldSelector extends React.Component {
           Your location
         </button>
 
-        <SubmitButton goBehavior={this.goBehavior} changeAPIData={this.props.changeAPIData} isPageDataValid={this.isPageDataValid}
+        <SubmitButton
+          goBehavior={this.goBehavior}
+          changeAPIData={this.props.changeAPIData}
+          isPageDataValid={this.isPageDataValid}
           fieldSelectorState={this.state}
+          setResources={this.props.setResources}
         />
       </div>
     );

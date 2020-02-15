@@ -33,21 +33,34 @@ navbar.links = [
   }
 ];
 
-const fakeShelter = [{ID: 1, Name: "Shelter 1", Address: "123 SE Sesame Street", Website: "https://www.google.com", Resources: ["Housing", "Clothing", "Food"] }, { ID: 2 ,Name: "Shelter 2", Address: "123 SE Sesame Street", Website: "https://www.google.com", Resources: ["Housing", "Clothing", "Food"] }]
-
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
 class App extends React.Component {
-
-  state = {
-    themeColor: 'light',
-    sessionID: null,
-    categories: []
+  constructor(props){
+    super(props)
+      this.state = {
+        themeColor: 'light',
+        sessionID: null,
+        categories: [],
+        resources: []
+      }
+      //this.apiCaller = this.apiCaller.bind(this)
+      this.setResources = this.setResources.bind(this)
+    }
+    setResources = resources => this.setState({ resources: resources })
+  /*async apiCaller() {
+    await API.initialize()
+    this.setState({categories: await API.getCategories()});
+    console.log(this.state.categories)
   }
+  componentDidMount(){
+    this.apiCaller()
+
+  }*/
 
   render() {
-
+    //
 
     return (
       <ThemeContext.Provider value={this.state.themeColor}>
@@ -68,13 +81,13 @@ class App extends React.Component {
             <Route
               exact path="/"
             >
-              <FieldSelector changeAPIData={this.handleApiDataChange}/>
+              <FieldSelector setResources={this.setResources}/>
             </Route>
 
             <Route
               path="/info"
             >
-              <Shelter appProps={this.state}/>
+              <Shelter shelters={this.state.resources}/>
             </Route>
           </div>
 

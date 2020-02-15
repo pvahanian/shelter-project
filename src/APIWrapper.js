@@ -37,6 +37,7 @@ class APIWrapper {
     let data = await response.json()
     return data
   }
+
 //TODO: This function will have to loop/map to different shelter info components or shelter info maps them
   async getResource(obj){
     let parameters = {...this.credentials,...obj}
@@ -75,6 +76,7 @@ class APIWrapper {
     )
 
     let data = await response.json()
+
     return data
   }
 
@@ -87,7 +89,8 @@ class APIWrapper {
     let data = await response.json()
     return data
   }
-  
+
+
 }
 
 export default APIWrapper;

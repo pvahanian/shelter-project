@@ -6,16 +6,25 @@ import APIWrapper from '../../APIWrapper.js';
 
 function SubmitButton(props) {
 
-    let history = useHistory();
+    let history = useHistory()
     const APIKey = process.env.REACT_APP_211_API_KEY
     const API = new APIWrapper(APIKey)
-
+    API.initialize()
+    let obj ={
+      sn : props.fieldSelectorState.service,
+      st: 's',
+      age: Number(props.fieldSelectorState.age),
+      gender: props.fieldSelectorState.gender,
+      zip: Number(props.fieldSelectorState.zip),
+      county: props.fieldSelectorState.county,
+      //catid: props.fieldSelectorState.catID
+    }
 
     async function handleClick() {
       await props.goBehavior();
         if(props.isPageDataValid()){
-          await API.initialize()
-          //await props.changeAPIData(API.getCategories());
+          console.log(props.fieldSelectorState)
+          props.setResources(await API.getKeywords(obj))
           history.push("/info");
         }
     }

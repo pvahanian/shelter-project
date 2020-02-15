@@ -26,10 +26,11 @@ After installing npm (Node Package Manager) or a virtual environment system like
 
 ## Set Environment Variables
 
-We currently only use one environment variable: `REACT_APP_211_API_KEY`
-Set this to the proper value with
+We currently use two environment variables: `REACT_APP_211_API_KEY`
+Set these to the proper value with:
 
 `export REACT_APP_211_API_KEY=J7R0W5XK`
+`export REACT_APP_CENSUS_API_KEY=828d15da3d6b751cc242cc822adf5eba189827e5`
 
 Usually it would be **VERY** bad practice to expose the API key in your README, or anywhere else in your code. However the way this API is constructed means that your key is always public. Our project will build using standard secure patterns, but know that this key is not secure.
 

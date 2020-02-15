@@ -7,14 +7,15 @@ class TextInput extends React.Component {
   constructor(props) {
     super(props)
   }
-
+  
   static contextType = ThemeContext
   invalidEntryMessage = ''
   valid = null
 
 
   validate() {
-    if(!this.props.validator)
+
+      if(!this.props.validator)
       return {valid: true, message: ''}
 
     let value = this.props.value
@@ -32,6 +33,7 @@ class TextInput extends React.Component {
 
     if(validityObject.valid === true)
       this.invalidEntryMessage = ''
+
   }
 
 

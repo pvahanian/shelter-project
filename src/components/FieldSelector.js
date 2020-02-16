@@ -267,6 +267,7 @@ class FieldSelector extends React.Component {
           isPageDataValid={this.isPageDataValid}
           fieldSelectorState={this.state}
           setResources={this.props.setResources}
+          handleZIPChange ={this.handleZIPChange}
         />
       </div>
     );

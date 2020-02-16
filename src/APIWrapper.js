@@ -47,6 +47,33 @@ class APIWrapper {
     )
     return await response.json()
   }
+  async getResourceByCategory(obj){
+    var data = {
+      st: 'c',
+      catID: obj['catID'],
+      zip: obj['zip']
+    }
+    let parameters = {...this.credentials,...data}
+    console.log(JSON.stringify(parameters))
+    let response = await fetch(
+        `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
+    )
+    return await response.json()
+  }
+
+  async getResourceBySubCategory(obj){
+    var data = {
+      st: 'sc',
+      catID: obj['catID'],
+      zip: obj['zip']
+    }
+    let parameters = {...this.credentials,...data}
+    console.log(JSON.stringify(parameters))
+    let response = await fetch(
+        `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
+    )
+    return await response.json()
+  }
 
   async getCountyByZipCode(obj) {
     let parameters = {...obj, ...this.credentials}

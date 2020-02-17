@@ -268,6 +268,7 @@ class FieldSelector extends React.Component {
           fieldSelectorState={this.state}
           setResources={this.props.setResources}
           handleZIPChange ={this.handleZIPChange}
+          apiCategories={this.state.apiCategories}
         />
       </div>
     );

@@ -11,8 +11,8 @@ function SubmitButton(props) {
     const API = new APIWrapper(APIKey)
     API.initialize()
     let obj ={
-      //sn : props.fieldSelectorState.service,
-      st: 'c',
+      sn : props.fieldSelectorState.service,
+      st: 'sc',
       age: Number(props.fieldSelectorState.age),
       gender: props.fieldSelectorState.gender,
       zip: Number(props.fieldSelectorState.zip),
@@ -24,9 +24,25 @@ function SubmitButton(props) {
       await props.goBehavior();
         if(props.isPageDataValid()){
           console.log(props.fieldSelectorState)
-          props.setResources(await API.getResourceBySubCategory(obj))
+          //props.setResources(await API.getResourceByCategory(obj))
           //props.handleZIPChange(await API.getCountyByZipCode(props.county))
-          history.push("/info");
+          //history.push("/info");
+          let resourcesArray = []
+          let i = 0;
+          for(const service of props.apiCategories){
+            let categoryResources = {};
+
+            categoryResources['name'] = service['name']
+            obj['st'] = 'c'
+            obj['catID'] = props.apiCategories[i]['categoryID']
+            //categoryResources['resources'] = await API.getResourceByCategory(obj);
+              for(const subService of props.apiCategories[i]['subcat']){
+                categoryResources[service['name']]['subCategory'] = subService['name']
+              }
+            i++;
+            resourcesArray.push(categoryResources)
+          }
+          console.log(resourcesArray)
         }
     }
 

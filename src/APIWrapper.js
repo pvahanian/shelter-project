@@ -35,7 +35,11 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(parameters)}`
     )
     let data = await response.json()
-    return data
+    let d3Obj = this.createD3Obj(data)
+
+    //saveData(d3Obj, '211_categories.json')
+    console.log(data)
+    return d3Obj
   }
 
 //TODO: This function will have to loop/map to different shelter info components or shelter info maps them
@@ -51,7 +55,8 @@ class APIWrapper {
     var data = {
       st: 'c',
       catID: obj['catID'],
-      zip: obj['zip']
+      zip: obj['zip'],
+      incdet:1
     }
     let parameters = {...this.credentials,...data}
     console.log(JSON.stringify(parameters))
@@ -61,13 +66,13 @@ class APIWrapper {
     return await response.json()
   }
 
-  async getResourceBySubCategory(obj){
+  async getResourceByServiceTerm(obj){
     var data = {
-      st: 'sc',
-      catID: obj['catID'],
+      st: 's',
+      sn: obj['sn'],
       zip: obj['zip']
     }
-    let parameters = {...this.credentials,...data}
+    let parameters = {...this.credentials,...obj}
     console.log(JSON.stringify(parameters))
     let response = await fetch(
         `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
@@ -116,6 +121,44 @@ class APIWrapper {
     let data = await response.json()
     return data
   }
+  createD3Obj(array){
+   let objArray = [];
+     for(const item of array){
+       let obj = {};
+       obj['name'] = item['category'];
+       obj['category'] = item['category'];
+       obj['children'] = item['subcat'];
+       obj['subcat'] = item['subcat'];
+       obj['categoryID'] = item['categoryID'];
+       for(const subcat of obj['children']){
+         subcat['name'] = subcat['subcategory']
+         subcat['children']= subcat['subcatterm'];
+         subcat['subcatterm'] = subcat['subcatterm']
+         for(const sterm of subcat['children']){
+           sterm['name'] = sterm['sterm'];
+         }
+       }
+       objArray.push(obj)
+     }
+    /*
+  downloadCategories(data, fileName){
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (data, fileName) {
+        var json = JSON.stringify(data),
+            blob = new Blob([json], {type: "octet/stream"}),
+            url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+  }*/
+   console.log(objArray)
+   return objArray
+ }
+
 
 
 }

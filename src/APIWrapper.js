@@ -38,7 +38,6 @@ class APIWrapper {
     let d3Obj = this.createD3Obj(data)
 
     //saveData(d3Obj, '211_categories.json')
-    console.log(data)
     return d3Obj
   }
 
@@ -52,18 +51,29 @@ class APIWrapper {
     return await response.json()
   }
   async getResourceByCategory(obj){
-    var data = {
-      st: 'c',
+    let data = {
+      st: 'sc',
       catID: obj['catID'],
       zip: obj['zip'],
       incdet:1
     }
     let parameters = {...this.credentials,...data}
     console.log(JSON.stringify(parameters))
-    let response = await fetch(
-        `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
-    )
-    return await response.json()
+
+    try{
+      let response = await fetch(
+          `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
+      )
+      return await response.json()
+    }
+    catch(err){
+      let error = {
+        name: "None",
+
+      }
+      console.log(err)
+      return JSON.stringify(error)
+    }
   }
 
   async getResourceByServiceTerm(obj){
@@ -133,7 +143,7 @@ class APIWrapper {
        for(const subcat of obj['children']){
          subcat['name'] = subcat['subcategory']
          subcat['children']= subcat['subcatterm'];
-         subcat['subcatterm'] = subcat['subcatterm']
+         subcat['subcatterm'] = subcat['subcatterm'];
          for(const sterm of subcat['children']){
            sterm['name'] = sterm['sterm'];
          }

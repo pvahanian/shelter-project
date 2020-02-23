@@ -22,9 +22,7 @@ class CategorySelector extends React.Component{
   }
   constructor(props){
     super(props)
-    this.state = {
-    category: []
-    }
+    this.state = {category: []}
     this.appendCategory = this.appendCategory.bind(this)
     this.createLabelWithImage = this.createLabelWithImage.bind(this)
 
@@ -64,7 +62,8 @@ class CategorySelector extends React.Component{
     else{
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
       this.setState({category:newCategory})
-      this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
+      console.log(this.props.apiCategories[id]['subcat'][id]['subcategoryID'])
+      this.props.handleCatIDChange(this.props.apiCategories[id]['subcat']['subcategoryID'])
     }
 
     }

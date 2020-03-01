@@ -20,12 +20,15 @@ class FieldSelector extends React.Component {
 
   async callAPI() {
     await API.initialize()
-    this.setState({apiCategories: await API.getCategories()});
+    API.getCategories()
+      .then( res => this.setState({apiCategories: res }));
+  }
+  async componentDidMount(){
+     this.callAPI()
   }
 
    constructor(props) {
     super(props)
-    API.initialize()
     this.state = {
 
       service: '',
@@ -37,7 +40,7 @@ class FieldSelector extends React.Component {
       possibleCounties: '',
       county: '',
       doValidation: false,
-      apiCategories: [],
+      apiCategories: null,
       catID : '',
       familySize: ''
     }
@@ -61,7 +64,7 @@ class FieldSelector extends React.Component {
     this.goBehavior = this.goBehavior.bind(this)
     this.isPageDataValid = this.isPageDataValid.bind(this)
     this.callAPI = this.callAPI.bind(this)
-    this.callAPI()
+
 
   }
 
@@ -276,13 +279,19 @@ class FieldSelector extends React.Component {
 
   render() {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
+    if(!this.state.apiCategories){
+      return <div/>
+    }
     return(
+
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
           <CategorySelector
             onChange={this.handleServiceChange}
             apiCategories = {this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
+            handleServiceChange = {this.handleServiceChange}
+            negateBasic = {this.props.negateBasic}
           />
         </InputLabel>
 

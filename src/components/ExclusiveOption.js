@@ -19,6 +19,7 @@ class ExclusiveButton extends React.Component {
   }
 
   render() {
+    //For category buttons
     if(typeof(this.props.data) !== 'string' && this.props.appendCategory) {
       // Assume object like {label, image} and build an SVG button
       return (
@@ -75,6 +76,7 @@ class ExclusiveGroup extends React.Component {
   handleClick(event, data, id) {
 
     this.setState({selected: data})
+    //If button is a category and doesn't have an image
     if(typeof(data) === 'string' && this.props.appendCategory){
       this.props.onChange(data)
       this.props.appendCategory(this.props.row, id)
@@ -85,7 +87,6 @@ class ExclusiveGroup extends React.Component {
     else if (this.props.appendCategory){
       this.props.onChange(data.label)
       this.props.appendCategory(this.props.row, id)
-
     }
     else{
       this.props.onChange(data.label)
@@ -119,31 +120,32 @@ class ExclusiveGroup extends React.Component {
   render() {
     if(this.props.shouldValidate)
       this.validate()
-    if(typeof(this.props.appendCategory) == 'function' ){
 
-    return (
-      <div className='exclusive-group-container'>
-        <div className='exclusive-group'>
-          {
-            this.props.items.map((item, i) =>
-              <ExclusiveButton
-                selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
-                key={i}
-                data={item}
-                onClick={this.handleClick}
-                appendCategory={this.props.appendCategory}
-                id = {i}
-                row = {this.props.row}
-              />,
-            )
-          }
+    //For category buttons
+    if(typeof(this.props.appendCategory) == 'function' ){
+      return (
+        <div className='exclusive-group-container'>
+          <div className='exclusive-group'>
+            {
+              this.props.items.map((item, i) =>
+                <ExclusiveButton
+                  selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
+                  key={i}
+                  data={item}
+                  onClick={this.handleClick}
+                  appendCategory={this.props.appendCategory}
+                  id = {i}
+                  row = {this.props.row}
+                />,
+              )
+            }
+          </div>
+
+          <InvalidEntryMessage message={this.invalidEntryMessage} />
         </div>
 
-        <InvalidEntryMessage message={this.invalidEntryMessage} />
-      </div>
-
-    );
-  }
+      );
+    }
   return (
     <div className='exclusive-group-container'>
       <div className='exclusive-group'>

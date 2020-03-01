@@ -43,12 +43,15 @@ class App extends React.Component {
         themeColor: 'light',
         sessionID: null,
         categories: [],
-        resources: []
+        resources: [],
+        basic: true
       }
       //this.apiCaller = this.apiCaller.bind(this)
       this.setResources = this.setResources.bind(this)
+      this.negateBasic = this.negateBasic.bind(this)
     }
     setResources = resources => this.setState({ resources: resources })
+    negateBasic = () => this.setState({basic: !this.state.basic})
   /*async apiCaller() {
     await API.initialize()
     this.setState({categories: await API.getCategories()});
@@ -81,7 +84,7 @@ class App extends React.Component {
             <Route
               exact path="/"
             >
-              <FieldSelector setResources={this.setResources}/>
+              <FieldSelector negateBasic={this.negateBasic} setResources={this.setResources}/ >
             </Route>
 
             <Route

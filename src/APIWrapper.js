@@ -35,6 +35,14 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(parameters)}`
     )
     let data = await response.json()
+    let key_data = data.reduce((acc, currentCategory) => {
+      let categoryName = currentCategory['category']
+      let newObj = {};
+      newObj[categoryName] = currentCategory
+      return Object.assign(acc, newObj)
+      //{[currentData['category']] : currentData}
+    }, {})
+    console.log(data)
     return data
   }
 
@@ -45,7 +53,9 @@ class APIWrapper {
     let response = await fetch(
         `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
     )
-    return await response.json()
+    response = response.json()
+    console.log(response)
+    return response
   }
 
   async getCountyByZipCode(obj) {

@@ -15,17 +15,19 @@ class ExclusiveButton extends React.Component {
 
   constructor(props) {
     super(props);
-
   }
 
-  componentWillMount() {
-    // console.log("this is this", this)
-    if(this.props.data.label === JSON.parse(localStorage.getItem("fieldSelectorState")).service) {
-      console.log("now what smart guy")
-    }
-    console.log("label",this.props.data.label)
-    console.log("selected",this.props.selected)
-  }
+  // componentWillMount() {
+  //   // console.log("this is this", this)
+  //   if(this.props.data.label === JSON.parse(localStorage.getItem("fieldSelectorState")).subService) {
+  //     console.log("now what smart guy", this.props)
+  //     console.log("now what smart guy", this.props.subService)
+  //     this.props.subServiceChange(JSON.parse(localStorage.getItem("fieldSelectorState")).subService )
+
+  //   }
+  //   console.log("label",this.props.data.label)
+  //   console.log("selected",this.props.selected)
+  // }
 
   render() {
     if (typeof this.props.data !== "string" && this.props.appendCategory) {
@@ -84,7 +86,6 @@ class ExclusiveButton extends React.Component {
 }
 
 class ExclusiveGroup extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { selected: this.props.default ? this.props.default : "" };
@@ -104,6 +105,7 @@ class ExclusiveGroup extends React.Component {
     } else if (this.props.appendCategory) {
       this.props.onChange(data.label);
       this.props.appendCategory(this.props.row, id);
+      // this.props.subServiceChange(data.label)
     } else {
       this.props.onChange(data.label);
     }
@@ -129,15 +131,26 @@ class ExclusiveGroup extends React.Component {
   }
 
   componentWillMount() {
-    console.log("heres the items", this.props.items);
-    console.log("heres the selected item", this.state.selected);
-    console.log(
-      "heres the localstorage",
-      JSON.parse(localStorage.getItem("fieldSelectorState"))
-    );
-    this.setState({
-      selected: JSON.parse(localStorage.getItem("fieldSelectorState")).gender,
-    });
+    // console.log("heres the items", this.props.items);
+    // console.log("heres the selected item", this.state.selected);
+    // console.log(
+    //   "heres the localstorage",
+    //   typeof JSON.parse(localStorage.getItem("fieldSelectorState")).service
+    // );
+      if(JSON.parse(localStorage.getItem("fieldSelectorState"))) {
+        if (this.props.row === 0) {
+          this.setState({
+            selected: {
+              label: JSON.parse(localStorage.getItem("fieldSelectorState")).service,
+            },
+          });
+        } else {
+          this.setState({
+            selected: JSON.parse(localStorage.getItem("fieldSelectorState")).gender,
+          });
+        }
+      }
+
   }
 
   render() {
@@ -167,9 +180,10 @@ class ExclusiveGroup extends React.Component {
                   data={item}
                   onClick={this.handleClick}
                   appendCategory={this.props.appendCategory}
+                  subServiceChange={this.props.subServiceChange}
+
                   id={i}
                   row={this.props.row}
-
                 />
               );
             })}
@@ -195,6 +209,8 @@ class ExclusiveGroup extends React.Component {
                 onClick={this.handleClick}
                 id={i}
                 onChange={this.props.onChange}
+                subServiceChange={this.props.subServiceChange}
+                subService={this.props.subService}
               />
             );
           })}

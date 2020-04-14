@@ -28,10 +28,10 @@ class FieldSelector extends React.Component {
     super(props);
     API.initialize();
 
-    if(JSON.parse(localStorage.getItem("fieldSelectorState"))) {
-      this.state = JSON.parse(localStorage.getItem("fieldSelectorState"))
+    //if theres an object in localstorage called fieldSelectorState, use it for initial state. (when users hit back button)
+    if (JSON.parse(localStorage.getItem("fieldSelectorState"))) {
+      this.state = JSON.parse(localStorage.getItem("fieldSelectorState"));
     } else {
-
       this.state = {
         service: "",
         subService: "",
@@ -48,12 +48,14 @@ class FieldSelector extends React.Component {
         familySize: "",
       };
     }
-
-
     this.callAPI();
   }
-
   handleServiceChange = (service) => this.setState({ service: service });
+  handleSubServiceChange = (subService) => {
+    console.log("trigger trigger", this.state.subService)
+    this.setState({ subService: subService });
+  }
+
   handleCatIDChange = (catID) => this.setState({ catID: catID });
 
   handleFamilySizeChange = (familysize) =>
@@ -66,43 +68,32 @@ class FieldSelector extends React.Component {
   validFamilySize = (familySize) => {
     let message = "";
     let empty = familySize === "";
-
     if (empty) return { valid: false, message: "Required entry." };
-
     let valid = familySize >= 0 && familySize <= 16;
-    if (!valid) message = "You don have that many chilren!";
-
+    if (!valid) message = "You don't have that many chilren!";
     return { valid, message };
   };
 
   validGender = (gender) => {
     let message = "";
-
     let empty = gender === "";
     if (empty) message = "Required entry.";
-
     let valid = !empty;
-
     return { valid, message };
   };
 
   validAge = (age) => {
     let message = "";
-
     if (!age) return { valid: false, message: "Required entry." };
-
     // Using a regex here to recognize positive non-leading zero integers
     let isPositiveInteger = /^[1-9]([0-9]*)$/.test(age);
     if (!isPositiveInteger)
       message = "Please enter a positive round number like 18 or 56.";
-
     // TODO: Maybe remove this case.
     let isReallyOld = parseInt(age) >= 120;
     if (isReallyOld)
       message = "It's unlikely this age is correct. Is this a typo?";
-
     let valid = isPositiveInteger && !isReallyOld;
-
     return { valid, message };
   };
 
@@ -133,30 +124,24 @@ class FieldSelector extends React.Component {
         });
       });
     }
-
     if (this.state.zip.length < 6) {
       this.state.possibleCounties = "";
     }
-  }
+  };
 
   validZIP = (zip) => {
     let message = "";
-
     if (!zip) return { valid: false, message: "Required entry." };
-
     let isPositiveInteger = /^([0-9]\d*)$/.test(zip);
     if (!isPositiveInteger)
       message = "Please only use numbers in the ZIP code.";
-
     // TODO: Verify this assumption. ZIPs can be very weird
     let correctLength = zip.length === 5;
     if (!correctLength)
       message = "ZIP codes are usually 5 digits long. Is this mistyped?";
-
     let valid = correctLength && isPositiveInteger;
-
     return { valid, message };
-  }
+  };
 
   handleCountyChange = (county) => this.setState({ county: county });
 
@@ -176,12 +161,11 @@ class FieldSelector extends React.Component {
     console.log(
       "Then we'd try to find their location using a Google API. For now..."
     );
-
     this.setState({
       zip: "97206",
       county: "multnomah",
     });
-  }
+  };
 
   onlyNumbers = (str) => {
     let characterArray = str.split("");
@@ -189,7 +173,7 @@ class FieldSelector extends React.Component {
       (character) => "0123456789".indexOf(character) !== -1
     );
     return numberArray.join("");
-  }
+  };
 
   // FOR DEBUGGING ONLY, DELETE!!!
   sleep(ms) {
@@ -212,7 +196,6 @@ class FieldSelector extends React.Component {
         return result.json();
       })
       .then((data) => {
-        // console.log("here is the data from the county api call", data);
         const countiesORWA = [];
         data.forEach((el) =>
           countiesORWA.push(
@@ -276,24 +259,13 @@ class FieldSelector extends React.Component {
           this.setState({ validCounty: false });
         }
       });
-  }
+  };
 
   goBehavior = async () => {
     await this.countyAPICall();
     await this.setState({ doValidation: true });
     await this.setState({ doValidation: false });
-
-    // REMOVE! JUST FOR DEBUG PURPOSES
-    // await this.sleep(2000)
-    // console.log({
-    //   service: this.state.service,
-    //   gender: this.state.gender,
-    //   age: this.state.age,
-    //   zip: this.state.zip,
-    //   county: this.state.county,
-    //   familySize: this.state.familySize,
-    // })
-  }
+  };
 
   isPageDataValid = () => {
     return (
@@ -303,7 +275,7 @@ class FieldSelector extends React.Component {
       this.validZIP(this.state.zip).valid &&
       this.validFamilySize(this.state.familySize).valid
     );
-  }
+  };
 
   render() {
     const svgPathEndings =
@@ -312,7 +284,9 @@ class FieldSelector extends React.Component {
       <div className={"field-selector " + this.context}>
         <InputLabel label="Service">
           <CategorySelector
-            onChange={this.handleServiceChange}/////////////////////////////////////////////////////////////////////////
+            onChange={this.handleServiceChange}
+            subServiceChange={this.handleSubServiceChange}
+            subService={this.state.subService}
             apiCategories={this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
           />

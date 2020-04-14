@@ -49,6 +49,7 @@ class App extends React.Component {
     this.setResources = this.setResources.bind(this);
   }
   setResources = (resources) => this.setState({ resources: resources });
+  
   /*async apiCaller() {
     await API.initialize()
     this.setState({categories: await API.getCategories()});

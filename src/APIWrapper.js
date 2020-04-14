@@ -16,7 +16,6 @@ class APIWrapper {
   async initialize() {
     let data = await this.getSessionID();
     this.credentials["sid"] = data[0]["session_id"];
-    // console.log("initialized",data[0], this.credentials);
   }
 
   async getSessionID() {
@@ -24,7 +23,6 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
     );
     let data = await response.json();
-    // console.log("here is the session id", data)
     return data;
   }
 
@@ -37,7 +35,6 @@ class APIWrapper {
       )}`
     );
     let data = await response.json();
-    // console.log("here are the categories", data);
 
     return data;
   }
@@ -45,14 +42,6 @@ class APIWrapper {
   //TODO: This function will have to loop/map to different shelter info components or shelter info maps them
   async getResource(obj) {
     let parameters = { ...this.credentials, ...obj };
-    // console.log(
-    //   "here is the not stringified json object",
-    //   parameters
-    // );
-    // console.log(
-    //   "here is the stringified json object",
-    //   JSON.stringify(parameters)
-    // );
     let response = await fetch(
       `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(
         parameters
@@ -84,7 +73,6 @@ class APIWrapper {
       )}`
     );
     let data = await response.json();
-    // console.log("here is the data from detail get key words:", data);
 
     return data;
   }
@@ -99,7 +87,6 @@ class APIWrapper {
     );
 
     let data = await response.json();
-    // console.log("here is the data from servicename serch:", data);
     return data;
   }
 
@@ -112,7 +99,6 @@ class APIWrapper {
       )}`
     );
     let data = await response.json();
-    // console.log("here is the data from detail drilldown:", data);
 
     return data;
   }

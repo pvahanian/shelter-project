@@ -17,17 +17,18 @@ class ExclusiveButton extends React.Component {
     super(props);
   }
 
-  // componentWillMount() {
-  //   // console.log("this is this", this)
-  //   if(this.props.data.label === JSON.parse(localStorage.getItem("fieldSelectorState")).subService) {
-  //     console.log("now what smart guy", this.props)
-  //     console.log("now what smart guy", this.props.subService)
-  //     this.props.subServiceChange(JSON.parse(localStorage.getItem("fieldSelectorState")).subService )
+  componentDidMount() {
+    //when button component is rendered check if its label is the same as the subservice value in localstorage
+    //if so, call this.props.initiateSelected to change subservice buttons state to selected
+    if (!JSON.parse(localStorage.getItem("fieldSelectorState"))) return;
 
-  //   }
-  //   console.log("label",this.props.data.label)
-  //   console.log("selected",this.props.selected)
-  // }
+    if (
+      this.props.data.label ===
+      JSON.parse(localStorage.getItem("fieldSelectorState")).subService
+    ) {
+      this.props.initiateSelected();
+    }
+  }
 
   render() {
     if (typeof this.props.data !== "string" && this.props.appendCategory) {
@@ -95,19 +96,54 @@ class ExclusiveGroup extends React.Component {
   valid = null;
   invalidEntryMessage = "";
 
+  //sets subservice state to selected during exclusivebutton componentDidMount lifecycle
+  initiateSelected = () => {
+    this.setState({
+      selected: {
+        label: JSON.parse(localStorage.getItem("fieldSelectorState"))
+          .subService,
+      },
+    });
+  };
+
   handleClick(event, data, id) {
     this.setState({ selected: data });
     if (typeof data === "string" && this.props.appendCategory) {
+      console.log("the weird output", data);
       this.props.onChange(data);
       this.props.appendCategory(this.props.row, id);
     } else if (typeof data === "string") {
       this.props.onChange(data);
     } else if (this.props.appendCategory) {
-      this.props.onChange(data.label);
-      this.props.appendCategory(this.props.row, id);
-      // this.props.subServiceChange(data.label)
+      //if category selected is not a top level service
+      if (
+        data.label !== "Crisis Hotlines" &&
+        data.label !== "Shelter" &&
+        data.label !== "Basics" &&
+        data.label !== "Seasonal"
+      ) {
+        //set subservice category in state to clicked button
+        this.props.subServiceChange(data.label);
+        this.props.appendCategory(this.props.row, id);
+      } else {
+        //set service category in state to clicked button
+        this.props.onChange(data.label);
+        this.props.appendCategory(this.props.row, id);
+      }
     } else {
-      this.props.onChange(data.label);
+      //if category selected is not a top level service
+      if (
+        data.label !== "Crisis Hotlines" &&
+        data.label !== "Shelter" &&
+        data.label !== "Basics" &&
+        data.label !== "Seasonal"
+      ) {
+        //set subservice category in state to clicked button
+        this.props.subServiceChange(data.label);
+      } else {
+        //set service category in state to clicked button
+        this.props.onChange(data.label);
+      }
     }
   }
 
@@ -131,26 +167,26 @@ class ExclusiveGroup extends React.Component {
   }
 
   componentWillMount() {
-    // console.log("heres the items", this.props.items);
-    // console.log("heres the selected item", this.state.selected);
-    // console.log(
-    //   "heres the localstorage",
-    //   typeof JSON.parse(localStorage.getItem("fieldSelectorState")).service
-    // );
-      if(JSON.parse(localStorage.getItem("fieldSelectorState"))) {
-        if (this.props.row === 0) {
-          this.setState({
-            selected: {
-              label: JSON.parse(localStorage.getItem("fieldSelectorState")).service,
-            },
-          });
-        } else {
-          this.setState({
-            selected: JSON.parse(localStorage.getItem("fieldSelectorState")).gender,
-          });
-        }
+    //if a fieldSelectorState object exists in localStorage
+    if (JSON.parse(localStorage.getItem("fieldSelectorState"))) {
+      //if props.row is 0 we are rendering top level service categories
+      if (this.props.row === 0) {
+        //set selected state value to === service localstorage value
+        this.setState({
+          selected: {
+            label: JSON.parse(localStorage.getItem("fieldSelectorState"))
+              .service,
+          },
+        });
+      } else {
+        //we are rendering gender categories
+        //set selected state to === gender in localstorage
+        this.setState({
+          selected: JSON.parse(localStorage.getItem("fieldSelectorState"))
+            .gender,
+        });
       }
-
+    }
   }
 
   render() {
@@ -160,15 +196,6 @@ class ExclusiveGroup extends React.Component {
         <div className="exclusive-group-container">
           <div className="exclusive-group">
             {this.props.items.map((item, i) => {
-              {
-                /* console.log("items label bitches: ",item.label)
-              if (
-                item.label ===
-                JSON.parse(localStorage.getItem("fieldSelectorState")).service
-              ) {
-                console.log("Ding Ding Ding");
-              } */
-              }
               return (
                 <ExclusiveButton
                   selected={
@@ -179,9 +206,9 @@ class ExclusiveGroup extends React.Component {
                   key={i}
                   data={item}
                   onClick={this.handleClick}
+                  initiateSelected={this.initiateSelected}
                   appendCategory={this.props.appendCategory}
                   subServiceChange={this.props.subServiceChange}
-
                   id={i}
                   row={this.props.row}
                 />
@@ -208,6 +235,7 @@ class ExclusiveGroup extends React.Component {
                 data={item}
                 onClick={this.handleClick}
                 id={i}
+                initiateSelected={this.initiateSelected}
                 onChange={this.props.onChange}
                 subServiceChange={this.props.subServiceChange}
                 subService={this.props.subService}

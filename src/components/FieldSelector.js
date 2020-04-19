@@ -28,7 +28,7 @@ class FieldSelector extends React.Component {
     super(props);
     API.initialize();
 
-    //if theres an object in localstorage called fieldSelectorState, use it for initial state. (when users hit back button)
+    //if theres an object in localstorage called fieldSelectorState, use it to populate form inputs and set "selected" state on menu buttons. (when users navigate back)
     if (JSON.parse(localStorage.getItem("fieldSelectorState"))) {
       this.state = JSON.parse(localStorage.getItem("fieldSelectorState"));
     } else {
@@ -50,11 +50,12 @@ class FieldSelector extends React.Component {
     }
     this.callAPI();
   }
+
   handleServiceChange = (service) => this.setState({ service: service });
-  handleSubServiceChange = (subService) => {
-    console.log("trigger trigger", this.state.subService)
+
+  //a method for changing subservice state. similiar to the rest of these methods. I removed all the calls to .bind() and replaced with with arrow syntax...
+  handleSubServiceChange = (subService) =>
     this.setState({ subService: subService });
-  }
 
   handleCatIDChange = (catID) => this.setState({ catID: catID });
 
@@ -284,6 +285,7 @@ class FieldSelector extends React.Component {
       <div className={"field-selector " + this.context}>
         <InputLabel label="Service">
           <CategorySelector
+            //these methods and properties that refer to service levels and the data they are modifying should get refactored / consolidated into one object / method ??
             onChange={this.handleServiceChange}
             subServiceChange={this.handleSubServiceChange}
             subService={this.state.subService}

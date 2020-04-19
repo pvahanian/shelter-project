@@ -23,19 +23,18 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
     );
     let data = await response.json();
+    console.log("getsessionIDdata: ", data)
     return data;
   }
 
   async getCategories() {
     let parameters = this.credentials;
-
     let response = await fetch(
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(
         parameters
       )}`
     );
     let data = await response.json();
-
     return data;
   }
 
@@ -59,47 +58,39 @@ class APIWrapper {
       )}`
     );
     let data = await response.json();
-    // console.log("here is the data from get county by zip:", data);
-
     return data;
   }
 
   async getKeywords(obj) {
     let parameters = { ...obj, ...this.credentials };
-
     let response = await fetch(
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(
         parameters
       )}`
     );
     let data = await response.json();
-
     return data;
   }
 
   async serviceNameSearch(obj) {
     let parameters = { ...obj, ...this.credentials };
-
     let response = await fetch(
       `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(
         parameters
       )}`
     );
-
     let data = await response.json();
     return data;
   }
 
   async detailDrilldown(obj) {
     let parameters = { ...obj, ...this.credentials };
-
     let response = await fetch(
       `https://www.navigateopen.info/pubres/api/ProviderDetail/?ip=${JSON.stringify(
         parameters
       )}`
     );
     let data = await response.json();
-
     return data;
   }
 }

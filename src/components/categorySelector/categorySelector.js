@@ -6,8 +6,7 @@ class CategorySelector extends React.Component {
   static contextType = ThemeContext;
 
   componentWillMount() {
-    console.log("categorySelector props",this.props)
-    const svgPathEndings =
+    const svgPathEndings =  
       this.context === "light" ? "-black.svg" : "-white.svg";
     let newCategory = this.state.category.slice();
     newCategory[0] = [

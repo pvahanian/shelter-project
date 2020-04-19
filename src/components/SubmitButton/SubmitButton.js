@@ -21,16 +21,13 @@ function SubmitButton(props) {
   async function handleClick() {
     await props.goBehavior();
     if (props.isPageDataValid()) {
-      // console.log("heres the object", obj)
-      // console.log("here is the fieldseleector state", props.fieldSelectorState)
+      //set fieldSelectorState object to localStorage on submit, for reference when user navigates backwards.. 
       localStorage.setItem(
         "fieldSelectorState",
         JSON.stringify(props.fieldSelectorState)
       );
-      // console.log("localstorage: ", localStorage)
-      // console.log("heres the get request you asked for",await API.getResource(obj))//////////////////////////////////////////////gives error
       props.setResources(await API.getResource(obj));
-      // props.setResources(await API.getCategories(obj))
+      // props.setResources(await API.getKeywords(obj)) //this was the function call when I started working on this app. why I cannot say.
       history.push("/info");
     }
   }

@@ -46,7 +46,7 @@ class App extends React.Component {
       resources: [],
     };
     //this.apiCaller = this.apiCaller.bind(this)
-    this.setResources = this.setResources.bind(this);
+    // this.setResources = this.setResources.bind(this);
   }
   setResources = (resources) => this.setState({ resources: resources });
   

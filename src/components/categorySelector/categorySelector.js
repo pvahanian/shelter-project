@@ -5,8 +5,17 @@ import { ThemeContext } from "../../ThemeContext";
 class CategorySelector extends React.Component {
   static contextType = ThemeContext;
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: [],
+    };
+    this.appendCategory = this.appendCategory.bind(this);
+    this.createLabelWithImage = this.createLabelWithImage.bind(this);
+  }
+
   componentWillMount() {
-    const svgPathEndings =  
+    const svgPathEndings =
       this.context === "light" ? "-black.svg" : "-white.svg";
     let newCategory = this.state.category.slice();
     newCategory[0] = [
@@ -17,15 +26,7 @@ class CategorySelector extends React.Component {
     ];
     this.setState({ category: newCategory });
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      category: [],
-    };
-    this.appendCategory = this.appendCategory.bind(this);
-    this.createLabelWithImage = this.createLabelWithImage.bind(this);
-  }
-  
+
   //categoryType needs to be 'category' or 'subcategory'
   createLabelWithImage(array, categoryType) {
     const svgPathEndings =
@@ -71,14 +72,14 @@ class CategorySelector extends React.Component {
       this.props.handleCatIDChange(this.props.apiCategories[id]["categoryID"]);
     }
   }
-
   render() {
+    
     return this.state.category.map((category, i) => (
       <ExclusiveOption
         items={category}
-        onChange={this.props.onChange}
-        subServiceChange={this.props.subServiceChange}
-        subService={this.props.subService}
+        setSelectedServices={this.props.setSelectedServices}
+        selectedServices={this.props.selectedServices}
+        apiCategories={this.props.apiCategories}
         appendCategory={this.appendCategory}
         key={i}
         row={i}

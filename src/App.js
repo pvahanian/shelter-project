@@ -57,12 +57,9 @@ class App extends React.Component {
   }
   componentDidMount(){
     this.apiCaller()
-
   }*/
 
   render() {
-    //
-
     return (
       <ThemeContext.Provider value={this.state.themeColor}>
         <Router>

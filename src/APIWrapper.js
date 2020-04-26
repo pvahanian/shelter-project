@@ -23,7 +23,6 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
     );
     let data = await response.json();
-    console.log("getsessionIDdata: ", data)
     return data;
   }
 

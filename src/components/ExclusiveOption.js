@@ -18,15 +18,22 @@ class ExclusiveButton extends React.Component {
   }
 
   componentDidMount() {
-    //when button component is rendered check if its label is the same as the subservice value in localstorage
-    //if so, call this.props.initiateSelected to change subservice buttons state to selected
+    //if there is no fieldselectorstate object in localstorage, bail out.
     if (!JSON.parse(localStorage.getItem("fieldSelectorState"))) return;
-
+    //if data.label equals selectedServices.service2 or selectedServices.service3, call setSelected() with appropriate input
+    //this will ensure styles are applied to the correct buttons when navigating backwards.
     if (
       this.props.data.label ===
-      JSON.parse(localStorage.getItem("fieldSelectorState")).subService
+      JSON.parse(localStorage.getItem("fieldSelectorState")).selectedServices
+        .service2
     ) {
-      this.props.initiateSelected();
+      this.props.setSelected(2);
+    } else if (
+      this.props.data.label ===
+      JSON.parse(localStorage.getItem("fieldSelectorState")).selectedServices
+        .service3
+    ) {
+      this.props.setSelected(3);
     }
   }
 
@@ -89,6 +96,7 @@ class ExclusiveButton extends React.Component {
 class ExclusiveGroup extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = { selected: this.props.default ? this.props.default : "" };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -96,53 +104,94 @@ class ExclusiveGroup extends React.Component {
   valid = null;
   invalidEntryMessage = "";
 
-  //sets subservice state to selected during exclusivebutton componentDidMount lifecycle
-  initiateSelected = () => {
-    this.setState({
-      selected: {
-        label: JSON.parse(localStorage.getItem("fieldSelectorState"))
-          .subService,
-      },
-    });
+  //sets service2 or service3 selected state during exclusivebutton componentDidMount lifecycle
+  setSelected = (serviceLevel) => {
+    if (serviceLevel === 2) {
+      this.setState({
+        selected: {
+          label: JSON.parse(localStorage.getItem("fieldSelectorState"))
+            .selectedServices.service2,
+        },
+      });
+    } else if (serviceLevel === 3) {
+      this.setState({
+        selected: {
+          label: JSON.parse(localStorage.getItem("fieldSelectorState"))
+            .selectedServices.service3,
+        },
+      });
+    }
   };
 
   handleClick(event, data, id) {
     this.setState({ selected: data });
+    //if button clicked was from gender field, handle it .
     if (typeof data === "string" && this.props.appendCategory) {
-      console.log("the weird output", data);
-      this.props.onChange(data);
+      this.props.handleServiceChange(data);
       this.props.appendCategory(this.props.row, id);
     } else if (typeof data === "string") {
-      this.props.onChange(data);
+      this.props.handleServiceChange(data);
+      //otherwise, button clicked was from service categories
     } else if (this.props.appendCategory) {
       //if category selected is not a top level service
       if (
-        data.label !== "Crisis Hotlines" &&
-        data.label !== "Shelter" &&
-        data.label !== "Basics" &&
-        data.label !== "Seasonal"
+        !["Crisis Hotlines", "Shelter", "Basics", "Seasonal"].includes(
+          data.label
+        )
       ) {
-        //set subservice category in state to clicked button
-        this.props.subServiceChange(data.label);
+        //make an array of all our service2 category names
+        let arrayOfCategories = [];
+        this.props.apiCategories.forEach((object) => {
+          arrayOfCategories.push(object.category);
+        });
+        //if data.label is in the array, then set service2 to equal data.label, otherwise set it to service3
+        arrayOfCategories.includes(data.label)
+          ? this.props.setSelectedServices({
+              ...this.props.selectedServices,
+              service2: data.label,
+            })
+          : this.props.setSelectedServices({
+              ...this.props.selectedServices,
+              service3: data.label,
+            });
+
         this.props.appendCategory(this.props.row, id);
       } else {
-        //set service category in state to clicked button
-        this.props.onChange(data.label);
+        //set service1 category in state to clicked button
+        this.props.setSelectedServices({
+          ...this.props.selectedServices,
+          service1: data.label,
+        });
         this.props.appendCategory(this.props.row, id);
       }
     } else {
       //if category selected is not a top level service
       if (
-        data.label !== "Crisis Hotlines" &&
-        data.label !== "Shelter" &&
-        data.label !== "Basics" &&
-        data.label !== "Seasonal"
+        !["Crisis Hotlines", "Shelter", "Basics", "Seasonal"].includes(
+          data.label
+        )
       ) {
-        //set subservice category in state to clicked button
-        this.props.subServiceChange(data.label);
+        //make an array of all our service2 category names
+        let arrayOfCategories = [];
+        this.props.apiCategories.forEach((object) => {
+          arrayOfCategories.push(object.category);
+        });
+        //if data.label is in the array, then set service2 to equal data.label, otherwise set it to service3
+        arrayOfCategories.includes(data.label)
+          ? this.props.setSelectedServices({
+              ...this.props.selectedServices,
+              service2: data.label,
+            })
+          : this.props.setSelectedServices({
+              ...this.props.selectedServices,
+              service3: data.label,
+            });
       } else {
-        //set service category in state to clicked button
-        this.props.onChange(data.label);
+        //set service1 to data.label
+        this.props.setSelectedServices({
+          ...this.props.selectedServices,
+          service1: data.label,
+        });
       }
     }
   }
@@ -171,11 +220,11 @@ class ExclusiveGroup extends React.Component {
     if (JSON.parse(localStorage.getItem("fieldSelectorState"))) {
       //if props.row is 0 we are rendering top level service categories
       if (this.props.row === 0) {
-        //set selected state value to === service localstorage value
+        //set selected state value to === service1 in localstorage
         this.setState({
           selected: {
             label: JSON.parse(localStorage.getItem("fieldSelectorState"))
-              .service,
+              .selectedServices.service1,
           },
         });
       } else {
@@ -205,10 +254,10 @@ class ExclusiveGroup extends React.Component {
                   }
                   key={i}
                   data={item}
+                  setSelected={this.setSelected}
                   onClick={this.handleClick}
-                  initiateSelected={this.initiateSelected}
+                  setSelectedServices={this.props.setSelectedServices}
                   appendCategory={this.props.appendCategory}
-                  subServiceChange={this.props.subServiceChange}
                   id={i}
                   row={this.props.row}
                 />
@@ -235,10 +284,9 @@ class ExclusiveGroup extends React.Component {
                 data={item}
                 onClick={this.handleClick}
                 id={i}
-                initiateSelected={this.initiateSelected}
+                setSelected={this.setSelected}
                 onChange={this.props.onChange}
-                subServiceChange={this.props.subServiceChange}
-                subService={this.props.subService}
+                setSelectedServices={this.props.setSelectedServices}
               />
             );
           })}

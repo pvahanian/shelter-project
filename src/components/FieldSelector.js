@@ -33,8 +33,11 @@ class FieldSelector extends React.Component {
       this.state = JSON.parse(localStorage.getItem("fieldSelectorState"));
     } else {
       this.state = {
-        service: "",
-        subService: "",
+        selectedServices: {
+          service1: "",
+          service2: "",
+          service3: "",
+        },
         gender: "",
         age: "",
         zip: "",
@@ -51,11 +54,8 @@ class FieldSelector extends React.Component {
     this.callAPI();
   }
 
-  handleServiceChange = (service) => this.setState({ service: service });
-
-  //a method for changing subservice state. similiar to the rest of these methods. I removed all the calls to .bind() and replaced with with arrow syntax...
-  handleSubServiceChange = (subService) =>
-    this.setState({ subService: subService });
+  setSelectedServices = (services) =>
+    this.setState({ selectedServices: services });
 
   handleCatIDChange = (catID) => this.setState({ catID: catID });
 
@@ -285,10 +285,9 @@ class FieldSelector extends React.Component {
       <div className={"field-selector " + this.context}>
         <InputLabel label="Service">
           <CategorySelector
-            //these methods and properties that refer to service levels and the data they are modifying should get refactored / consolidated into one object / method ??
-            onChange={this.handleServiceChange}
-            subServiceChange={this.handleSubServiceChange}
-            subService={this.state.subService}
+            //this method and property handle the all of the category buttons excluding gender
+            setSelectedServices={this.setSelectedServices}
+            selectedServices={this.state.selectedServices}
             apiCategories={this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
           />
@@ -299,7 +298,7 @@ class FieldSelector extends React.Component {
             items={["Male", "Female", "Trans Male", "Trans Female"]}
             validator={this.validGender}
             shouldValidate={this.state.doValidation}
-            onChange={this.handleGenderChange}
+            handleServiceChange={this.handleGenderChange}
           />
         </InputLabel>
 

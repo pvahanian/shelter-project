@@ -298,7 +298,7 @@ class FieldSelector extends React.Component {
             items={["Male", "Female", "Trans Male", "Trans Female"]}
             validator={this.validGender}
             shouldValidate={this.state.doValidation}
-            handleServiceChange={this.handleGenderChange}
+            handleGenderChange={this.handleGenderChange}
           />
         </InputLabel>
 

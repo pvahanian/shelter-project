@@ -7,9 +7,9 @@ const Shelters = ({ shelters }) => (
     <h1> Relevant Shelters </h1>
     <ul className="shelterList">
       {shelters &&
-        shelters.map((shelter) => {
+        shelters.map((shelter, index) => {
           return (
-            <li key={shelter.Id}>
+            <li key={shelter.Id || index}>
               <ShelterCard {...shelter} />
             </li>
           );

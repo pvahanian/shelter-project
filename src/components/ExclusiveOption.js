@@ -104,7 +104,7 @@ class ExclusiveGroup extends React.Component {
   valid = null;
   invalidEntryMessage = "";
 
-  //sets service2 or service3 selected state during exclusivebutton componentDidMount lifecycle
+  //sets service2 or service3 selected state during exclusivebutton componentDidMount lifecycle. (service1 selected state is handled in ExclusiveGroup component)
   setSelected = (serviceLevel) => {
     if (serviceLevel === 2) {
       this.setState({
@@ -127,10 +127,10 @@ class ExclusiveGroup extends React.Component {
     this.setState({ selected: data });
     //if button clicked was from gender field, handle it .
     if (typeof data === "string" && this.props.appendCategory) {
-      this.props.handleServiceChange(data);
+      this.props.handleGenderChange(data);
       this.props.appendCategory(this.props.row, id);
     } else if (typeof data === "string") {
-      this.props.handleServiceChange(data);
+      this.props.handleGenderChange(data);
       //otherwise, button clicked was from service categories
     } else if (this.props.appendCategory) {
       //if category selected is not a top level service
@@ -220,7 +220,7 @@ class ExclusiveGroup extends React.Component {
     if (JSON.parse(localStorage.getItem("fieldSelectorState"))) {
       //if props.row is 0 we are rendering top level service categories
       if (this.props.row === 0) {
-        //set selected state value to === service1 in localstorage
+        //set selected state value to === service1 from localstorage
         this.setState({
           selected: {
             label: JSON.parse(localStorage.getItem("fieldSelectorState"))
@@ -229,7 +229,7 @@ class ExclusiveGroup extends React.Component {
         });
       } else {
         //we are rendering gender categories
-        //set selected state to === gender in localstorage
+        //set selected state to === gender from localstorage
         this.setState({
           selected: JSON.parse(localStorage.getItem("fieldSelectorState"))
             .gender,

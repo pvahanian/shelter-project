@@ -35,7 +35,6 @@ navbar.links = [
 
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
-
 class App extends React.Component {
   constructor(props){
     super(props)

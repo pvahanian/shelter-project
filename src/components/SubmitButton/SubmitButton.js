@@ -29,10 +29,12 @@ function SubmitButton(props) {
           "fieldSelectorState",
           JSON.stringify(props.fieldSelectorState)
         );
-          props.setResources(await API.getKeywords(obj))
+          props.setResources(await API.getCategories(obj))
           history.push("/info");
+        } else {
+          console.log("test", props.isPageDataValid() )
         }
-    }
+    } 
 
     return (
       <button type="button" onClick={handleClick}>

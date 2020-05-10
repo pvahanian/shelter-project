@@ -26,6 +26,9 @@ class FieldSelector extends React.Component {
    constructor(props) {
     super(props)
     API.initialize()
+    if (JSON.parse(localStorage.getItem('fieldSelectorState'))) {
+      this.state = JSON.parse(localStorage.getItem('fieldSelectorState'));
+    } else {
     this.state = {
       selectedServices: {
         service1: '',
@@ -45,6 +48,7 @@ class FieldSelector extends React.Component {
       catID : '',
       familySize: ''
     }
+  }
 
     // Bind all functions which are called from child inputs
     this.handleServiceChange = this.handleServiceChange.bind(this)

@@ -118,46 +118,17 @@ class ExclusiveGroup extends React.Component {
       this.props.appendCategory(this.props.row, id);
     } else if (typeof data === 'string') {
       this.props.onChange(data);
-      //otherwise, button clicked was from service categories
-    } else if (this.props.appendCategory) {
-      //if category selected is not a top level service
-      if (
-        !['Crisis Hotlines', 'Shelter', 'Basics', 'Seasonal'].includes(
-          data.label
-        )
-      ) {
-        //make an array of all our service2 category names
-        let arrayOfCategories = [];
-        this.props.apiCategories.forEach((object) => {
-          arrayOfCategories.push(object.category);
-        });
-        //if data.label is in the array, then set service2 to equal data.label, otherwise set it to service3
-        arrayOfCategories.includes(data.label)
-          ? this.props.setSelectedServices({
-              ...this.props.selectedServices,
-              service2: data.label,
-            })
-          : this.props.setSelectedServices({
-              ...this.props.selectedServices,
-              service3: data.label,
-            });
-
-        this.props.appendCategory(this.props.row, id);
-      } else {
+      //otherwise, the button clicked was from one of the service categories.
+    } else {
+      //if category selected is a top level service
+      if (['Crisis Hotlines', 'Shelter', 'Basics', 'Seasonal'].includes(data.label)) { 
         //set service1 category in state to clicked button
         this.props.setSelectedServices({
           ...this.props.selectedServices,
           service1: data.label,
         });
         this.props.appendCategory(this.props.row, id);
-      }
-    } else {
-      //if category selected is not a top level service
-      if (
-        !['Crisis Hotlines', 'Shelter', 'Basics', 'Seasonal'].includes(
-          data.label
-        )
-      ) {
+      } else {
         //make an array of all our service2 category names
         let arrayOfCategories = [];
         this.props.apiCategories.forEach((object) => {
@@ -173,14 +144,9 @@ class ExclusiveGroup extends React.Component {
               ...this.props.selectedServices,
               service3: data.label,
             });
-      } else {
-        //set service1 to data.label
-        this.props.setSelectedServices({
-          ...this.props.selectedServices,
-          service1: data.label,
-        });
-      }
-    }
+        this.props.appendCategory(this.props.row, id);
+      } 
+    } 
   }
 
   validate() {

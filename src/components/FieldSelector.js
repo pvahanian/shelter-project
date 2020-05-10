@@ -27,7 +27,11 @@ class FieldSelector extends React.Component {
     super(props)
     API.initialize()
     this.state = {
-
+      selectedServices: {
+        service1: '',
+        service2: '',
+        service3: '',
+      },
       service: '',
       gender: '',
       age: '',
@@ -64,6 +68,10 @@ class FieldSelector extends React.Component {
     this.callAPI()
 
   }
+
+  //Method for handling selected service state.
+  setSelectedServices = (services) =>
+  this.setState({ selectedServices: services });
 
   handleServiceChange = service => this.setState({ service: service })
   handleCatIDChange = catID => this.setState({ catID: catID })
@@ -281,6 +289,8 @@ class FieldSelector extends React.Component {
         <InputLabel label='Service'>
           <CategorySelector
             onChange={this.handleServiceChange}
+            setSelectedServices={this.setSelectedServices}
+            selectedServices={this.state.selectedServices}
             apiCategories = {this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
           />

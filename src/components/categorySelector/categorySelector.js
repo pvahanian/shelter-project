@@ -75,6 +75,9 @@ class CategorySelector extends React.Component{
         <ExclusiveOption
           items = {category}
           onChange={this.props.onChange}
+          setSelectedServices={this.props.setSelectedServices}
+          selectedServices={this.props.selectedServices}
+          apiCategories={this.props.apiCategories}
           appendCategory = {this.appendCategory}
           key = {i}
           row ={i}

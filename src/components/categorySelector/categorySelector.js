@@ -6,28 +6,23 @@ import { ThemeContext } from '../../ThemeContext';
 class CategorySelector extends React.Component{
   static contextType = ThemeContext;
 
-  componentWillMount(){
-    const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg';
-    let newCategory = this.state.category.slice();
-    newCategory[0] = [
-    {label: 'Crisis Hotlines',
-    image: '../dog' + svgPathEndings},
-    {label: 'Basics',
-    image: '../dog' + svgPathEndings},
-    {label: 'Shelter',
-    image: '../dog' + svgPathEndings},
-    {label: 'Seasonal',
-    image: '../dog' + svgPathEndings}]
-    this.setState({category: newCategory})
+  componentDidMount(){
+    /*let newCategory = []
+    newCategory[0] = this.createLabelWithImage(this.props.apiCategories, 'category')
+    this.setState({categories: newCategory})
+    console.log(this.props.apiCategories)
+    console.log(newCategory)
+    console.log(this.state)*/
   }
   constructor(props){
     super(props)
     this.state = {
-    category: []
+    categories: []
     }
+    this.state.categories[0] = this.createLabelWithImage(this.props.apiCategories, 'category')
     this.appendCategory = this.appendCategory.bind(this)
     this.createLabelWithImage = this.createLabelWithImage.bind(this)
-
+    console.log(this.state)
   }
    //categoryType needs to be 'category' or 'subcategory'
    createLabelWithImage(array, categoryType){
@@ -42,18 +37,18 @@ class CategorySelector extends React.Component{
     return objArray
   }
 
-   async appendCategory(row, id){
-    let newCategory = this.state.category.slice();
+  appendCategory(row, id){
+    let newCategory = this.state.categories.slice();
     //Remove buttons if user selects previous options
-    if(this.state.category.length > row + 1){
-      for(let i = 0; i < this.state.category.length - row - 2 ; i++){
+    if(this.state.categories.length > row + 1){
+      for(let i = 0; i < this.state.categories.length - row - 2 ; i++){
         newCategory.pop()
       }
     }
     //if first for map to category
     if (row == 0) {
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories, 'category')
-      this.setState({category:newCategory})
+      this.setState({categories:newCategory})
       return
     }
     //to stop buttons from growing
@@ -63,17 +58,17 @@ class CategorySelector extends React.Component{
     //else map to subCategory
     else{
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
-      this.setState({category:newCategory})
+      this.setState({categories:newCategory})
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
-    }
-
+      }
     }
 
   render(){
+    console.log(this.state)
     return(
-      this.state.category.map((category, i) =>
+      this.state.categories.map((categories, i) =>
         <ExclusiveOption
-          items = {category}
+          items = {categories}
           onChange={this.props.onChange}
           appendCategory = {this.appendCategory}
           key = {i}

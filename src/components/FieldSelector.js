@@ -21,11 +21,11 @@ class FieldSelector extends React.Component {
   async callAPI() {
     await API.initialize()
     this.setState({apiCategories: await API.getCategories()});
+    console.log(this.state.apiCategories)
   }
 
    constructor(props) {
     super(props)
-    API.initialize()
     this.state = {
 
       service: '',
@@ -275,6 +275,10 @@ class FieldSelector extends React.Component {
   }
 
   render() {
+    if(this.state.apiCategories.length === 0){
+      return null
+    }
+    else{
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
     return(
       <div className={'field-selector ' + this.context}>
@@ -378,7 +382,9 @@ class FieldSelector extends React.Component {
           setResources={this.props.setResources}
         />
       </div>
+
     );
+  }
   }
 }
 

@@ -120,29 +120,27 @@ class ExclusiveGroup extends React.Component {
     if(this.props.shouldValidate)
       this.validate()
     if(typeof(this.props.appendCategory) == 'function' ){
-
-    return (
-      <div className='exclusive-group-container'>
-        <div className='exclusive-group'>
-          {
-            this.props.items.map((item, i) =>
-              <ExclusiveButton
-                selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
-                key={i}
-                data={item}
-                onClick={this.handleClick}
-                appendCategory={this.props.appendCategory}
-                id = {i}
-                row = {this.props.row}
-              />,
-            )
-          }
+      return (
+        <div className='exclusive-group-container'>
+          <div className='exclusive-group'>
+            {
+              this.props.items.map((item, i) =>
+                <ExclusiveButton
+                  selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
+                  key={i}
+                  data={item}
+                  onClick={this.handleClick}
+                  appendCategory={this.props.appendCategory}
+                  id = {i}
+                  row = {this.props.row}
+                />,
+              )
+            }
+          </div>
+          <InvalidEntryMessage message={this.invalidEntryMessage} />
         </div>
 
-        <InvalidEntryMessage message={this.invalidEntryMessage} />
-      </div>
-
-    );
+      );
   }
   return (
     <div className='exclusive-group-container'>

@@ -6,23 +6,21 @@ import { ThemeContext } from '../../ThemeContext';
 class CategorySelector extends React.Component{
   static contextType = ThemeContext;
 
-  componentDidMount(){
-    /*let newCategory = []
-    newCategory[0] = this.createLabelWithImage(this.props.apiCategories, 'category')
-    this.setState({categories: newCategory})
-    console.log(this.props.apiCategories)
-    console.log(newCategory)
-    console.log(this.state)*/
-  }
   constructor(props){
     super(props)
     this.state = {
-    categories: []
+      categories: [],
+      keys: []
     }
-    this.state.categories[0] = this.createLabelWithImage(this.props.apiCategories, 'category')
     this.appendCategory = this.appendCategory.bind(this)
     this.createLabelWithImage = this.createLabelWithImage.bind(this)
-    console.log(this.state)
+    this.setKey = this.setKey.bind(this)
+    this.state.categories[0] = this.createLabelWithImage(this.props.apiCategories, 'category')
+
+  }
+
+  setKey(keyValue){
+    this.state.keys.push(keyValue)
   }
    //categoryType needs to be 'category' or 'subcategory'
    createLabelWithImage(array, categoryType){
@@ -38,30 +36,43 @@ class CategorySelector extends React.Component{
   }
 
   appendCategory(row, id){
+    console.log(row)
+    console.log(id)
     let newCategory = this.state.categories.slice();
-    //Remove buttons if user selects previous options
-    if(this.state.categories.length > row + 1){
-      for(let i = 0; i < this.state.categories.length - row - 2 ; i++){
-        newCategory.pop()
-      }
+
+    //remove subCategories if user clicks at a higher level of the tree
+    for(let i = row; i < this.state.categories.length - 1; i++){
+      newCategory.pop()
+      this.state.keys.pop()
     }
-    //if first for map to category
-    if (row == 0) {
-      newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories, 'category')
-      this.setState({categories:newCategory})
-      return
-    }
-    //to stop buttons from growing
+
+    //keep options from growing
     if(row >= 2){
+      this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]][this.state.keys[1]]['subcategoryID'])
       return
     }
-    //else map to subCategory
-    else{
+
+    //Category has been selected. Show subcategory
+    if(row === 0){
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
       this.setState({categories:newCategory})
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
+      this.setKey(id)
+    }
+    //subcategory has been selectd. Show subbestCategory.
+    else{
+      try{
+        newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcatterm'], 'sterm')
+        this.setState({categories:newCategory})
+        this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcategoryID'])
+        this.setKey(id)
+      }
+      catch(error){
+        console.log(this.props.apiCategories[id]['subcat'] + "does not have subCategories" + error)
       }
     }
+
+  }
 
   render(){
     console.log(this.state)

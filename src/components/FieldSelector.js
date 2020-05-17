@@ -275,6 +275,7 @@ class FieldSelector extends React.Component {
   }
 
   render() {
+    console.log(this.state.catID)
     if(this.state.apiCategories.length === 0){
       return null
     }

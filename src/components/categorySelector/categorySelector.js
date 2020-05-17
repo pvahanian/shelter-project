@@ -40,7 +40,7 @@ class CategorySelector extends React.Component{
     console.log(id)
     let newCategory = this.state.categories.slice();
 
-    //remove subCategories if user clicks at a higher level of the tree
+    //remove subCategories and keys if user clicks at a higher level of the tree
     for(let i = row; i < this.state.categories.length - 1; i++){
       newCategory.pop()
       this.state.keys.pop()
@@ -48,7 +48,7 @@ class CategorySelector extends React.Component{
 
     //keep options from growing
     if(row >= 2){
-      this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]][this.state.keys[1]]['subcategoryID'])
+      //MARK ----------- Here is where you would set the service3
       return
     }
 
@@ -57,6 +57,7 @@ class CategorySelector extends React.Component{
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
       this.setState({categories:newCategory})
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
+      //MARK ----------- Here is where you would set the service1
       this.setKey(id)
     }
     //subcategory has been selectd. Show subbestCategory.
@@ -65,6 +66,7 @@ class CategorySelector extends React.Component{
         newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcatterm'], 'sterm')
         this.setState({categories:newCategory})
         this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcategoryID'])
+        //MARK ----------- Here is where you would set the service2
         this.setKey(id)
       }
       catch(error){

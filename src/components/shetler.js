@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 
 const Shelters = ({ shelters }) => (
   <div>
-    {console.log(shelters)}
+    {/* {console.log(shelters)} */}
     <h1> Relevant Shelters </h1>
     <ul className="shetlerList">
       {shelters && shelters.map(shelter => (

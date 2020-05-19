@@ -26,9 +26,14 @@ class FieldSelector extends React.Component {
 
    constructor(props) {
     super(props)
-    this.state = {
+    if(JSON.parse(localStorage.getItem("fieldSelectorState"))) {
+      this.state = JSON.parse(localStorage.getItem("fieldSelectorState"))
+    } else {
 
+    this.state = {
+      
       service: '',
+      buttonState: {category: '', subCat: [{subCategory: '', subCatTerm: [{sterm: ''}]}]},
       gender: '',
       age: '',
       zip: '',
@@ -40,6 +45,7 @@ class FieldSelector extends React.Component {
       apiCategories: [],
       catID : '',
       familySize: ''
+    }
     }
 
     // Bind all functions which are called from child inputs
@@ -64,7 +70,9 @@ class FieldSelector extends React.Component {
     this.callAPI()
 
   }
+  handleButtonStateChange = (newState) => this.setState({buttonState: newState}) 
 
+  
   handleServiceChange = service => this.setState({ service: service })
   handleCatIDChange = catID => this.setState({ catID: catID })
 
@@ -258,14 +266,14 @@ class FieldSelector extends React.Component {
 
     // REMOVE! JUST FOR DEBUG PURPOSES
     await this.sleep(2000)
-    console.log({
-      service: this.state.service,
-      gender: this.state.gender,
-      age: this.state.age,
-      zip: this.state.zip,
-      county: this.state.county,
-      familySize: this.state.familySize,
-    })
+  //   console.log({
+  //     service: this.state.service,
+  //     gender: this.state.gender,
+  //     age: this.state.age,
+  //     zip: this.state.zip,
+  //     county: this.state.county,
+  //     familySize: this.state.familySize,
+  //   })
   }
 
   isPageDataValid(){
@@ -275,7 +283,7 @@ class FieldSelector extends React.Component {
   }
 
   render() {
-    console.log(this.state.catID)
+    // console.log(this.state.catID)
     if(this.state.apiCategories.length === 0){
       return null
     }
@@ -286,6 +294,8 @@ class FieldSelector extends React.Component {
         <InputLabel label='Service'>
           <CategorySelector
             onChange={this.handleServiceChange}
+            handleButtonStateChange={this.handleButtonStateChange}
+            buttonState={this.state.buttonState}
             apiCategories = {this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
           />

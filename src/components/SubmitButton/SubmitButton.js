@@ -24,6 +24,8 @@ function SubmitButton(props) {
       await props.goBehavior();
         if(props.isPageDataValid()){
           console.log(props.fieldSelectorState)
+          //save field selector state to local storage for use if / when user navigates backwards 
+          localStorage.setItem('fieldSelectorState', JSON.stringify(props.fieldSelectorState))
           props.setResources(await API.getKeywords(obj))
           history.push("/info");
         }

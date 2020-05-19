@@ -36,8 +36,8 @@ class CategorySelector extends React.Component{
   }
 
   appendCategory(row, id){
-    console.log(row)
-    console.log(id)
+    // console.log('row',row)
+    // console.log('id', id)
     let newCategory = this.state.categories.slice();
 
     //remove subCategories and keys if user clicks at a higher level of the tree
@@ -81,6 +81,8 @@ class CategorySelector extends React.Component{
     return(
       this.state.categories.map((categories, i) =>
         <ExclusiveOption
+          buttonState={this.props.buttonState}
+          handleButtonStateChange={this.props.handleButtonStateChange}/////////////////////////////////////////
           items = {categories}
           onChange={this.props.onChange}
           appendCategory = {this.appendCategory}

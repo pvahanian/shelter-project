@@ -70,6 +70,7 @@ class FieldSelector extends React.Component {
     this.callAPI()
 
   }
+  
   handleButtonStateChange = (newState) => this.setState({buttonState: newState}) 
 
   

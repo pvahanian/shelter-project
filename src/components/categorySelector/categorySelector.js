@@ -8,10 +8,26 @@ class CategorySelector extends React.Component{
 
   constructor(props){
     super(props)
+
+
     this.state = {
       categories: [],
       keys: []
     }
+    console.log(JSON.parse(localStorage.getItem("categorySelector")))
+    // console.log(JSON.parse(localStorage.getItem('categorySelector')).categories)
+    // // if(!JSON.parse(localStorage.getItem("categorySelector"))) return;
+    // if(JSON.parse(localStorage.getItem("categorySelector")).categories) {
+    //   this.state = {
+    //     categories: JSON.parse(localStorage.getItem("categorySelector")).categories,
+    //     keys: []
+    //   }
+    // } else {
+    //   this.state = {
+    //     categories: [],
+    //     keys: []
+    //   }
+    // }
     this.appendCategory = this.appendCategory.bind(this)
     this.createLabelWithImage = this.createLabelWithImage.bind(this)
     this.setKey = this.setKey.bind(this)
@@ -49,16 +65,19 @@ class CategorySelector extends React.Component{
     //keep options from growing
     if(row >= 2){
       //MARK ----------- Here is where you would set the service3
+      localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
+
       return
     }
 
     //Category has been selected. Show subcategory
     if(row === 0){
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
-      this.setState({categories:newCategory})
+      this.setState({categories:newCategory})/////////////////
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
       //MARK ----------- Here is where you would set the service1
       this.setKey(id)
+      localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
     }
     //subcategory has been selectd. Show subbestCategory.
     else{
@@ -68,6 +87,7 @@ class CategorySelector extends React.Component{
         this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcategoryID'])
         //MARK ----------- Here is where you would set the service2
         this.setKey(id)
+        localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
       }
       catch(error){
         console.log(this.props.apiCategories[id]['subcat'] + "does not have subCategories" + error)
@@ -76,6 +96,13 @@ class CategorySelector extends React.Component{
 
   }
 
+  componentWillMount() {
+    //look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
+    if(!JSON.parse(localStorage.getItem("categorySelector"))) return;
+    if(JSON.parse(localStorage.getItem("categorySelector"))) {
+      this.setState({categories: JSON.parse(localStorage.getItem("categorySelector"))})
+    }
+  }
   render(){
     console.log(this.state)
     return(

@@ -59,6 +59,10 @@ class App extends React.Component {
 
   }*/
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', localStorage.removeItem('fieldSelectorState'))
+    window.addEventListener('beforeunload', localStorage.removeItem('categorySelector'))
+  }
   render() {
     //
 

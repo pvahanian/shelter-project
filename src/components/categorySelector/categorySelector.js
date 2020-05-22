@@ -14,25 +14,23 @@ class CategorySelector extends React.Component{
       categories: [],
       keys: []
     }
-    console.log(JSON.parse(localStorage.getItem("categorySelector")))
-    // console.log(JSON.parse(localStorage.getItem('categorySelector')).categories)
-    // // if(!JSON.parse(localStorage.getItem("categorySelector"))) return;
-    // if(JSON.parse(localStorage.getItem("categorySelector")).categories) {
-    //   this.state = {
-    //     categories: JSON.parse(localStorage.getItem("categorySelector")).categories,
-    //     keys: []
-    //   }
-    // } else {
-    //   this.state = {
-    //     categories: [],
-    //     keys: []
-    //   }
-    // }
+    // console.log(JSON.parse(localStorage.getItem("categorySelector")))
+    //look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
+    if(JSON.parse(localStorage.getItem('categorySelector'))) {
+      this.state = {
+        categories: JSON.parse(localStorage.getItem('categorySelector')),
+        keys: []
+      }
+    } else {
+      this.state = {
+        categories: [],
+        keys: []
+      }
+    }
     this.appendCategory = this.appendCategory.bind(this)
     this.createLabelWithImage = this.createLabelWithImage.bind(this)
     this.setKey = this.setKey.bind(this)
     this.state.categories[0] = this.createLabelWithImage(this.props.apiCategories, 'category')
-
   }
 
   setKey(keyValue){
@@ -52,8 +50,6 @@ class CategorySelector extends React.Component{
   }
 
   appendCategory(row, id){
-    // console.log('row',row)
-    // console.log('id', id)
     let newCategory = this.state.categories.slice();
 
     //remove subCategories and keys if user clicks at a higher level of the tree
@@ -64,18 +60,15 @@ class CategorySelector extends React.Component{
 
     //keep options from growing
     if(row >= 2){
-      //MARK ----------- Here is where you would set the service3
       localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
-
       return
     }
 
     //Category has been selected. Show subcategory
     if(row === 0){
       newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[id]['subcat'], 'subcategory')
-      this.setState({categories:newCategory})/////////////////
+      this.setState({categories:newCategory})
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
-      //MARK ----------- Here is where you would set the service1
       this.setKey(id)
       localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
     }
@@ -85,7 +78,6 @@ class CategorySelector extends React.Component{
         newCategory[row + 1] = this.createLabelWithImage(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcatterm'], 'sterm')
         this.setState({categories:newCategory})
         this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcategoryID'])
-        //MARK ----------- Here is where you would set the service2
         this.setKey(id)
         localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
       }
@@ -96,20 +88,14 @@ class CategorySelector extends React.Component{
 
   }
 
-  componentWillMount() {
-    //look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
-    if(!JSON.parse(localStorage.getItem("categorySelector"))) return;
-    if(JSON.parse(localStorage.getItem("categorySelector"))) {
-      this.setState({categories: JSON.parse(localStorage.getItem("categorySelector"))})
-    }
-  }
+
   render(){
     console.log(this.state)
     return(
       this.state.categories.map((categories, i) =>
         <ExclusiveOption
           buttonState={this.props.buttonState}
-          handleButtonStateChange={this.props.handleButtonStateChange}/////////////////////////////////////////
+          handleButtonStateChange={this.props.handleButtonStateChange}
           items = {categories}
           onChange={this.props.onChange}
           appendCategory = {this.appendCategory}

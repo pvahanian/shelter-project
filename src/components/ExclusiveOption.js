@@ -21,20 +21,20 @@ class ExclusiveButton extends React.Component {
   
   componentWillMount() {
     //look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
-    if(!JSON.parse(localStorage.getItem("fieldSelectorState"))) return;
+    if(!JSON.parse(localStorage.getItem('fieldSelectorState'))) return;
     if(this.props.row === undefined) {
-      console.log("gender group")
+      console.log('gender group')
       this.props.handleSetSelected(JSON.parse(localStorage.getItem('fieldSelectorState')).gender)
     }
     if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.category) {
       console.log('number 1')
       this.props.handleSetSelected(this.props.data)
     } else if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.subCat[0].subCategory) {
-      console.log("number 2")
+      console.log('number 2')
       this.props.handleSetSelected(this.props.data)
  
     } else if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.subCat[0].subCatTerm[0].sterm) {
-      console.log("number 3")
+      console.log('number 3')
       this.props.handleSetSelected(this.props.data)
     } 
   }
@@ -68,8 +68,6 @@ class ExclusiveButton extends React.Component {
       )
     }
 
-
-
     return (
       <button
         className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
@@ -98,7 +96,6 @@ class ExclusiveGroup extends React.Component {
   invalidEntryMessage = ''
 
   handleClick(event, data, id, row) {
-    console.log("row", row)
     this.setState({selected: data})
     if(typeof(data) === 'string' && this.props.appendCategory){
       this.props.onChange(data)

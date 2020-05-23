@@ -18,6 +18,7 @@ class APIWrapper {
   async initialize() {
     let data = await this.getSessionID()
     this.credentials['sid'] = data[0]['session_id']
+    console.log("API initalized")
   }
 
   async getSessionID() {
@@ -25,6 +26,8 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
     )
     let data = await response.json()
+    console.log("get SessionID called")
+
     return data
   }
 
@@ -45,7 +48,10 @@ class APIWrapper {
     let response = await fetch(
         `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
     )
-    return await response.json()
+    //for DEBUGGING
+    let jsonReturn = await response.json()
+    console.log(jsonReturn)
+    return jsonReturn
   }
 
   async getCountyByZipCode(obj) {

@@ -15,7 +15,7 @@ class CategorySelector extends React.Component{
       keys: []
     }
     // console.log(JSON.parse(localStorage.getItem("categorySelector")))
-    //look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
+    //look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
     if(JSON.parse(localStorage.getItem('categorySelectorState'))) {
       this.state = {
         categories: JSON.parse(localStorage.getItem('categorySelectorState')).categories,
@@ -52,18 +52,18 @@ class CategorySelector extends React.Component{
 
   appendCategory(row, id){
     let newCategory = this.state.categories.slice();
-
+    console.log(row)
     //remove subCategories and keys if user clicks at a higher level of the tree
     for(let i = row; i < this.state.categories.length - 1; i++){
       newCategory.pop()
       this.state.keys.pop()
-      
     }
-    console.log(this.state)
 
     //keep options from growing
     if(row >= 2){
       localStorage.setItem('categorySelectorState', JSON.stringify(this.state))
+      this.props.handleCatIDChange('')
+      this.props.handleCategorySelected(3)
       return
     }
 
@@ -74,6 +74,8 @@ class CategorySelector extends React.Component{
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
       this.setKey(id)
       localStorage.setItem('categorySelectorState', JSON.stringify(this.state))
+      this.props.handleCategorySelected(1)
+      console.log(this.props.catID)
     }
     //subcategory has been selectd. Show subbestCategory.
     else{
@@ -83,6 +85,10 @@ class CategorySelector extends React.Component{
         this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcategoryID'])
         this.setKey(id)
         localStorage.setItem('categorySelectorState', JSON.stringify(this.state))
+        this.props.handleCategorySelected(2)
+        console.log(this.props.catID)
+        //this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCatTerm: [{sterm: null}]}] })
+        //console.log(this.props.buttonState)
       }
       catch(error){
         console.log(this.props.apiCategories[id]['subcat'] + "does not have subCategories" + error)

@@ -18,9 +18,9 @@ class ExclusiveButton extends React.Component {
     super(props)
   }
 
-  
+
   componentWillMount() {
-    //look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
+    //look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
     if(!JSON.parse(localStorage.getItem('fieldSelectorState'))) return;
     if(this.props.row === undefined) {
       console.log('gender group')
@@ -32,13 +32,13 @@ class ExclusiveButton extends React.Component {
     } else if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.subCat[0].subCategory) {
       console.log('number 2')
       this.props.handleSetSelected(this.props.data)
- 
+
     } else if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.subCat[0].subCatTerm[0].sterm) {
       console.log('number 3')
       this.props.handleSetSelected(this.props.data)
-    } 
+    }
   }
-  
+
   render() {
     if(typeof(this.props.data) !== 'string' && this.props.appendCategory) {
       // Assume object like {label, image} and build an SVG button
@@ -91,7 +91,7 @@ class ExclusiveGroup extends React.Component {
   handleSetSelected = (data) => {
     this.setState({selected: data })
   }
-  
+
   valid = null
   invalidEntryMessage = ''
 
@@ -109,11 +109,11 @@ class ExclusiveGroup extends React.Component {
       this.props.appendCategory(this.props.row, id)
       //save service button selections to fieldSelectorState, which in turn is saved to localstorage on form submit
       if(row === 0) {
-        this.props.handleButtonStateChange({...this.props.buttonState, category: data.label})    
+        this.props.handleButtonStateChange({...this.props.buttonState, category: data.label})
       } else if(row === 1) {
-        this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCategory: data.label}] })    
+        this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCategory: data.label}] })
       } else {
-        this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCatTerm: [{sterm: data.label}]}] })    
+        this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCatTerm: [{sterm: data.label}]}] })
       }
     } else {
       console.log(data, id)
@@ -150,7 +150,7 @@ class ExclusiveGroup extends React.Component {
     if(this.props.shouldValidate)
       this.validate()
     if(typeof(this.props.appendCategory) == 'function' ){
-      
+
       return (
         <div className='exclusive-group-container'>
           <div className='exclusive-group'>

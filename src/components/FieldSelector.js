@@ -31,7 +31,7 @@ class FieldSelector extends React.Component {
     } else {
 
     this.state = {
-      
+
       service: '',
       buttonState: {category: '', subCat: [{subCategory: '', subCatTerm: [{sterm: ''}]}]},
       gender: '',
@@ -44,7 +44,8 @@ class FieldSelector extends React.Component {
       doValidation: false,
       apiCategories: [],
       catID : '',
-      familySize: ''
+      familySize: '',
+      categorySelected: []
     }
     }
 
@@ -57,6 +58,7 @@ class FieldSelector extends React.Component {
     this.handleCatIDChange = this.handleCatIDChange.bind(this)
     this.handleFamilySizeChange = this.handleFamilySizeChange.bind(this)
 
+    this.handleCategorySelected = this.handleCategorySelected.bind(this)
 
     this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
@@ -70,10 +72,12 @@ class FieldSelector extends React.Component {
     this.callAPI()
 
   }
-  
-  handleButtonStateChange = (newState) => this.setState({buttonState: newState}) 
 
-  
+  handleCategorySelected = category => this.setState({categorySelected: category})
+
+  handleButtonStateChange = (newState) => this.setState({buttonState: newState})
+
+
   handleServiceChange = service => this.setState({ service: service })
   handleCatIDChange = catID => this.setState({ catID: catID })
 
@@ -299,6 +303,9 @@ class FieldSelector extends React.Component {
             buttonState={this.state.buttonState}
             apiCategories = {this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
+            handleCategorySelected = {this.handleCategorySelected}
+            categorySelected = {this.state.categorySelected}
+            catID = {this.state.catID}
           />
         </InputLabel>
 
@@ -392,6 +399,9 @@ class FieldSelector extends React.Component {
           isPageDataValid={this.isPageDataValid}
           fieldSelectorState={this.state}
           setResources={this.props.setResources}
+          apiCategories = {this.props.apiCategories}
+          categorySelected = {this.state.categorySelected}
+
         />
       </div>
 

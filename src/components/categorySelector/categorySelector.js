@@ -16,11 +16,12 @@ class CategorySelector extends React.Component{
     }
     // console.log(JSON.parse(localStorage.getItem("categorySelector")))
     //look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards. 
-    if(JSON.parse(localStorage.getItem('categorySelector'))) {
+    if(JSON.parse(localStorage.getItem('categorySelectorState'))) {
       this.state = {
-        categories: JSON.parse(localStorage.getItem('categorySelector')),
-        keys: []
+        categories: JSON.parse(localStorage.getItem('categorySelectorState')).categories,
+        keys: JSON.parse(localStorage.getItem('categorySelectorState')).keys
       }
+      localStorage.removeItem('categorySelectorState')
     } else {
       this.state = {
         categories: [],
@@ -57,10 +58,11 @@ class CategorySelector extends React.Component{
       newCategory.pop()
       this.state.keys.pop()
     }
+    console.log(this.state)
 
     //keep options from growing
     if(row >= 2){
-      localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
+      localStorage.setItem('categorySelectorState', JSON.stringify(this.state))
       return
     }
 
@@ -70,7 +72,7 @@ class CategorySelector extends React.Component{
       this.setState({categories:newCategory})
       this.props.handleCatIDChange(this.props.apiCategories[id]['categoryID'])
       this.setKey(id)
-      localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
+      localStorage.setItem('categorySelectorState', JSON.stringify(this.state))
     }
     //subcategory has been selectd. Show subbestCategory.
     else{
@@ -79,7 +81,7 @@ class CategorySelector extends React.Component{
         this.setState({categories:newCategory})
         this.props.handleCatIDChange(this.props.apiCategories[this.state.keys[0]]['subcat'][id]['subcategoryID'])
         this.setKey(id)
-        localStorage.setItem('categorySelector', JSON.stringify(this.state.categories))
+        localStorage.setItem('categorySelectorState', JSON.stringify(this.state))
       }
       catch(error){
         console.log(this.props.apiCategories[id]['subcat'] + "does not have subCategories" + error)

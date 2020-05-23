@@ -57,6 +57,7 @@ class CategorySelector extends React.Component{
     for(let i = row; i < this.state.categories.length - 1; i++){
       newCategory.pop()
       this.state.keys.pop()
+      
     }
     console.log(this.state)
 

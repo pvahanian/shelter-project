@@ -10,6 +10,7 @@ import InputLabel from './InputLabel';
 import SubmitButton from './SubmitButton/SubmitButton.js'
 import CategorySelector from './categorySelector/categorySelector.js'
 import CountySelect from './CountySelect'
+import Spinner from '../Assets/spinner.gif'
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -19,9 +20,9 @@ class FieldSelector extends React.Component {
   static contextType = ThemeContext;
 
   async callAPI() {
-    await API.initialize()
-    this.setState({apiCategories: await API.getCategories()});
-    console.log(this.state.apiCategories)
+      await API.initialize()
+      this.setState({apiCategories: await API.getCategories()});
+      console.log(this.state.apiCategories)    
   }
 
    constructor(props) {
@@ -29,9 +30,7 @@ class FieldSelector extends React.Component {
     if(JSON.parse(localStorage.getItem("fieldSelectorState"))) {
       this.state = JSON.parse(localStorage.getItem("fieldSelectorState"))
     } else {
-
     this.state = {
-
       service: '',
       buttonState: {category: '', subCat: [{subCategory: '', subCatTerm: [{sterm: ''}]}]},
       gender: '',
@@ -45,7 +44,9 @@ class FieldSelector extends React.Component {
       apiCategories: [],
       catID : '',
       familySize: '',
-      categorySelected: []
+      categorySelected: [],
+      isLoading: false////////////////////////////////
+
     }
     }
 
@@ -69,12 +70,15 @@ class FieldSelector extends React.Component {
     this.goBehavior = this.goBehavior.bind(this)
     this.isPageDataValid = this.isPageDataValid.bind(this)
     this.callAPI = this.callAPI.bind(this)
+
+
     this.callAPI()
 
   }
 
   handleCategorySelected = category => this.setState({categorySelected: category})
 
+  handleIsLoading = () => this.setState({...this.state, isLoading: !this.state.isLoading})///////////////////////////
   handleButtonStateChange = (newState) => this.setState({buttonState: newState})
 
 
@@ -290,10 +294,13 @@ class FieldSelector extends React.Component {
   render() {
     // console.log(this.state.catID)
     if(this.state.apiCategories.length === 0){
-      return null
-    }
-    else{
+      return <img src={Spinner} style={{width: '200px'}} />
+    } else {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
+    }
+    if(this.state.isLoading === true) {
+      return <img src={Spinner} style={{width: '200px'}} />
+    }
     return(
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
@@ -401,13 +408,14 @@ class FieldSelector extends React.Component {
           setResources={this.props.setResources}
           apiCategories = {this.props.apiCategories}
           categorySelected = {this.state.categorySelected}
+          handleIsLoading = {this.handleIsLoading}
 
         />
       </div>
 
     );
   }
-  }
+  
 }
 
 export default FieldSelector;

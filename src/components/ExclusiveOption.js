@@ -18,13 +18,34 @@ class ExclusiveButton extends React.Component {
     super(props)
   }
 
+
+  componentWillMount() {
+    //look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
+    if(!JSON.parse(localStorage.getItem('fieldSelectorState'))) return;
+    if(this.props.row === undefined) {
+      console.log('gender group')
+      this.props.handleSetSelected(JSON.parse(localStorage.getItem('fieldSelectorState')).gender)
+    }
+    if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.category) {
+      console.log('number 1')
+      this.props.handleSetSelected(this.props.data)
+    } else if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.subCat[0].subCategory) {
+      console.log('number 2')
+      this.props.handleSetSelected(this.props.data)
+
+    } else if(this.props.data.label === JSON.parse(localStorage.getItem(('fieldSelectorState'))).buttonState.subCat[0].subCatTerm[0].sterm) {
+      console.log('number 3')
+      this.props.handleSetSelected(this.props.data)
+    }
+  }
+
   render() {
     if(typeof(this.props.data) !== 'string' && this.props.appendCategory) {
       // Assume object like {label, image} and build an SVG button
       return (
         <button
           className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
-          onClick={e => {this.props.onClick(e, this.props.data, this.props.id)}}    // changes the name of the pick in ExGroup's state.
+          onClick={e => {this.props.onClick(e, this.props.data, this.props.id, this.props.row)}}    // changes the name of the pick in ExGroup's state.
         >
           <img src={this.props.data.image}>
           </img>
@@ -47,8 +68,6 @@ class ExclusiveButton extends React.Component {
       )
     }
 
-
-
     return (
       <button
         className={'exclusive-button ' + (this.props.selected ? 'selected ' : ' ') + this.context}  // changes CSS and appearance when an option is selected/deselected
@@ -68,12 +87,15 @@ class ExclusiveGroup extends React.Component {
 
     this.handleClick = this.handleClick.bind(this);
   }
+  //set selected state during exclusiveButton componentWillMount
+  handleSetSelected = (data) => {
+    this.setState({selected: data })
+  }
 
   valid = null
   invalidEntryMessage = ''
 
-  handleClick(event, data, id) {
-
+  handleClick(event, data, id, row) {
     this.setState({selected: data})
     if(typeof(data) === 'string' && this.props.appendCategory){
       this.props.onChange(data)
@@ -85,9 +107,17 @@ class ExclusiveGroup extends React.Component {
     else if (this.props.appendCategory){
       this.props.onChange(data.label)
       this.props.appendCategory(this.props.row, id)
-
-    }
-    else{
+      //save service button selections to fieldSelectorState, which in turn is saved to localstorage on form submit
+      if(row === 0) {
+        this.props.handleButtonStateChange({...this.props.buttonState, category: data.label})
+      } else if(row === 1) {
+        this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCategory: data.label}] })
+      } else {
+        this.props.handleButtonStateChange({...this.props.buttonState, subCat:[{...this.props.buttonState.subCat[0], subCatTerm: [{sterm: data.label}]}] })
+      }
+    } else {
+      console.log(data, id)
+      this.props.handleButtonStateChange({...this.props.buttonState, category: data.label})
       this.props.onChange(data.label)
 
     }
@@ -121,40 +151,42 @@ class ExclusiveGroup extends React.Component {
       this.validate()
     if(typeof(this.props.appendCategory) == 'function' ){
 
-    return (
-      <div className='exclusive-group-container'>
-        <div className='exclusive-group'>
-          {
-            this.props.items.map((item, i) =>
-              <ExclusiveButton
-                selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
-                key={i}
-                data={item}
-                onClick={this.handleClick}
-                appendCategory={this.props.appendCategory}
-                id = {i}
-                row = {this.props.row}
-              />,
-            )
-          }
+      return (
+        <div className='exclusive-group-container'>
+          <div className='exclusive-group'>
+            {
+              this.props.items.map((item, i) =>
+                <ExclusiveButton
+                  handleSetSelected={this.handleSetSelected}
+                  selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
+                  key={i}
+                  data={item}
+                  onClick={this.handleClick}
+                  appendCategory={this.props.appendCategory}
+                  id = {i}
+                  row = {this.props.row}
+                />,
+              )
+            }
+          </div>
+          <InvalidEntryMessage message={this.invalidEntryMessage} />
         </div>
-
-        <InvalidEntryMessage message={this.invalidEntryMessage} />
-      </div>
-
-    );
+      );
   }
+
   return (
     <div className='exclusive-group-container'>
       <div className='exclusive-group'>
         {
           this.props.items.map((item, i) =>
             <ExclusiveButton
+              handleSetSelected={this.handleSetSelected}
               selected={typeof(item) === 'string' ? item===this.state.selected : item.label===this.state.selected.label}
               key={i}
               data={item}
               onClick={this.handleClick}
               id = {i}
+              row={this.props.row}
             />,
           )
         }

@@ -16,8 +16,16 @@ class APIWrapper {
   }
 
   async initialize() {
-    let data = await this.getSessionID()
-    this.credentials['sid'] = data[0]['session_id']
+    //check localstorage for sessionId and if present, use it for credentials, otherwise, get new sessionId to use for credentials
+    if(JSON.parse(localStorage.getItem('sessionId')) ) {
+      this.credentials['sid'] = localStorage.getItem('sessionId')[0].session_id
+      console.log('sessionId set from localStorage')
+    } else {
+      let data = await this.getSessionID()  
+      console.log(data[0]['session_id'])
+      this.credentials['sid'] = data[0]['session_id']
+      console.log("API initalized")
+    }
   }
 
   async getSessionID() {
@@ -25,6 +33,9 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
     )
     let data = await response.json()
+    console.log("get SessionID called", data)
+    //set sessionId to localstorage
+    localStorage.setItem('sessionId', JSON.stringify(data))
     return data
   }
 
@@ -45,7 +56,10 @@ class APIWrapper {
     let response = await fetch(
         `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
     )
-    return await response.json()
+    //for DEBUGGING
+    let jsonReturn = await response.json()
+    console.log(jsonReturn)
+    return jsonReturn
   }
 
   async getCountyByZipCode(obj) {

@@ -10,6 +10,7 @@ import InputLabel from './InputLabel';
 import SubmitButton from './SubmitButton/SubmitButton.js'
 import CategorySelector from './categorySelector/categorySelector.js'
 import CountySelect from './CountySelect'
+import Spinner from '../Assets/spinner.gif'
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -19,16 +20,19 @@ class FieldSelector extends React.Component {
   static contextType = ThemeContext;
 
   async callAPI() {
-    await API.initialize()
-    this.setState({apiCategories: await API.getCategories()});
+      await API.initialize()
+      this.setState({apiCategories: await API.getCategories()});
+      console.log(this.state.apiCategories)    
   }
 
    constructor(props) {
     super(props)
-    API.initialize()
+    if(JSON.parse(localStorage.getItem("fieldSelectorState"))) {
+      this.state = JSON.parse(localStorage.getItem("fieldSelectorState"))
+    } else {
     this.state = {
-
       service: '',
+      buttonState: {category: '', subCat: [{subCategory: '', subCatTerm: [{sterm: ''}]}]},
       gender: '',
       age: '',
       zip: '',
@@ -39,7 +43,11 @@ class FieldSelector extends React.Component {
       doValidation: false,
       apiCategories: [],
       catID : '',
-      familySize: ''
+      familySize: '',
+      categorySelected: [],
+      isLoading: false////////////////////////////////
+
+    }
     }
 
     // Bind all functions which are called from child inputs
@@ -51,6 +59,7 @@ class FieldSelector extends React.Component {
     this.handleCatIDChange = this.handleCatIDChange.bind(this)
     this.handleFamilySizeChange = this.handleFamilySizeChange.bind(this)
 
+    this.handleCategorySelected = this.handleCategorySelected.bind(this)
 
     this.validGender = this.validGender.bind(this)
     this.validAge = this.validAge.bind(this)
@@ -61,9 +70,17 @@ class FieldSelector extends React.Component {
     this.goBehavior = this.goBehavior.bind(this)
     this.isPageDataValid = this.isPageDataValid.bind(this)
     this.callAPI = this.callAPI.bind(this)
+
+
     this.callAPI()
 
   }
+
+  handleCategorySelected = category => this.setState({categorySelected: category})
+
+  handleIsLoading = () => this.setState({...this.state, isLoading: !this.state.isLoading})///////////////////////////
+  handleButtonStateChange = (newState) => this.setState({buttonState: newState})
+
 
   handleServiceChange = service => this.setState({ service: service })
   handleCatIDChange = catID => this.setState({ catID: catID })
@@ -258,14 +275,14 @@ class FieldSelector extends React.Component {
 
     // REMOVE! JUST FOR DEBUG PURPOSES
     await this.sleep(2000)
-    console.log({
-      service: this.state.service,
-      gender: this.state.gender,
-      age: this.state.age,
-      zip: this.state.zip,
-      county: this.state.county,
-      familySize: this.state.familySize,
-    })
+  //   console.log({
+  //     service: this.state.service,
+  //     gender: this.state.gender,
+  //     age: this.state.age,
+  //     zip: this.state.zip,
+  //     county: this.state.county,
+  //     familySize: this.state.familySize,
+  //   })
   }
 
   isPageDataValid(){
@@ -275,14 +292,27 @@ class FieldSelector extends React.Component {
   }
 
   render() {
+    // console.log(this.state.catID)
+    if(this.state.apiCategories.length === 0){
+      return <img src={Spinner} style={{width: '200px'}} />
+    } else {
     const svgPathEndings = this.context === 'light' ? '-black.svg' : '-white.svg'
+    }
+    if(this.state.isLoading === true) {
+      return <img src={Spinner} style={{width: '200px'}} />
+    }
     return(
       <div className={'field-selector ' + this.context}>
         <InputLabel label='Service'>
           <CategorySelector
             onChange={this.handleServiceChange}
+            handleButtonStateChange={this.handleButtonStateChange}
+            buttonState={this.state.buttonState}
             apiCategories = {this.state.apiCategories}
             handleCatIDChange={this.handleCatIDChange}
+            handleCategorySelected = {this.handleCategorySelected}
+            categorySelected = {this.state.categorySelected}
+            catID = {this.state.catID}
           />
         </InputLabel>
 
@@ -376,10 +406,16 @@ class FieldSelector extends React.Component {
           isPageDataValid={this.isPageDataValid}
           fieldSelectorState={this.state}
           setResources={this.props.setResources}
+          apiCategories = {this.props.apiCategories}
+          categorySelected = {this.state.categorySelected}
+          handleIsLoading = {this.handleIsLoading}
+
         />
       </div>
+
     );
   }
+  
 }
 
 export default FieldSelector;

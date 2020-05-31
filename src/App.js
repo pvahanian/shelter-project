@@ -39,7 +39,6 @@ const API = new APIWrapper(APIKey)
 class App extends React.Component {
   constructor(props){
     super(props)
-    /////////////////////////////////////////////////////////////////////////////////
     if(JSON.parse(localStorage.getItem('appState'))) {
       console.log('trigger')
       this.state = JSON.parse(localStorage.getItem('appState'))
@@ -51,15 +50,13 @@ class App extends React.Component {
         resources: [], 
       };
     }
-    /////////////////////////////////////////////////////////////////////////////////
       //this.apiCaller = this.apiCaller.bind(this)
       this.setResources = this.setResources.bind(this)
   }
 
   setResources = (resources) => {
-    /////////////////////////////////////////////////////////////////////////////////
     localStorage.setItem('appState', JSON.stringify(this.state))
-    /////////////////////////////////////////////////////////////////////////////////
+    
     this.setState({ resources: resources }) 
   } 
 

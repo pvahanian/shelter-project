@@ -78,8 +78,8 @@ class FieldSelector extends React.Component {
 
   handleCategorySelected = category => this.setState({categorySelected: category})
 
-  handleIsLoading = () => this.setState({...this.state, isLoading: !this.state.isLoading})///////////////////////////
-  handleButtonStateChange = (newState) => this.setState({buttonState: newState})
+  handleIsLoading = () => this.setState({isLoading: !this.state.isLoading})
+  handleButtonStateChange = newState => this.setState({buttonState: newState})
 
 
   handleServiceChange = service => this.setState({ service: service })

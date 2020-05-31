@@ -39,16 +39,30 @@ const API = new APIWrapper(APIKey)
 class App extends React.Component {
   constructor(props){
     super(props)
+    /////////////////////////////////////////////////////////////////////////////////
+    if(JSON.parse(localStorage.getItem('appState'))) {
+      console.log('trigger')
+      this.state = JSON.parse(localStorage.getItem('appState'))
+    } else {      
       this.state = {
         themeColor: 'light',
         sessionID: null,
         categories: [],
-        resources: []
-      }
+        resources: [], 
+      };
+    }
+    /////////////////////////////////////////////////////////////////////////////////
       //this.apiCaller = this.apiCaller.bind(this)
       this.setResources = this.setResources.bind(this)
-    }
-    setResources = resources => this.setState({ resources: resources })
+  }
+
+  setResources = (resources) => {
+    /////////////////////////////////////////////////////////////////////////////////
+    localStorage.setItem('appState', JSON.stringify(this.state))
+    /////////////////////////////////////////////////////////////////////////////////
+    this.setState({ resources: resources }) 
+  } 
+
   /*async apiCaller() {
     await API.initialize()
     this.setState({categories: await API.getCategories()});
@@ -56,14 +70,16 @@ class App extends React.Component {
   }
   componentDidMount(){
     this.apiCaller()
-
   }*/
 
   componentDidMount() {
-    //when user navigates away from the page or closes the browser, remove fieldselectorstate and categoryselectorstate from localstorage.///////////////
+    //when user navigates away from the page or closes the browser, remove fieldselectorstate and categoryselectorstate and sessionId from localstorage
+    //
     //after 30 minutes, remove users sessionId from localStorage. 
-    window.addEventListener('beforeunload', localStorage.removeItem('fieldSelectorState'))
-    window.addEventListener('beforeunload', localStorage.removeItem('categorySelectorState'))
+    window.addEventListener('beforeunload', localStorage.removeItem('appState')) 
+    window.addEventListener('beforeunload', localStorage.removeItem('fieldSelectorState')) 
+    window.addEventListener('beforeunload', localStorage.removeItem('categorySelectorState')) 
+    window.addEventListener('beforeunload', localStorage.removeItem('sessionId'))
     setTimeout( () => {localStorage.removeItem('sessionId')}, 1800000)
   }
   render() {

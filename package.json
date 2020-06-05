@@ -7,11 +7,11 @@
     "@material-ui/icons": "latest",
     "@material-ui/lab": "latest",
     "bootstrap": "^3.3.5",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.0.1"
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

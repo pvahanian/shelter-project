@@ -61,7 +61,7 @@ class App extends React.Component {
 
   componentDidMount() {
     //when user navigates away from the page or closes the browser, remove fieldselectorstate and categoryselectorstate from localstorage.///////////////
-    //after 30 minutes, remove users sessionId from localStorage. 
+    //after 30 minutes, remove users sessionId from localStorage.
     window.addEventListener('beforeunload', localStorage.removeItem('fieldSelectorState'))
     window.addEventListener('beforeunload', localStorage.removeItem('categorySelectorState'))
     setTimeout( () => {localStorage.removeItem('sessionId')}, 1800000)
@@ -81,6 +81,7 @@ class App extends React.Component {
             Left Gutter
           </div>
 
+          //This div contains the current pages we display. We route between them using a path contained in the history object.
           <div id='main-container'>
             Main Container
             <Route

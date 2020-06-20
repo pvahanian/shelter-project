@@ -19,10 +19,11 @@ const API = new APIWrapper(APIKey)
 class FieldSelector extends React.Component {
   static contextType = ThemeContext;
 
+  //Get all the category data from 211's API
   async callAPI() {
       await API.initialize()
       this.setState({apiCategories: await API.getCategories()});
-      console.log(this.state.apiCategories)    
+      console.log(this.state.apiCategories)
   }
 
    constructor(props) {
@@ -415,7 +416,7 @@ class FieldSelector extends React.Component {
 
     );
   }
-  
+
 }
 
 export default FieldSelector;

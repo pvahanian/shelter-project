@@ -14,7 +14,6 @@ class CategorySelector extends React.Component{
       categories: [],
       keys: []
     }
-    // console.log(JSON.parse(localStorage.getItem("categorySelector")))
     //look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
     // BUG categorySelectorState not in localstorage after user goes back and forward multiple times.......
     if(JSON.parse(localStorage.getItem('categorySelectorState'))) {

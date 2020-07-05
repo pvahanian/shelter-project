@@ -56,7 +56,6 @@ class App extends React.Component {
 
   setResources = (resources) => {
     localStorage.setItem('appState', JSON.stringify(this.state))
-    
     this.setState({ resources: resources }) 
   } 
 
@@ -70,8 +69,7 @@ class App extends React.Component {
   }*/
 
   componentDidMount() {
-    //when user navigates away from the page or closes the browser, remove fieldselectorstate and categoryselectorstate and sessionId from localstorage
-    //
+    //when user navigates away from the page or closes the browser tab, remove appState fieldselectorstate and categoryselectorstate and sessionId from localstorage
     //after 30 minutes, remove users sessionId from localStorage. 
     window.addEventListener('beforeunload', localStorage.removeItem('appState')) 
     window.addEventListener('beforeunload', localStorage.removeItem('fieldSelectorState')) 

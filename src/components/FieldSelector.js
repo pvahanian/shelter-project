@@ -11,6 +11,7 @@ import SubmitButton from './SubmitButton/SubmitButton.js'
 import CategorySelector from './categorySelector/categorySelector.js'
 import CountySelect from './CountySelect'
 import Spinner from '../Assets/spinner.gif'
+import SearchBar from './SearchBar/SearchBar'
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -22,7 +23,7 @@ class FieldSelector extends React.Component {
   async callAPI() {
       await API.initialize()
       this.setState({apiCategories: await API.getCategories()});
-      console.log(this.state.apiCategories)    
+      // console.log(this.state.apiCategories)    
   }
 
    constructor(props) {
@@ -303,6 +304,18 @@ class FieldSelector extends React.Component {
     }
     return(
       <div className={'field-selector ' + this.context}>
+        <SearchBar 
+          apiCategories={this.state.apiCategories}
+          goBehavior={this.goBehavior}
+          changeAPIData={this.props.changeAPIData}
+          isPageDataValid={this.isPageDataValid}
+          fieldSelectorState={this.state}
+          setResources={this.props.setResources}
+          categorySelected = {this.state.categorySelected}
+          handleIsLoading = {this.handleIsLoading} 
+          handleServiceChange={this.handleServiceChange
+          }  
+          />
         <InputLabel label='Service'>
           <CategorySelector
             onChange={this.handleServiceChange}
@@ -409,7 +422,6 @@ class FieldSelector extends React.Component {
           apiCategories = {this.props.apiCategories}
           categorySelected = {this.state.categorySelected}
           handleIsLoading = {this.handleIsLoading}
-
         />
       </div>
 

@@ -22,9 +22,9 @@ class APIWrapper {
       console.log('sessionId set from localStorage')
     } else {
       let data = await this.getSessionID()  
-      console.log(data[0]['session_id'])
+      // console.log(data[0]['session_id'])
       this.credentials['sid'] = data[0]['session_id']
-      console.log("API initalized")
+      // console.log("API initalized")
     }
   }
 
@@ -33,8 +33,8 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
     )
     let data = await response.json()
-    console.log("get SessionID called", data)
-    //set sessionId to localstorage
+    // console.log("get SessionID called", data)
+    //save sessionId in localstorage
     localStorage.setItem('sessionId', JSON.stringify(data))
     return data
   }
@@ -46,13 +46,16 @@ class APIWrapper {
       `https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(parameters)}`
     )
     let data = await response.json()
+    // console.log(data)
     return data
   }
 
 //TODO: This function will have to loop/map to different shelter info components or shelter info maps them
   async getResource(obj){
+    
     let parameters = {...this.credentials,...obj}
-    console.log(JSON.stringify(parameters))
+    // console.log(JSON.stringify(parameters))
+    console.log('getResource',parameters)
     let response = await fetch(
         `https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(parameters)}`
     )

@@ -30,12 +30,12 @@ function SubmitButton(props) {
           history.push("/info");
 
           //If category selected
-
             //Make getResource call with category data
           //If subCategory selected
             ////Make getResource call with subCategory data
           //If subestCategory selected
             ////Make getResource call with service name data
+
           console.log(props.categorySelected)
           if(props.categorySelected === 3){
             obj['st'] = 's'
@@ -58,7 +58,6 @@ function SubmitButton(props) {
 
         }
         props.handleIsLoading()
-
     }
 
     return (

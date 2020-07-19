@@ -12,6 +12,7 @@ const ContextExample = () => {
 			{apiResourceContext.apiCategories.map((arrayElement, index) => {
 				return <div>{arrayElement.category} </div>
 			})}
+			<button onClick={apiResourceContext.removeOneFromCategories}>Remove One</button>
 		</div>
 	);
 };

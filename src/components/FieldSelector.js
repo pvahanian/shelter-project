@@ -12,6 +12,7 @@ import CategorySelector from './categorySelector/categorySelector.js'
 import CountySelect from './CountySelect'
 import Spinner from '../Assets/spinner.gif'
 import SearchBar from './SearchBar/SearchBar'
+import ContextExample from './context/ContextExample'
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY
 
 const APIKey = process.env.REACT_APP_211_API_KEY
@@ -304,6 +305,8 @@ class FieldSelector extends React.Component {
     }
     return(
       <div className={'field-selector ' + this.context}>
+      <ContextExample />
+      
         <SearchBar 
           apiCategories={this.state.apiCategories}
           goBehavior={this.goBehavior}

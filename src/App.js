@@ -9,6 +9,7 @@ import APIWrapper from "./APIWrapper.js";
 import ExclusiveOption from "./components/ExclusiveOption";
 import Section from './components/Section';
 import { ThemeContext } from './ThemeContext';
+import ApiResourceState from './components/context/ApiResourceState'
 import {
   BrowserRouter as Router,
   Switch,
@@ -79,6 +80,8 @@ class App extends React.Component {
   }
   render() {
     return (
+      <ApiResourceState>
+
       <ThemeContext.Provider value={this.state.themeColor}>
       <Router>
         <div className={'app ' + this.state.themeColor }>
@@ -113,6 +116,8 @@ class App extends React.Component {
         </div>
         </Router>
       </ThemeContext.Provider>
+      </ApiResourceState>
+
     );
 
   }

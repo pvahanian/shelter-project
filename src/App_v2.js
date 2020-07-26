@@ -36,6 +36,8 @@ navbar.links = [
 const APIKey = process.env.REACT_APP_211_API_KEY
 const API = new APIWrapper(APIKey)
 
+//TODO figure out why appstate leaves localstorage after hitting refresh AFTER navigating backwards from results page
+
 const App = () => {
 
     const [appState, setAppState] = useState({
@@ -54,7 +56,7 @@ const App = () => {
 
   useEffect(() => {
     if(JSON.parse(localStorage.getItem('appState'))) {
-      console.log('trigger')
+      console.log('trigger localstorage')
       setAppState(JSON.parse(localStorage.getItem('appState')))
     }
     

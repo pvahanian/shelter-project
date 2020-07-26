@@ -4,20 +4,27 @@ import InvalidEntryMessage from './InvalidEntryMessage';
 import {ThemeContext} from '../ThemeContext';
 
 class TextInput extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+  // constructor(props) {
+  //   super(props)
+  // }
   
   static contextType = ThemeContext
   invalidEntryMessage = ''
   valid = null
 
+  handleChange = (e) => {
+    // console.log(e.currentTarget.value)
+    let newValue = e.currentTarget.value
+    if(this.props.filter)
+      newValue = this.props.filter(newValue)
+    this.props.onChange(newValue)
+  }
 
   validate() {
 
       if(!this.props.validator)
       return {valid: true, message: ''}
-
+    // console.log(this.props)
     let value = this.props.value
     let validEntryClass = ''
     let invalidEntryMessage = ''
@@ -40,7 +47,6 @@ class TextInput extends React.Component {
   render() {
     let value = this.props.value
     let validEntryClass = ''
-
     // Find the correct validity class to add to our elements
     if(this.valid === true)
       validEntryClass = 'valid-entry '
@@ -63,13 +69,7 @@ class TextInput extends React.Component {
           placeholder={this.props.placeholder}
           id={this.props.name.toLowerCase()+'-input'}
           className={'text-input ' + validEntryClass + this.context}
-          onChange={ e => {
-              let newValue = e.currentTarget.value
-              if(this.props.filter)
-                newValue = this.props.filter(newValue)
-              this.props.onChange(newValue)
-            }
-          }
+          onChange={this.handleChange}
           type='text'
         />
         <div className={'underline ' + validEntryClass + this.context}></div>

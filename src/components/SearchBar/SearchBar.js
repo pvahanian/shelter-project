@@ -31,6 +31,7 @@ const SearchBar = ({
   API.initialize();
   //here we unpack the return object from API.getCategories() into the searchTermsArray.
   const searchTermsArr = [];
+  if(apiCategories) {
   apiCategories.forEach((entry) => {
     searchTermsArr.push(entry.category);
     entry.subcat.forEach((subentry) => {
@@ -40,7 +41,7 @@ const SearchBar = ({
       });
     });
   });
-
+  }
   //here we filter through the searchTerms on keypress.
   const handleChange = (e) => {
     console.log(e.target.value);

@@ -19,26 +19,32 @@ class APIWrapper {
 		//check localstorage for sessionId and if present, use it for credentials, otherwise, get new sessionId to use for credentials
 		if (JSON.parse(localStorage.getItem('sessionId'))) {
 			this.credentials['sid'] = localStorage.getItem('sessionId')[0].session_id;
-			// console.log('sessionId set from localStorage')
-			// console.log("API initalized")
+			console.log('sessionId set from localStorage')
+			console.log("API initalized")
 		} else {
-			// console.log('new sessionID')
+			console.log('new sessionID')
 			let data = await this.getSessionID();
-			// console.log(data[0]['session_id'])
+			console.log(data[0]['session_id'])
 			this.credentials['sid'] = data[0]['session_id'];
-			// console.log("API initalized")
+			console.log("API initalized")
 		}
 	}
 
 	async getSessionID() {
-		let response = await fetch(
-			`https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
-		);
-		let data = await response.json();
-		// console.log("get SessionID called", data)
-		//save sessionId in localstorage
-		localStorage.setItem('sessionId', JSON.stringify(data));
-		return data;
+		try {
+			let response = await fetch(
+				`https://www.navigateopen.info/pubres/api/GetSessionID/?ip={apikey: "${this.credentials.APIKey}"}`
+			);
+			let data = await response.json();
+			console.log("get SessionID called", data)
+			//save sessionId in localstorage
+			console.log(data)
+			localStorage.setItem('sessionId', JSON.stringify(data));
+			return data;
+		} catch (error) {
+			console.log(error)
+		}
+
 	}
 
 	async getCategories() {

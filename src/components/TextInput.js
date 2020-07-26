@@ -21,7 +21,6 @@ class TextInput extends React.Component {
   }
 
   validate() {
-
       if(!this.props.validator)
       return {valid: true, message: ''}
     // console.log(this.props)

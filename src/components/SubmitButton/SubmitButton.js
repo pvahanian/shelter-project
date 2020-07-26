@@ -22,13 +22,13 @@ function SubmitButton(props) {
 	};
 
 	async function handleClick() {
-		console.log('trigger submit')
+		console.log('trigger submit');
 		try {
 			props.handleIsLoading();
 			await props.goBehavior();
-			console.log(props.isPageDataValid())
+			console.log(props.isPageDataValid());
 			if (props.isPageDataValid()) {
-				console.log('trigger page data is valid')
+				console.log('trigger page data is valid');
 				// console.log(props.fieldSelectorState);
 				//save field selector state to local storage for use if / when user navigates backwards
 				localStorage.setItem(

@@ -581,7 +581,7 @@ const FieldSelector = (props) => {
 	};
 
 	const getAllPossibleCountiesByZip = async (zip) => {
-		setZipCode(zip) // redundent?
+		setZipCode(zip); // redundent?
 		await setFieldSelectorState({ ...fieldSelectorState, zip: zip });
 		if (validZIP(zip).valid) {
 			await API.getCountyByZipCode({
@@ -592,7 +592,7 @@ const FieldSelector = (props) => {
 					possibleCounties: Object.values(data).map((value) => {
 						return value['county'];
 					}),
-				}); 
+				});
 			});
 		}
 
@@ -619,12 +619,11 @@ const FieldSelector = (props) => {
 		return { valid, message };
 	};
 
-	const [county, setCounty] = useState('')
-	const handleCountyChange = (county) =>{
-		setCounty(county)
+	const [county, setCounty] = useState('');
+	const handleCountyChange = (county) => {
+		setCounty(county);
 		setFieldSelectorState({ ...fieldSelectorState, county: county });
-	}
-
+	};
 
 	const validCounty = (county) => {
 		let valid = null;
@@ -642,8 +641,8 @@ const FieldSelector = (props) => {
 		console.log(
 			"Then we'd try to find their location using a Google API. For now..."
 		);
-			setZipCode('97206')
-			setCounty('Clackamas')
+		setZipCode('97206');
+		setCounty('Clackamas');
 		setFieldSelectorState({
 			...fieldSelectorState,
 			zip: '97206',
@@ -664,7 +663,6 @@ const FieldSelector = (props) => {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	};
 
-	///////////////////////////////////////////////////////////////////
 
 	const countyAPICall = async () => {
 		await fetch(
@@ -765,19 +763,18 @@ const FieldSelector = (props) => {
 	};
 
 	const isPageDataValid = () => {
-			console.log(validCounty(county).valid)
-			console.log(validGender(gender).valid)
-			console.log(validAge(age).valid)
-			console.log(validZIP(zipCode).valid)
-			console.log(validFamilySize(familySize).valid)
-			return (
-				validCounty(county).valid &&
-				validGender(gender).valid &&
-				validAge(age).valid &&
-				validZIP(zipCode).valid &&
-				validFamilySize(familySize).valid
-			);
-		
+		// console.log(validCounty(county).valid);
+		// console.log(validGender(gender).valid);
+		// console.log(validAge(age).valid);
+		// console.log(validZIP(zipCode).valid);
+		// console.log(validFamilySize(familySize).valid);
+		return (
+			validCounty(county).valid &&
+			validGender(gender).valid &&
+			validAge(age).valid &&
+			validZIP(zipCode).valid &&
+			validFamilySize(familySize).valid
+		);
 	};
 
 	useEffect(() => {
@@ -805,10 +802,17 @@ const FieldSelector = (props) => {
 					.zipCode;
 				const county = JSON.parse(localStorage.getItem('submitButtonProps'))
 					.county;
-				setAge(age);
-				setFamilySize(familySize);
-				setZipCode(zipCode);
-				setCounty(county)
+				const gender = JSON.parse(localStorage.getItem('submitButtonProps'))
+					.gender;
+				const buttonState = JSON.parse(
+					localStorage.getItem('submitButtonProps')
+				).buttonState;
+				handleAgeChange(age);
+				handleFamilySizeChange(familySize);
+				handleZIPChange(zipCode);
+				handleCountyChange(county);
+				handleGenderChange(gender);
+				handleButtonStateChange(buttonState);
 			}
 		}
 	}, []);
@@ -816,17 +820,18 @@ const FieldSelector = (props) => {
 	useEffect(() => {
 		console.log('trigger useEffect2');
 		const handleValidZip = async () => {
-			if (validZIP(fieldSelectorState.zip).valid) {
+			if (validZIP(zipCode).valid) {
 				console.log('trigger valid zipcode');
 				await API.getCountyByZipCode({
-					zip: fieldSelectorState.zip,
+					zip: zipCode,
 				})
 					.then((data) => {
+						setCounty(data[0]['county']);
 						setFieldSelectorState({
 							...fieldSelectorState,
 							county: data[0]['county'],
 						});
-						getAllPossibleCountiesByZip(fieldSelectorState.zip);
+						getAllPossibleCountiesByZip(zipCode);
 					})
 					.catch((err) => {
 						// TODO: we'll probably want to take action here to resolve the error
@@ -836,7 +841,7 @@ const FieldSelector = (props) => {
 		};
 
 		handleValidZip();
-	}, [fieldSelectorState.zip]);
+	}, [zipCode]);
 
 	if (
 		fieldSelectorState.apiCategories.length === 0 ||
@@ -964,6 +969,8 @@ const FieldSelector = (props) => {
 					familySize={familySize}
 					zipCode={zipCode}
 					county={county}
+					gender={gender}
+					buttonState={buttonState}
 				/>
 			</div>
 		);
@@ -971,3 +978,5 @@ const FieldSelector = (props) => {
 };
 
 export default FieldSelector;
+
+

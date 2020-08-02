@@ -135,37 +135,34 @@ import InvalidEntryMessage from './InvalidEntryMessage';
 import { ThemeContext } from '../ThemeContext';
 
 // Child component of ExclusiveGroup
-class ExclusiveButton extends React.Component {
-	static contextType = ThemeContext;
+const ExclusiveButton = (props) => {
+	const context = useContext(ThemeContext)
 
-	constructor(props) {
-		super(props);
-	}
 
-	componentWillMount() {
+	useEffect(() => {
 		//look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
 		if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
-		if (this.props.row === undefined) {
+		if (props.row === undefined) {
 			// console.log('gender group')
-			this.props.handleSetSelected(
+			props.handleSetSelected(
 				JSON.parse(localStorage.getItem('submitButtonProps')).gender
 			);
 		}
-
+	
 		if (
-			this.props.data.label ===
+			props.data.label ===
 				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
 					.category ||
-			this.props.data.label ===
+			props.data.label ===
 				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
 					.subCat[0].subCategory ||
-			this.props.data.label ===
+			props.data.label ===
 				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
 					.subCat[0].subCatTerm[0].sterm
 		) {
-			this.props.handleSetSelected(this.props.data);
+			props.handleSetSelected(props.data);
 		}
-
+	
 		// if (
 		// 	this.props.data.label ===
 		// 	JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
@@ -188,48 +185,51 @@ class ExclusiveButton extends React.Component {
 		// 	// console.log('number 3')
 		// 	this.props.handleSetSelected(this.props.data);
 		// }
-	}
+	
 
-	render() {
-		if (typeof this.props.data !== 'string' && this.props.appendCategory) {
+	}, [])
+
+
+
+		if (typeof props.data !== 'string' && props.appendCategory) {
 			// Assume object like {label, image} and build an SVG button
 			return (
 				<button
 					className={
 						'exclusive-button ' +
-						(this.props.selected ? 'selected ' : ' ') +
-						this.context
+						(props.selected ? 'selected ' : ' ') +
+						context
 					} // changes CSS and appearance when an option is selected/deselected
 					onClick={(e) => {
-						this.props.onClick(
+						props.onClick(
 							e,
-							this.props.data,
-							this.props.id,
-							this.props.row
+							props.data,
+							props.id,
+							props.row
 						);
 					}} // changes the name of the pick in ExGroup's state.
 				>
-					<img src={this.props.data.image}></img>
-					{this.props.data.label}
+					<img src={props.data.image}></img>
+					{props.data.label}
 				</button>
 			);
 		}
 		// For buttons with SVG images
-		if (typeof this.props.data !== 'string') {
+		if (typeof props.data !== 'string') {
 			// Assume object like {label, image} and build an SVG button
 			return (
 				<button
 					className={
 						'exclusive-button ' +
-						(this.props.selected ? 'selected ' : ' ') +
-						this.context
+						(props.selected ? 'selected ' : ' ') +
+						context
 					} // changes CSS and appearance when an option is selected/deselected
 					onClick={(e) => {
-						this.props.onClick(e, this.props.data, this.props.id);
+						props.onClick(e, props.data, props.id);
 					}} // changes the name of the pick in ExGroup's state.
 				>
-					<img src={this.props.data.image}></img>
-					{this.props.data.label}
+					<img src={props.data.image}></img>
+					{props.data.label}
 				</button>
 			);
 		}
@@ -238,17 +238,17 @@ class ExclusiveButton extends React.Component {
 			<button
 				className={
 					'exclusive-button ' +
-					(this.props.selected ? 'selected ' : ' ') +
-					this.context
+					(props.selected ? 'selected ' : ' ') +
+					context
 				} // changes CSS and appearance when an option is selected/deselected
 				onClick={(e) => {
-					this.props.onClick(e, this.props.data, this.props.id);
+					props.onClick(e, props.data, props.id);
 				}} // changes the name of the pick in ExGroup's state.
 			>
-				{this.props.data}
+				{props.data}
 			</button>
 		);
-	}
+	
 }
 
 // class ExclusiveGroup extends React.Component {

@@ -40,7 +40,7 @@ const API = new APIWrapper(APIKey);
 
 //TODO figure out why appstate leaves localstorage after hitting refresh AFTER navigating backwards from results page
 const App = () => {
-	console.log('app rendered');
+	// console.log('app rendered');
 	const [appState, setAppState] = useState({
 		themeColor: 'light',
 		sessionID: null,
@@ -72,12 +72,24 @@ const App = () => {
 		);
 		window.addEventListener(
 			'beforeunload',
+			localStorage.removeItem('submitButtonProps')
+		);
+		window.addEventListener(
+			'beforeunload',
 			localStorage.removeItem('categorySelectorState')
 		);
 		window.addEventListener(
 			'beforeunload',
-			localStorage.removeItem('sessionId')
+			localStorage.removeItem('keyz')
 		);
+		window.addEventListener(
+			'beforeunload',
+			localStorage.removeItem('categories')
+		);
+		// window.addEventListener(
+		// 	'beforeunload',
+		// 	localStorage.removeItem('sessionId')
+		// );
 		setTimeout(() => {
 			localStorage.removeItem('sessionId');
 		}, 1800000);

@@ -13,18 +13,27 @@ const SearchBar = ({
   categorySelected,
   handleIsLoading,
   handleServiceChange,
+  serviceName,
+  age,
+  gender,
+  zipcode,
+  county,
+  familySize,
+  categoryID,
+  buttonState
+
 }) => {
   const [search, setSearch] = useState('');
   const [filtered, setFiltered] = useState([]);
   const history = useHistory();
   let obj = {
-    sn: fieldSelectorState.service,
-    st: '',
-    age: Number(fieldSelectorState.age),
-    gender: fieldSelectorState.gender,
-    zip: Number(fieldSelectorState.zip),
-    county: fieldSelectorState.county,
-    catid: fieldSelectorState.catID,
+		sn: serviceName,
+		st: '',
+		age: Number(age),
+		gender: gender,
+		zip: Number(zipcode),
+		county: county,
+		catid: categoryID,
   };
   const APIKey = process.env.REACT_APP_211_API_KEY;
   const API = new APIWrapper(APIKey);
@@ -61,7 +70,7 @@ const SearchBar = ({
     handleServiceChange(item);
     // county validation
     await goBehavior();
-    //if form inputs have valid entries
+    //if form inputs have valid entries /////////////////////////////
     if (isPageDataValid()) {
       //save field selector state to local storage for use if / when user navigates backwards
       localStorage.setItem(
@@ -94,10 +103,10 @@ const SearchBar = ({
       }
     }
     // the getResource call below works because the options are all hardcoded. Above, it doesn't work becasue obj is missing many required properties. 
-    //this will be fixed when brian allens branch is merged into master
+    //this will be fixed when the refactor is complete and ispagedatavalid passes, as well and obj being fully populated with necessary data
     setResources(await API.getResource({
       APIKey: 'J7R0W5XK',
-      // catid: '2603',
+      catid: '2603',
       sn: '',
       st: 'c',
       zip: 97086
@@ -132,6 +141,12 @@ const SearchBar = ({
           apiCategories={apiCategories}
           categorySelected={categorySelected}
           handleIsLoading={handleIsLoading}
+          age={age}
+				familySize={familySize}
+				zipcode={zipcode}
+				county={county}
+				gender={gender}
+				buttonState={buttonState}
         >
           Submit
         </SubmitButton>

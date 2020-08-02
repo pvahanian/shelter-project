@@ -9,15 +9,15 @@ function SubmitButton(props) {
 	let history = useHistory();
 	const APIKey = process.env.REACT_APP_211_API_KEY;
 	const API = new APIWrapper(APIKey);
-	console.log('submitButton props: ', props);
+	// console.log('submitButton props: ', props);
 	API.initialize();
 	let obj = {
 		sn: props.serviceName,
 		st: '',
-		age: Number(props.fieldSelectorState.age),
-		gender: props.fieldSelectorState.gender,
-		zip: Number(props.fieldSelectorState.zip),
-		county: props.fieldSelectorState.county,
+		age: Number(props.age),
+		gender: props.gender,
+		zip: Number(props.zip),
+		county: props.county,
 		catid: props.categoryID,
 	};
 
@@ -28,13 +28,9 @@ function SubmitButton(props) {
 			await props.goBehavior();
 			console.log(props.isPageDataValid());
 			if (props.isPageDataValid()) {
-				console.log('trigger page data is valid');
-				// console.log(props.fieldSelectorState);
-				//save field selector state to local storage for use if / when user navigates backwards
-				localStorage.setItem(
-					'fieldSelectorState',
-					JSON.stringify(props.fieldSelectorState)
-				);
+
+				//save submit button state to local storage for use if / when user navigates backwards
+
 				localStorage.setItem('submitButtonProps', JSON.stringify(props));
 				//props.setResources(await API.getKeywords(obj))
 				history.push('/info');
@@ -46,11 +42,11 @@ function SubmitButton(props) {
 				//If subestCategory selected
 				//Make getResource call with service name data
 
-				console.log('here is the object from submitButton: ', obj);
-				console.log(
-					'here is categorySelected from props: ',
-					props.categorySelected
-				);
+				// console.log('here is the object from submitButton: ', obj);
+				// console.log(
+				// 	'here is categorySelected from props: ',
+				// 	props.categorySelected
+				// );
 				// console.log('here is the category selected from props in submit button', props.categorySelected);
 				if (props.categorySelected === 3) {
 					obj['st'] = 's';
@@ -74,7 +70,7 @@ function SubmitButton(props) {
 		} catch (error) {
 			console.log(error);
 		}
-		props.handleIsLoading();
+		// props.handleIsLoading();
 	}
 	return (
 		<button type='button' onClick={handleClick}>

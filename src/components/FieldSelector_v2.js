@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useContext } from 'react';
 import ExclusiveOption from './ExclusiveOption';
 import TextInput from './TextInput';
@@ -18,8 +19,8 @@ const API = new APIWrapper(APIKey);
 
 const FieldSelector = (props) => {
 	console.log('fieldSelector rendered');
+	console.log('fieldSelectorProps: ', props);
 	const themeContext = useContext(ThemeContext);
-
 	const [fieldSelectorState, setFieldSelectorState] = useState({
 		service: '',
 		buttonState: {
@@ -40,8 +41,11 @@ const FieldSelector = (props) => {
 		isLoading: false,
 	});
 
+	const [apiCategories, setApiCategories] = useState([]);
+
 	async function callAPI() {
 		await API.initialize();
+		setApiCategories(await API.getCategories());
 		setFieldSelectorState({
 			...fieldSelectorState,
 			apiCategories: await API.getCategories(),
@@ -54,7 +58,7 @@ const FieldSelector = (props) => {
 		setCategorySelected(category);
 		setFieldSelectorState({
 			...fieldSelectorState,
-			categorySelected: category,
+			categorySelected: [category],
 		});
 	};
 
@@ -155,19 +159,23 @@ const FieldSelector = (props) => {
 		await setFieldSelectorState({ ...fieldSelectorState, zip: zip });
 	};
 
+	const [possibleCounties, setPossibleCounties] = useState()
 	const getAllPossibleCountiesByZip = async (zip) => {
-		setZipCode(zip) // redundent?
+		setZipCode(zip); // redundent?
 		await setFieldSelectorState({ ...fieldSelectorState, zip: zip });
 		if (validZIP(zip).valid) {
 			await API.getCountyByZipCode({
 				zip: zipCode,
 			}).then((data) => {
+				setPossibleCounties(Object.values(data).map((value) => {
+					return value['county'];
+				}),)
 				setFieldSelectorState({
 					...fieldSelectorState,
 					possibleCounties: Object.values(data).map((value) => {
 						return value['county'];
 					}),
-				}); 
+				});
 			});
 		}
 
@@ -194,12 +202,11 @@ const FieldSelector = (props) => {
 		return { valid, message };
 	};
 
-	const [county, setCounty] = useState('')
-	const handleCountyChange = (county) =>{
-		setCounty(county)
+	const [county, setCounty] = useState('');
+	const handleCountyChange = (county) => {
+		setCounty(county);
 		setFieldSelectorState({ ...fieldSelectorState, county: county });
-	}
-
+	};
 
 	const validCounty = (county) => {
 		let valid = null;
@@ -217,8 +224,8 @@ const FieldSelector = (props) => {
 		console.log(
 			"Then we'd try to find their location using a Google API. For now..."
 		);
-			setZipCode('97206')
-			setCounty('Clackamas')
+		setZipCode('97206');
+		setCounty('Clackamas');
 		setFieldSelectorState({
 			...fieldSelectorState,
 			zip: '97206',
@@ -239,8 +246,7 @@ const FieldSelector = (props) => {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	};
 
-	///////////////////////////////////////////////////////////////////
-
+	const [isValidCounty, setIsValidCounty] = useState(null)
 	const countyAPICall = async () => {
 		await fetch(
 			/*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost
@@ -265,8 +271,10 @@ const FieldSelector = (props) => {
 				);
 				countiesORWA.shift();
 				if (countiesORWA.includes(fieldSelectorState.county.toLowerCase())) {
+					setIsValidCounty(true)
 					setFieldSelectorState({ ...fieldSelectorState, validCounty: true });
 				} else {
+					setIsValidCounty(false)
 					setFieldSelectorState({ ...fieldSelectorState, validCounty: false });
 				}
 			})
@@ -315,15 +323,20 @@ const FieldSelector = (props) => {
 					'wahkiakum',
 				];
 				if (countiesORWA.includes(fieldSelectorState.county.toLowerCase())) {
+					setIsValidCounty(true)
 					setFieldSelectorState({ ...fieldSelectorState, validCounty: true });
 				} else {
+					setIsValidCounty(false)
 					setFieldSelectorState({ ...fieldSelectorState, validCounty: false });
 				}
 			});
 	};
 
+	const [doValidation, setDoValidation] = useState(false)
 	const goBehavior = async () => {
 		await countyAPICall();
+		await setDoValidation(true)
+		await setDoValidation(false)
 		await setFieldSelectorState({ ...fieldSelectorState, doValidation: true });
 		await setFieldSelectorState({ ...fieldSelectorState, doValidation: false });
 
@@ -340,39 +353,25 @@ const FieldSelector = (props) => {
 	};
 
 	const isPageDataValid = () => {
-			console.log(validCounty(county).valid)
-			console.log(validGender(gender).valid)
-			console.log(validAge(age).valid)
-			console.log(validZIP(zipCode).valid)
-			console.log(validFamilySize(familySize).valid)
-			return (
-				validCounty(county).valid &&
-				validGender(gender).valid &&
-				validAge(age).valid &&
-				validZIP(zipCode).valid &&
-				validFamilySize(familySize).valid
-			);
-		
+		// console.log(validCounty(county).valid);
+		// console.log(validGender(gender).valid);
+		// console.log(validAge(age).valid);
+		// console.log(validZIP(zipCode).valid);
+		// console.log(validFamilySize(familySize).valid);
+		return (
+			validCounty(county).valid &&
+			validGender(gender).valid &&
+			validAge(age).valid &&
+			validZIP(zipCode).valid &&
+			validFamilySize(familySize).valid
+		);
 	};
 
 	useEffect(() => {
 		console.log('trigger useEffect1');
 		callAPI();
-		if (JSON.parse(localStorage.getItem('fieldSelectorState'))) {
-			const localStorageFieldSelectorState = JSON.parse(
-				localStorage.getItem('fieldSelectorState')
-			);
-			console.log('trigger localStorage', localStorageFieldSelectorState);
-			setFieldSelectorState({
-				...fieldSelectorState,
-				...localStorageFieldSelectorState,
-			});
-			if (JSON.parse(localStorage.getItem('serviceName'))) {
-				const serviceName = JSON.parse(localStorage.getItem('serviceName'));
-				console.log(serviceName);
-				setServiceName(serviceName);
-			}
 			if (JSON.parse(localStorage.getItem('submitButtonProps'))) {
+				console.log(JSON.parse(localStorage.getItem('submitButtonProps')))
 				const age = JSON.parse(localStorage.getItem('submitButtonProps')).age;
 				const familySize = JSON.parse(localStorage.getItem('submitButtonProps'))
 					.familySize;
@@ -380,28 +379,46 @@ const FieldSelector = (props) => {
 					.zipCode;
 				const county = JSON.parse(localStorage.getItem('submitButtonProps'))
 					.county;
-				setAge(age);
-				setFamilySize(familySize);
-				setZipCode(zipCode);
-				setCounty(county)
+				const gender = JSON.parse(localStorage.getItem('submitButtonProps'))
+					.gender;
+				const categorySelected = JSON.parse(
+					localStorage.getItem('submitButtonProps')
+				).categorySelected;
+				const catID = JSON.parse(localStorage.getItem('submitButtonProps'))
+					.catID;
+				const serviceName = JSON.parse(
+					localStorage.getItem('submitButtonProps')
+				).serviceName;
+				const buttonState = JSON.parse(
+					localStorage.getItem('submitButtonProps')
+				).buttonState;
+				handleAgeChange(age);
+				handleFamilySizeChange(familySize);
+				handleZIPChange(zipCode);
+				handleCountyChange(county);
+				handleGenderChange(gender);
+				handleCategorySelected(categorySelected);
+				handleCatIDChange(catID);
+				handleServiceChange(serviceName);
+				handleButtonStateChange(buttonState);
 			}
-		}
 	}, []);
 
 	useEffect(() => {
 		console.log('trigger useEffect2');
 		const handleValidZip = async () => {
-			if (validZIP(fieldSelectorState.zip).valid) {
+			if (validZIP(zipCode).valid) {
 				console.log('trigger valid zipcode');
 				await API.getCountyByZipCode({
-					zip: fieldSelectorState.zip,
+					zip: zipCode,
 				})
 					.then((data) => {
+						setCounty(data[0]['county']);
 						setFieldSelectorState({
 							...fieldSelectorState,
 							county: data[0]['county'],
 						});
-						getAllPossibleCountiesByZip(fieldSelectorState.zip);
+						getAllPossibleCountiesByZip(zipCode);
 					})
 					.catch((err) => {
 						// TODO: we'll probably want to take action here to resolve the error
@@ -411,138 +428,161 @@ const FieldSelector = (props) => {
 		};
 
 		handleValidZip();
-	}, [fieldSelectorState.zip]);
+	}, [zipCode]);
 
-	if (
-		fieldSelectorState.apiCategories.length === 0 ||
-		fieldSelectorState.isLoading === true
-	)
+	// if (fieldSelectorState.apiCategories.length === 0) {
+	if (apiCategories.length === 0 || isLoading) {
 		return <img src={Spinner} style={{ width: '200px' }} />;
-	else {
-		return (
-			<div className={'field-selector ' + themeContext}>
-				<SearchBar
-					apiCategories={fieldSelectorState.apiCategories}
-					goBehavior={goBehavior}
-					changeAPIData={props.changeAPIData}
-					isPageDataValid={isPageDataValid}
-					fieldSelectorState={fieldSelectorState}
-					setResources={props.setResources}
-					categorySelected={fieldSelectorState.categorySelected}
-					handleIsLoading={handleIsLoading}
-					handleServiceChange={handleServiceChange}
-				/>
-
-				<InputLabel label='Service'>
-					<CategorySelector
-						onChange={handleServiceChange}
-						handleButtonStateChange={handleButtonStateChange}
-						// buttonState={fieldSelectorState.buttonState}
-						buttonState={buttonState}
-						apiCategories={fieldSelectorState.apiCategories}
-						handleCatIDChange={handleCatIDChange}
-						handleCategorySelected={handleCategorySelected}
-						// categorySelected={fieldSelectorState.categorySelected}
-						categorySelected={categorySelected}
-						// catID={fieldSelectorState.catID}
-						catID={categoryID}
-					/>
-				</InputLabel>
-
-				<InputLabel label='Gender'>
-					<ExclusiveOption
-						items={['Male', 'Female', 'Trans Male', 'Trans Female']}
-						validator={validGender}
-						shouldValidate={fieldSelectorState.doValidation}
-						onChange={handleGenderChange}
-					/>
-				</InputLabel>
-
-				<InputLabel label='Age'>
-					<TextInput
-						name='Age'
-						// value={fieldSelectorState.age}
-						value={age}
-						filter={onlyNumbers}
-						validator={validAge}
-						placeholder='32'
-						onChange={handleAgeChange}
-						shouldValidate={fieldSelectorState.doValidation}
-					/>
-				</InputLabel>
-
-				<div id='zip-and-county'>
-					<InputLabel label='ZIP'>
-						<TextInput
-							name='ZIP'
-							value={zipCode}
-							filter={onlyNumbers}
-							validator={validZIP}
-							placeholder='97333'
-							onChange={handleZIPChange}
-							shouldValidate={fieldSelectorState.doValidation}
-						/>
-					</InputLabel>
-
-					{fieldSelectorState.possibleCounties ? (
-						<InputLabel label='County'>
-							<CountySelect
-								name='County'
-								value={county}
-								validator={validCounty}
-								onChange={handleCountyChange}
-								shouldValidate={fieldSelectorState.doValidation}
-								counties={fieldSelectorState.possibleCounties}></CountySelect>
-						</InputLabel>
-					) : (
-						<InputLabel label='County'>
-							<TextInput
-								name='County'
-								value={county}
-								validator={validCounty}
-								placeholder='Multnomah'
-								onChange={handleCountyChange}
-								shouldValidate={fieldSelectorState.doValidation}
-							/>
-						</InputLabel>
-					)}
-
-					<InputLabel label='Family Size'>
-						<TextInput
-							name='famliysize'
-							// value={fieldSelectorState.familySize}
-							value={familySize}
-							validator={validFamilySize}
-							placeholder='How many people are in your family?'
-							onChange={handleFamilySizeChange}
-							shouldValidate={fieldSelectorState.doValidation}
-						/>
-					</InputLabel>
-				</div>
-
-				<button id='your-location-button' onClick={findLocation}>
-					Your location
-				</button>
-
-				<SubmitButton
-					goBehavior={goBehavior}
-					changeAPIData={props.changeAPIData}
-					isPageDataValid={isPageDataValid}
-					fieldSelectorState={fieldSelectorState}
-					setResources={props.setResources}
-					apiCategories={props.apiCategories}
-					handleIsLoading={handleIsLoading}
-					serviceName={serviceName}
-					categoryID={categoryID}
-					categorySelected={categorySelected}
-					age={age}
-					familySize={familySize}
-					zipCode={zipCode}
-					county={county}
-				/>
-			</div>
-		);
 	}
+
+	return (
+		<div className={'field-selector ' + themeContext}>
+			<SearchBar
+				// apiCategories={fieldSelectorState.apiCategories}
+				apiCategories={apiCategories}
+				goBehavior={goBehavior}
+				changeAPIData={props.changeAPIData}
+				isPageDataValid={isPageDataValid}
+				// fieldSelectorState={fieldSelectorState}
+				setResources={props.setResources}
+				// categorySelected={fieldSelectorState.categorySelected}
+				handleIsLoading={handleIsLoading}
+				handleServiceChange={handleServiceChange}
+				serviceName={serviceName}
+				categoryID={categoryID}
+				categorySelected={categorySelected}
+				age={age}
+				familySize={familySize}
+				zipCode={zipCode}
+				county={county}
+				gender={gender}
+				buttonState={buttonState}
+			/>
+
+			<InputLabel label='Service'>
+				<CategorySelector
+					onChange={handleServiceChange}
+					handleButtonStateChange={handleButtonStateChange}
+					// buttonState={fieldSelectorState.buttonState}
+					buttonState={buttonState}
+					// apiCategories={fieldSelectorState.apiCategories}
+					apiCategories={apiCategories}
+					handleCatIDChange={handleCatIDChange}
+					handleCategorySelected={handleCategorySelected}
+					// categorySelected={fieldSelectorState.categorySelected}
+					categorySelected={categorySelected}
+					// catID={fieldSelectorState.catID}
+					catID={categoryID}
+				/>
+			</InputLabel>
+
+			<InputLabel label='Gender'>
+				<ExclusiveOption
+					items={['Male', 'Female', 'Trans Male', 'Trans Female']}
+					validator={validGender}
+					// shouldValidate={fieldSelectorState.doValidation}
+					shouldValidate={doValidation}
+					onChange={handleGenderChange}
+				/>
+			</InputLabel>
+
+			<InputLabel label='Age'>
+				<TextInput
+					name='Age'
+					// value={fieldSelectorState.age}
+					value={age}
+					filter={onlyNumbers}
+					validator={validAge}
+					placeholder='32'
+					onChange={handleAgeChange}
+					// shouldValidate={fieldSelectorState.doValidation}
+					shouldValidate={doValidation}
+				/>
+			</InputLabel>
+
+			<div id='zip-and-county'>
+				<InputLabel label='ZIP'>
+					<TextInput
+						name='ZIP'
+						value={zipCode}
+						filter={onlyNumbers}
+						validator={validZIP}
+						placeholder='97333'
+						onChange={handleZIPChange}
+						// shouldValidate={fieldSelectorState.doValidation}
+						shouldValidate={doValidation}
+					/>
+				</InputLabel>
+
+				{/* {fieldSelectorState.possibleCounties ? ( */}
+				{possibleCounties ? (
+					<InputLabel label='County'>
+						<CountySelect
+							name='County'
+							value={county}
+							validator={validCounty}
+							onChange={handleCountyChange}
+							// shouldValidate={fieldSelectorState.doValidation}
+							shouldValidate={doValidation}
+							// counties={fieldSelectorState.possibleCounties}
+							counties={possibleCounties}
+							>
+
+							</CountySelect>
+					</InputLabel>
+				) : (
+					<InputLabel label='County'>
+						<TextInput
+							name='County'
+							value={county}
+							validator={validCounty}
+							placeholder='Multnomah'
+							onChange={handleCountyChange}
+							// shouldValidate={fieldSelectorState.doValidation}
+							shouldValidate={doValidation}
+						/>
+					</InputLabel>
+				)}
+
+				<InputLabel label='Family Size'>
+					<TextInput
+						name='famliysize'
+						// value={fieldSelectorState.familySize}
+						value={familySize}
+						validator={validFamilySize}
+						placeholder='How many people are in your family?'
+						onChange={handleFamilySizeChange}
+						// shouldValidate={fieldSelectorState.doValidation}
+						shouldValidate={doValidation}
+					/>
+				</InputLabel>
+			</div>
+
+			<button id='your-location-button' onClick={findLocation}>
+				Your location
+			</button>
+
+			<SubmitButton
+				goBehavior={goBehavior}
+				changeAPIData={props.changeAPIData}
+				isPageDataValid={isPageDataValid}
+				// fieldSelectorState={fieldSelectorState}
+				setResources={props.setResources}
+				// apiCategories={fieldSelectorState.apiCategories}
+				apiCategories={apiCategories}
+				handleIsLoading={handleIsLoading}
+				serviceName={serviceName}
+				categoryID={categoryID}
+				categorySelected={categorySelected}
+				age={age}
+				familySize={familySize}
+				zipCode={zipCode}
+				county={county}
+				gender={gender}
+				buttonState={buttonState}
+			/>
+		</div>
+	);
 };
 
 export default FieldSelector;

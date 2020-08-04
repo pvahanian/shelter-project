@@ -163,16 +163,15 @@ const CategorySelector = (props) => {
 	const [categories, setCategories] = useState([]);
 	const [keyz, setTheKeyz] = useState([]);
 
+	
 	useEffect(() => {
-		//look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
-
 		const labelsWithImages = createLabelWithImage(
 			props.apiCategories,
 			'category'
-		);
-		console.log(labelsWithImages);
-
-		setCategories([labelsWithImages]);
+			);
+			setCategories([labelsWithImages]);
+			
+			//look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
 		if (JSON.parse(localStorage.getItem('categories')))
 			setCategories(JSON.parse(localStorage.getItem('categories')));
 
@@ -180,8 +179,8 @@ const CategorySelector = (props) => {
 			setTheKeyz(JSON.parse(localStorage.getItem('keyz')));
 	}, []);
 
+	//TODO rename this...
 	const setKey = (keyValue) => {
-		console.log(keyz, keyValue);
 		setTheKeyz([...keyz, keyValue]);
 	};
 
@@ -189,7 +188,6 @@ const CategorySelector = (props) => {
 	const createLabelWithImage = (array, categoryType) => {
 		const svgPathEndings = context === 'light' ? '-black.svg' : '-white.svg';
 		let objArray = [];
-		console.log(array);
 		for (const item of array) {
 			let obj = {};
 			obj['label'] = item[categoryType];
@@ -201,10 +199,6 @@ const CategorySelector = (props) => {
 
 	const appendCategory = (row, id) => {
 		let newCategory = categories.slice();
-		console.log(newCategory);
-		console.log('this is the button row: ', row);
-		console.log('this is the button id: ', id);
-
 		//remove subCategories and keys if user clicks at a higher level of the tree
 		for (let i = row; i < categories.length - 1; i++) {
 			newCategory.pop();
@@ -227,13 +221,10 @@ const CategorySelector = (props) => {
 				props.apiCategories[id]['subcat'],
 				'subcategory'
 			);
-			console.log(newCategory[row + 1]);
 			setCategories(newCategory);
 			setKey(id);
-
 			localStorage.setItem('categories', JSON.stringify(newCategory));
 			localStorage.setItem('keyz', JSON.stringify(keyz));
-
 			props.handleCatIDChange(props.apiCategories[id]['categoryID']);
 			props.handleCategorySelected(1);
 		}
@@ -247,17 +238,11 @@ const CategorySelector = (props) => {
 				setCategories(newCategory);
 				localStorage.setItem('categories', JSON.stringify(newCategory));
 				localStorage.setItem('keyz', JSON.stringify(keyz));
-
-				console.log(
-					'this is the subcategory id: ',
-					props.apiCategories[keyz[0]]['subcat'][id]['subcategoryID']
-				);
 				props.handleCatIDChange(
 					props.apiCategories[keyz[0]]['subcat'][id]['subcategoryID']
 				);
 				setKey(id);
 				props.handleCategorySelected(2);
-				console.log('this is the categoryID: ', props.catID);
 				props.handleButtonStateChange({
 					...props.buttonState,
 					subCat: [
@@ -276,11 +261,6 @@ const CategorySelector = (props) => {
 			}
 		}
 	};
-
-	useEffect(() => {
-		console.log(categories);
-		console.log(keyz);
-	}, [categories, keyz]);
 
 	return categories.map((categories, i) => (
 		<ExclusiveOption

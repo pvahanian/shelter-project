@@ -129,128 +129,6 @@
 // 	}
 // }
 
-import React, { useState, useEffect, useContext } from 'react';
-import '../Assets/ExclusiveOption.scss';
-import InvalidEntryMessage from './InvalidEntryMessage';
-import { ThemeContext } from '../ThemeContext';
-
-// Child component of ExclusiveGroup
-const ExclusiveButton = (props) => {
-	const context = useContext(ThemeContext)
-
-
-	useEffect(() => {
-		//look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
-		if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
-		if (props.row === undefined) {
-			// console.log('gender group')
-			props.handleSetSelected(
-				JSON.parse(localStorage.getItem('submitButtonProps')).gender
-			);
-		}
-	
-		if (
-			props.data.label ===
-				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
-					.category ||
-			props.data.label ===
-				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
-					.subCat[0].subCategory ||
-			props.data.label ===
-				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
-					.subCat[0].subCatTerm[0].sterm
-		) {
-			props.handleSetSelected(props.data);
-		}
-	
-		// if (
-		// 	this.props.data.label ===
-		// 	JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
-		// 		.category
-		// ) {
-		// 	// console.log('number 1')
-		// 	this.props.handleSetSelected(this.props.data);
-		// } else if (
-		// 	this.props.data.label ===
-		// 	JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
-		// 		.subCat[0].subCategory
-		// ) {
-		// 	// console.log('number 2')
-		// 	this.props.handleSetSelected(this.props.data);
-		// } else if (
-		// 	this.props.data.label ===
-		// 	JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
-		// 		.subCat[0].subCatTerm[0].sterm
-		// ) {
-		// 	// console.log('number 3')
-		// 	this.props.handleSetSelected(this.props.data);
-		// }
-	
-
-	}, [])
-
-
-
-		if (typeof props.data !== 'string' && props.appendCategory) {
-			// Assume object like {label, image} and build an SVG button
-			return (
-				<button
-					className={
-						'exclusive-button ' +
-						(props.selected ? 'selected ' : ' ') +
-						context
-					} // changes CSS and appearance when an option is selected/deselected
-					onClick={(e) => {
-						props.onClick(
-							e,
-							props.data,
-							props.id,
-							props.row
-						);
-					}} // changes the name of the pick in ExGroup's state.
-				>
-					<img src={props.data.image}></img>
-					{props.data.label}
-				</button>
-			);
-		}
-		// For buttons with SVG images
-		if (typeof props.data !== 'string') {
-			// Assume object like {label, image} and build an SVG button
-			return (
-				<button
-					className={
-						'exclusive-button ' +
-						(props.selected ? 'selected ' : ' ') +
-						context
-					} // changes CSS and appearance when an option is selected/deselected
-					onClick={(e) => {
-						props.onClick(e, props.data, props.id);
-					}} // changes the name of the pick in ExGroup's state.
-				>
-					<img src={props.data.image}></img>
-					{props.data.label}
-				</button>
-			);
-		}
-
-		return (
-			<button
-				className={
-					'exclusive-button ' +
-					(props.selected ? 'selected ' : ' ') +
-					context
-				} // changes CSS and appearance when an option is selected/deselected
-				onClick={(e) => {
-					props.onClick(e, props.data, props.id);
-				}} // changes the name of the pick in ExGroup's state.
-			>
-				{props.data}
-			</button>
-		);
-	
-}
-
 // class ExclusiveGroup extends React.Component {
 // 	constructor(props) {
 // 		// console.log(props)
@@ -387,21 +265,21 @@ const ExclusiveButton = (props) => {
 
 // export default ExclusiveGroup;
 
-const ExclusiveGroup = (props) => {
-	// console.log(props)
+import React, { useState, useEffect, useContext } from 'react';
+import '../Assets/ExclusiveOption.scss';
+import InvalidEntryMessage from './InvalidEntryMessage';
+import { ThemeContext } from '../ThemeContext';
 
-	// console.log('excluseiveOption props: ', props)
-	const [selected, setSelected] = useState(
-		props.default ? props.default : ''
-	);
+const ExclusiveGroup = (props) => {
+	const [selected, setSelected] = useState(props.default ? props.default : '');
 
 	//set selected state during exclusiveButton componentWillMount
 	const handleSetSelected = (data) => {
 		setSelected(data);
 	};
 
-	const valid = null;
-	const invalidEntryMessage = '';
+	let valid = null;
+	let invalidEntryMessage = '';
 
 	const handleClick = (event, data, id, row) => {
 		// console.log('here is the data passed into handleClick in exclusive option: ', data, id, row)
@@ -414,7 +292,7 @@ const ExclusiveGroup = (props) => {
 		} else if (props.appendCategory) {
 			props.onChange(data.label);
 			props.appendCategory(props.row, id);
-			//save service button selections to fieldSelectorState, which in turn is saved to localstorage on form submit
+			//save service button selections to buttonState, which in turn is saved to localstorage on form submit
 			if (row === 0) {
 				props.handleButtonStateChange({
 					...props.buttonState,
@@ -510,10 +388,85 @@ const ExclusiveGroup = (props) => {
 					/>
 				))}
 			</div>
-
 			<InvalidEntryMessage message={invalidEntryMessage} />
 		</div>
 	);
 };
 
 export default ExclusiveGroup;
+
+// Child component of ExclusiveGroup
+const ExclusiveButton = (props) => {
+	const context = useContext(ThemeContext);
+
+	useEffect(() => {
+		//look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
+		if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
+		if (props.row === undefined) {
+			props.handleSetSelected(
+				JSON.parse(localStorage.getItem('submitButtonProps')).gender
+			);
+		}
+
+		if (
+			props.data.label ===
+				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
+					.category ||
+			props.data.label ===
+				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
+					.subCat[0].subCategory ||
+			props.data.label ===
+				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
+					.subCat[0].subCatTerm[0].sterm
+		) {
+			props.handleSetSelected(props.data);
+		}
+	}, []);
+
+	if (typeof props.data !== 'string' && props.appendCategory) {
+		// Assume object like {label, image} and build an SVG button
+		return (
+			<button
+				className={
+					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + context
+				} // changes CSS and appearance when an option is selected/deselected
+				onClick={(e) => {
+					props.onClick(e, props.data, props.id, props.row);
+				}} // changes the name of the pick in ExGroup's state.
+			>
+				<img src={props.data.image}></img>
+				{props.data.label}
+			</button>
+		);
+	}
+	// For buttons with SVG images
+	if (typeof props.data !== 'string') {
+		// Assume object like {label, image} and build an SVG button
+		return (
+			<button
+				className={
+					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + context
+				} // changes CSS and appearance when an option is selected/deselected
+				onClick={(e) => {
+					props.onClick(e, props.data, props.id);
+				}} // changes the name of the pick in ExGroup's state.
+			>
+				<img src={props.data.image}></img>
+				{props.data.label}
+			</button>
+		);
+	}
+
+	return (
+		<button
+			className={
+				'exclusive-button ' + (props.selected ? 'selected ' : ' ') + context
+			} // changes CSS and appearance when an option is selected/deselected
+			onClick={(e) => {
+				props.onClick(e, props.data, props.id);
+			}} // changes the name of the pick in ExGroup's state.
+		>
+			{props.data}
+		</button>
+	);
+};

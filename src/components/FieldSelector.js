@@ -13,15 +13,17 @@ import CategorySelector from './categorySelector/categorySelector.js';
 import CountySelect from './CountySelect';
 import Spinner from '../Assets/spinner.gif';
 import SearchBar from './SearchBar/SearchBar';
+import ApiDataContext from './context/apiData/ApiDataContext'
+import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY;
 
 const APIKey = process.env.REACT_APP_211_API_KEY;
 const API = new APIWrapper(APIKey);
 
 const FieldSelector = (props) => {
-	// console.log('fieldSelectorProps: ', props);
 	const themeContext = useContext(ThemeContext);
-
+	const apiDataContext = useContext(ApiDataContext)
+	const fieldSelectorContext = useContext(FieldSelectorContext)
 	const [apiCategories, setApiCategories] = useState([]);
 
 	async function callAPI() {
@@ -31,7 +33,6 @@ const FieldSelector = (props) => {
 
 	const [categorySelected, setCategorySelected] = useState('');
 	const handleCategorySelected = (category) => {
-		// console.log(category);
 		setCategorySelected(category);
 	};
 
@@ -51,13 +52,11 @@ const FieldSelector = (props) => {
 
 	const [serviceName, setServiceName] = useState('');
 	const handleServiceChange = (service) => {
-		// console.log(service);
 		setServiceName(service);
 	};
 
 	const [categoryID, setCategoryID] = useState('');
 	const handleCatIDChange = (catID) => {
-		// console.log(catID);
 		setCategoryID(catID);
 	};
 
@@ -329,7 +328,8 @@ const FieldSelector = (props) => {
 			handleGenderChange(gender);
 			handleCategorySelected(categorySelected);
 			handleCatIDChange(catID);
-			handleServiceChange(serviceName);
+			// handleServiceChange(serviceName);
+			fieldSelectorContext.setServiceName(serviceName)
 			handleButtonStateChange(buttonState);
 		}
 	}, []);
@@ -371,6 +371,7 @@ const FieldSelector = (props) => {
 				handleIsLoading={handleIsLoading}
 				handleServiceChange={handleServiceChange}
 				serviceName={serviceName}
+				serviceName={fieldSelectorContext.serviceName}
 				categoryID={categoryID}
 				categorySelected={categorySelected}
 				age={age}
@@ -383,10 +384,11 @@ const FieldSelector = (props) => {
 
 			<InputLabel label='Service'>
 				<CategorySelector
-					onChange={handleServiceChange}
+					handleServiceChange={handleServiceChange}
 					handleButtonStateChange={handleButtonStateChange}
 					buttonState={buttonState}
-					apiCategories={apiCategories}
+					// apiCategories={apiCategories}
+					// apiCategories={apiDataContext.categories}
 					handleCatIDChange={handleCatIDChange}
 					handleCategorySelected={handleCategorySelected}
 					categorySelected={categorySelected}
@@ -471,10 +473,10 @@ const FieldSelector = (props) => {
 				goBehavior={goBehavior}
 				changeAPIData={props.changeAPIData}
 				isPageDataValid={isPageDataValid}
-				setResources={props.setResources}
+				// setResources={props.setResources}
 				apiCategories={apiCategories}
 				handleIsLoading={handleIsLoading}
-				serviceName={serviceName}
+				// serviceName={serviceName}
 				categoryID={categoryID}
 				categorySelected={categorySelected}
 				age={age}

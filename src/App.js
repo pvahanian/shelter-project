@@ -1,15 +1,12 @@
-/** @format */
 
-import React, { PureComponent, useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.scss';
-import FieldSelector from './components/FieldSelector';
-import NavBlock from './components/NavigationBlock';
-import NavBar from './components/Navbar';
-import Footer from './components/Footer';
 import APIWrapper from './APIWrapper.js';
-import ExclusiveOption from './components/ExclusiveOption';
-import Section from './components/Section';
+import FieldSelector from './components/FieldSelector';
+import Shelter from './components/shetler.js';
+import ApiDataState from './components/context/apiData/ApiDataState'
+import FieldSelectorState from './components/context/fieldSelectorContext/FieldSelectorState'
+
 import { ThemeContext } from './ThemeContext';
 import {
 	BrowserRouter as Router,
@@ -18,7 +15,6 @@ import {
 	Link,
 	Redirect,
 } from 'react-router-dom';
-import Shelter from './components/shetler.js';
 
 const navbar = {};
 navbar.brand = { linkTo: '#', text: 'Portland Shelters' };
@@ -43,7 +39,7 @@ const App = () => {
 	// console.log('app rendered');
 	const [appState, setAppState] = useState({
 		themeColor: 'light',
-		sessionID: null,
+		// sessionID: null,
 		categories: [],
 		resources: [],
 	});
@@ -59,7 +55,7 @@ const App = () => {
 			setAppState(JSON.parse(localStorage.getItem('appState')));
 		}
 
-		//when user navigates away from the page or closes the browser tab, remove appState fieldselectorstate and categoryselectorstate and sessionId from localstorage
+		//when user hits refresh, navigates away from the page or closes the browser tab, remove state values from localstorage.
 		//after 30 minutes, remove users sessionId from localStorage.
 		//TODO remove the event listeners after refactor
 		window.addEventListener(
@@ -86,16 +82,15 @@ const App = () => {
 			'beforeunload',
 			localStorage.removeItem('categories')
 		);
-		// window.addEventListener(
-		// 	'beforeunload',
-		// 	localStorage.removeItem('sessionId')
-		// );
 		setTimeout(() => {
 			localStorage.removeItem('sessionId');
 		}, 1800000);
 	}, []);
 
 	return (
+		<FieldSelectorState>
+
+		<ApiDataState>
 		<ThemeContext.Provider value={appState.themeColor}>
 			<Router>
 				<div className={'app ' + appState.themeColor}>
@@ -116,10 +111,12 @@ const App = () => {
 					<div id='main-container'>
 						Main Container
 						<Route exact path='/'>
-							<FieldSelector setResources={setResources} />
+							{/* <FieldSelector setResources={setResources} /> */}
+							<FieldSelector />
 						</Route>
 						<Route path='/info'>
-							<Shelter shelters={appState.resources} />
+							{/* <Shelter shelters={appState.resources} /> */}
+							<Shelter  />
 						</Route>
 					</div>
 
@@ -127,6 +124,9 @@ const App = () => {
 				</div>
 			</Router>
 		</ThemeContext.Provider>
+		</ApiDataState>
+		</FieldSelectorState>
+
 	);
 };
 

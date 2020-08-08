@@ -1,18 +1,20 @@
-/** @format */
 
-import React from 'react';
+import React, {useContext} from 'react';
 import './SubmitButton.css';
 import { useHistory } from 'react-router-dom';
 import APIWrapper from '../../APIWrapper.js';
-
+import ApiDataContext from '../context/apiData/ApiDataContext'
+import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
 function SubmitButton(props) {
 	let history = useHistory();
 	const APIKey = process.env.REACT_APP_211_API_KEY;
 	const API = new APIWrapper(APIKey);
+	const apiDataContext = useContext(ApiDataContext)
+	const fieldSelectorContext = useContext(FieldSelectorContext)
 	// console.log('submitButton props: ', props);
 	API.initialize();
 	let obj = {
-		sn: props.serviceName,
+		sn: fieldSelectorContext.serviceName,
 		st: '',
 		age: Number(props.age),
 		gender: props.gender,
@@ -30,9 +32,8 @@ function SubmitButton(props) {
 			if (props.isPageDataValid()) {
 
 				//save submit button state to local storage for use if / when user navigates backwards
-
 				localStorage.setItem('submitButtonProps', JSON.stringify(props));
-				//props.setResources(await API.getKeywords(obj))
+				//apiDataContext.setResources(await API.getKeywords(obj))
 				history.push('/info');
 
 				//If category selected
@@ -42,35 +43,28 @@ function SubmitButton(props) {
 				//If subestCategory selected
 				//Make getResource call with service name data
 
-				// console.log('here is the object from submitButton: ', obj);
-				// console.log(
-				// 	'here is categorySelected from props: ',
-				// 	props.categorySelected
-				// );
-				// console.log('here is the category selected from props in submit button', props.categorySelected);
 				if (props.categorySelected === 3) {
 					obj['st'] = 's';
 					console.log(props.categorySelected);
 					console.log(obj);
-					props.setResources(await API.getResource(obj));
+					apiDataContext.setResources(await API.getResource(obj));
 				} else if (props.categorySelected === 2) {
 					obj['st'] = 'sc';
 					obj['sn'] = '';
 					console.log(obj);
 					console.log(props.categorySelected);
-					props.setResources(await API.getResource(obj));
+					apiDataContext.setResources(await API.getResource(obj));
 				} else {
 					obj['st'] = 'c';
 					obj['sn'] = '';
 					console.log(obj);
 					console.log(props.categorySelected);
-					props.setResources(await API.getResource(obj));
+					apiDataContext.setResources(await API.getResource(obj));
 				}
 			}
 		} catch (error) {
 			console.log(error);
 		}
-		// props.handleIsLoading();
 	}
 	return (
 		<button type='button' onClick={handleClick}>

@@ -12,19 +12,23 @@ function SubmitButton(props) {
 	const apiDataContext = useContext(ApiDataContext)
 	const fieldSelectorContext = useContext(FieldSelectorContext)
 	// console.log('submitButton props: ', props);
+	console.log(fieldSelectorContext)
 	API.initialize();
 	let obj = {
 		sn: fieldSelectorContext.serviceName,
 		st: '',
-		age: Number(props.age),
+		// age: Number(props.age),
+		age: Number(fieldSelectorContext.age),
 		gender: props.gender,
 		zip: Number(props.zip),
 		county: props.county,
-		catid: props.categoryID,
+		// catid: props.categoryID,
+		catid: fieldSelectorContext.categoryId,
 	};
 
 	async function handleClick() {
 		console.log('trigger submit');
+		console.log(fieldSelectorContext)
 		try {
 			props.handleIsLoading();
 			await props.goBehavior();
@@ -33,6 +37,8 @@ function SubmitButton(props) {
 
 				//save submit button state to local storage for use if / when user navigates backwards
 				localStorage.setItem('submitButtonProps', JSON.stringify(props));
+				localStorage.setItem('fsContext', JSON.stringify(fieldSelectorContext));
+
 				//apiDataContext.setResources(await API.getKeywords(obj))
 				history.push('/info');
 

@@ -27,11 +27,13 @@ const ExclusiveGroup = (props) => {
 		// console.log('here is the data passed into handleClick in exclusive option: ', data, id, row)
 		setSelected(data);
 		if (typeof data === 'string' && props.appendCategory) {
+			console.log('test trigger')
 			fieldSelectorContext.setServiceName(data);
 			props.appendCategory(this.props.row, id);
 		} else if (typeof data === 'string') {
 			//this case is when a gender button is being clicked.
 			// fieldSelectorContext.setServiceName(data);
+			fieldSelectorContext.setGender(data)
 		} else if (props.appendCategory) {
 			fieldSelectorContext.setServiceName(data.label);
 			props.appendCategory(props.row, id);

@@ -17,7 +17,13 @@ class TextInput extends React.Component {
     let newValue = e.currentTarget.value
     if(this.props.filter)
       newValue = this.props.filter(newValue)
+      console.log(newValue)
     this.props.onChange(newValue)
+    if(this.props.contextAgeChange) this.props.contextAgeChange(newValue)
+    if(this.props.contextZipChange) this.props.contextZipChange(newValue)
+    if(this.props.contextCountyChange) this.props.contextCountyChange(newValue)
+    if(this.props.contextFamilyChange) this.props.contextFamilyChange(newValue)
+
   }
 
   validate() {

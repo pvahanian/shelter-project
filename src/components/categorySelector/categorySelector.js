@@ -5,11 +5,12 @@ import ExclusiveOption from '../ExclusiveOption';
 import { ThemeContext } from '../../ThemeContext';
 
 import ApiDataContext from '../context/apiData/ApiDataContext'
+import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
 
 const CategorySelector = (props) => {
 	const themeContext = useContext(ThemeContext);
 	const apiDataContext = useContext(ApiDataContext)
-	console.log(apiDataContext.categories)
+	const fieldSelectorContext = useContext(FieldSelectorContext)
 	const [categories, setCategories] = useState([]);
 	const [keyz, setTheKeyz] = useState([]);
 
@@ -37,7 +38,6 @@ const CategorySelector = (props) => {
 	const createLabelWithImage = (array, categoryType) => {
 		const svgPathEndings = themeContext === 'light' ? '-black.svg' : '-white.svg';
 		let objArray = [];
-		console.log(array);
 		for (const item of array) {
 			let obj = {};
 			obj['label'] = item[categoryType];
@@ -61,7 +61,10 @@ const CategorySelector = (props) => {
 			localStorage.setItem('keyz', JSON.stringify(keyz));
 
 			props.handleCatIDChange('');
+			fieldSelectorContext.setCategoryId('')
 			props.handleCategorySelected(3);
+			fieldSelectorContext.setCategorySelected(3)
+
 			return;
 		}
 
@@ -76,7 +79,9 @@ const CategorySelector = (props) => {
 			localStorage.setItem('categories', JSON.stringify(newCategory));
 			localStorage.setItem('keyz', JSON.stringify(keyz));
 			props.handleCatIDChange(apiDataContext.categories[id]['categoryID']);
+			fieldSelectorContext.setCategoryId(apiDataContext.categories[id]['categoryID'])
 			props.handleCategorySelected(1);
+			fieldSelectorContext.setCategorySelected(1)
 		}
 		//subcategory has been selectd. Show subbestCategory.
 		else {
@@ -91,8 +96,10 @@ const CategorySelector = (props) => {
 				props.handleCatIDChange(
 					apiDataContext.categories[keyz[0]]['subcat'][id]['subcategoryID']
 				);
+				fieldSelectorContext.setCategoryId(apiDataContext.categories[keyz[0]]['subcat'][id]['subcategoryID'])
 				setKey(id);
 				props.handleCategorySelected(2);
+				fieldSelectorContext.setCategorySelected(2)
 				props.handleButtonStateChange({
 					...props.buttonState,
 					subCat: [

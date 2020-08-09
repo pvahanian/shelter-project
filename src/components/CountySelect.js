@@ -24,6 +24,7 @@ class CountySelect extends React.Component {
             if(this.props.filter)
               newValue = this.props.filter(newValue)
             this.props.onChange(newValue)
+            if(this.props.contextCountyChange) this.props.contextCountyChange(newValue)
           }
         }
        counties = {this.props.counties}

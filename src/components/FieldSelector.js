@@ -305,58 +305,41 @@ const FieldSelector = (props) => {
 		callAPI();
 		console.log(JSON.parse(localStorage.getItem('fsContext')))
 		if (JSON.parse(localStorage.getItem('submitButtonProps'))) {
-			// const age = JSON.parse(localStorage.getItem('submitButtonProps')).age;
 			const age = JSON.parse(localStorage.getItem('fsContext')).age;
-			// const familySize = JSON.parse(localStorage.getItem('submitButtonProps'))
-			// 	.familySize;
+		
 			const familySize = JSON.parse(localStorage.getItem('fsContext'))
 				.familySize;
-			// const zipCode = JSON.parse(localStorage.getItem('submitButtonProps'))
-			// 	.zipCode;
+	
 			const zipcode = JSON.parse(localStorage.getItem('fsContext'))
 				.zipCode;
-			// const county = JSON.parse(localStorage.getItem('submitButtonProps'))
-			// 	.county;
+
 			const county = JSON.parse(localStorage.getItem('fsContext'))
 				.county;
-			// const gender = JSON.parse(localStorage.getItem('submitButtonProps'))
-			// 	.gender;
+
 			const gender = JSON.parse(localStorage.getItem('fsContext'))
 				.gender;
-			// const categorySelected = JSON.parse(
-			// 	localStorage.getItem('submitButtonProps')
-			// ).categorySelected;
+
 			const categorySelected = JSON.parse(
 				localStorage.getItem('fsContext')
 			).categorySelected;
-			// const catID = JSON.parse(localStorage.getItem('submitButtonProps')).catID;
+
 			const catID = JSON.parse(localStorage.getItem('fsContext')).categoryId;
-			// const serviceName = JSON.parse(localStorage.getItem('submitButtonProps'))
-			// 	.serviceName;
+			
 			const serviceName = JSON.parse(localStorage.getItem('fsContext'))
 				.serviceName;
-			// const buttonState = JSON.parse(localStorage.getItem('submitButtonProps'))
+
 			const buttonState = JSON.parse(localStorage.getItem('fsContext'))
 				.buttonState;
-			// handleAgeChange(age);
+
 			fieldSelectorContext.setAge(age)
-			// handleFamilySizeChange(familySize);
 			fieldSelectorContext.setFamilySize(familySize)
-
-			// handleZIPChange(zipCode);
 			fieldSelectorContext.setZipcode(zipcode);
-
-			handleCountyChange(county);
-			// fieldSelectorContext.setCounty(county);
-			// handleGenderChange(gender);
+			// handleCountyChange(county);
+			fieldSelectorContext.setCounty(county)
 			fieldSelectorContext.setGender(gender)
-			// handleCategorySelected(categorySelected);
 			fieldSelectorContext.setCategorySelected(categorySelected);
-			// handleCatIDChange(catID);
 			fieldSelectorContext.setCategoryId(catID)
-			// handleServiceChange(serviceName);
 			fieldSelectorContext.setServiceName(serviceName)
-			// handleButtonStateChange(buttonState);
 			fieldSelectorContext.setButtonState(buttonState)
 		}
 	}, []);
@@ -478,10 +461,12 @@ const FieldSelector = (props) => {
 					<InputLabel label='County'>
 						<TextInput
 							name='County'
-							value={county}
+							// value={county}
+							value={fieldSelectorContext.county}
 							validator={validCounty}
 							placeholder='Multnomah'
 							onChange={handleCountyChange}
+							contextCountyChange={fieldSelectorContext.setCounty}
 							shouldValidate={doValidation}
 						/>
 					</InputLabel>

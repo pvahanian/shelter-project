@@ -72,6 +72,10 @@ const App = () => {
 		);
 		window.addEventListener(
 			'beforeunload',
+			localStorage.removeItem('fsContext')
+		);
+		window.addEventListener(
+			'beforeunload',
 			localStorage.removeItem('categorySelectorState')
 		);
 		window.addEventListener(

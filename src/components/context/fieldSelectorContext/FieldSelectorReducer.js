@@ -21,8 +21,12 @@ const FieldSelectorReducer = (state, action) => {
 		case 'SET_ZIPCODE':
 			return { ...state, zipCode: action.payload };
 		case 'SET_POSSIBLE_COUNTIES':
-			console.log(action.payload)
 			return { ...state, possibleCounties: action.payload };
+		case 'SET_VALID_COUNTY':
+			return { ...state, validCounty: action.payload };
+		case 'SET_DO_VALIDATION':
+			return { ...state, doValidation: action.payload };
+
 
 		default:
 			return;

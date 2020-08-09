@@ -12,7 +12,9 @@ function SubmitButton(props) {
 	const API = new APIWrapper(APIKey);
 	const apiDataContext = useContext(ApiDataContext)
 	const fieldSelectorContext = useContext(FieldSelectorContext)
+
 	console.log(fieldSelectorContext)
+	
 	API.initialize();
 	let obj = {
 		sn: fieldSelectorContext.serviceName,
@@ -29,7 +31,8 @@ function SubmitButton(props) {
 		console.log(fieldSelectorContext)
 		try {
 			props.handleIsLoading();
-			await props.goBehavior();
+			// await props.goBehavior();
+			await fieldSelectorContext.goBehavior()
 			console.log(props.isPageDataValid());
 			if (props.isPageDataValid()) {
 

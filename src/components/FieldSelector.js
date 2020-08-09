@@ -196,92 +196,92 @@ const FieldSelector = (props) => {
 		return numberArray.join('');
 	};
 
-	const countyAPICall = async () => {
-		await fetch(
-			/*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost
-      this proxy prevents cors errors from being thrown by chrome. When the project is hosted somewhere, these errors
-      won't be an issue.*/
-			`https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`,
-			{
-				crossDomain: true,
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-			}
-		)
-			.then((result) => {
-				return result.json();
-			})
-			.then((data) => {
-				const countiesORWA = [];
-				data.forEach((el) =>
-					countiesORWA.push(
-						el[0].toLowerCase().split('').reverse().slice(7).reverse().join('')
-					)
-				);
-				countiesORWA.shift();
-				if (countiesORWA.includes(county.toLowerCase())) {
-					setIsValidCounty(true);
-				} else {
-					setIsValidCounty(false);
-				}
-			})
-			//Hardcoding here is a backup list of all counties serviced in case api fails.
-			.catch((err) => {
-				const countiesORWA = [
-					'baker',
-					'benton',
-					'clackamas',
-					'clatsop',
-					'columbia',
-					'coos',
-					'crook',
-					'curry',
-					'deschutes',
-					'douglas',
-					'gilliam',
-					'grant',
-					'harney',
-					'hood river',
-					'jackson',
-					'jefferson',
-					'josephine',
-					'klamath',
-					'lake',
-					'lane',
-					'lincoln',
-					'linn',
-					'malheur',
-					'marion',
-					'morrow',
-					'multnomah',
-					'polk',
-					'sherman',
-					'tillamook',
-					'umatilla',
-					'union',
-					'wallowa',
-					'wasco',
-					'washington',
-					'wheeler',
-					'yamhill',
-					'clark',
-					'cowlitz',
-					'skamania',
-					'wahkiakum',
-				];
-				if (countiesORWA.includes(county.toLowerCase())) {
-					setIsValidCounty(true);
-				} else {
-					setIsValidCounty(false);
-				}
-			});
-	};
+	// const countyAPICall = async () => {
+	// 	await fetch(
+	// 		/*https://cors-anywhere.herokuapp.com/ need to be removed for production. For testing purposes in localhost
+    //   this proxy prevents cors errors from being thrown by chrome. When the project is hosted somewhere, these errors
+    //   won't be an issue.*/
+	// 		`https://cors-anywhere.herokuapp.com/https://api.census.gov/data/timeseries/poverty/saipe?get=NAME&for=county:*&in=state:41,53&time=2018&key=${CensusAPIKey}`,
+	// 		{
+	// 			crossDomain: true,
+	// 			method: 'GET',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 		}
+	// 	)
+	// 		.then((result) => {
+	// 			return result.json();
+	// 		})
+	// 		.then((data) => {
+	// 			const countiesORWA = [];
+	// 			data.forEach((el) =>
+	// 				countiesORWA.push(
+	// 					el[0].toLowerCase().split('').reverse().slice(7).reverse().join('')
+	// 				)
+	// 			);
+	// 			countiesORWA.shift();
+	// 			if (countiesORWA.includes(county.toLowerCase())) {
+	// 				setIsValidCounty(true);
+	// 			} else {
+	// 				setIsValidCounty(false);
+	// 			}
+	// 		})
+	// 		//Hardcoding here is a backup list of all counties serviced in case api fails.
+	// 		.catch((err) => {
+	// 			const countiesORWA = [
+	// 				'baker',
+	// 				'benton',
+	// 				'clackamas',
+	// 				'clatsop',
+	// 				'columbia',
+	// 				'coos',
+	// 				'crook',
+	// 				'curry',
+	// 				'deschutes',
+	// 				'douglas',
+	// 				'gilliam',
+	// 				'grant',
+	// 				'harney',
+	// 				'hood river',
+	// 				'jackson',
+	// 				'jefferson',
+	// 				'josephine',
+	// 				'klamath',
+	// 				'lake',
+	// 				'lane',
+	// 				'lincoln',
+	// 				'linn',
+	// 				'malheur',
+	// 				'marion',
+	// 				'morrow',
+	// 				'multnomah',
+	// 				'polk',
+	// 				'sherman',
+	// 				'tillamook',
+	// 				'umatilla',
+	// 				'union',
+	// 				'wallowa',
+	// 				'wasco',
+	// 				'washington',
+	// 				'wheeler',
+	// 				'yamhill',
+	// 				'clark',
+	// 				'cowlitz',
+	// 				'skamania',
+	// 				'wahkiakum',
+	// 			];
+	// 			if (countiesORWA.includes(county.toLowerCase())) {
+	// 				setIsValidCounty(true);
+	// 			} else {
+	// 				setIsValidCounty(false);
+	// 			}
+	// 		});
+	// };
 
-	const goBehavior = async () => {
-		await countyAPICall();
-		await setDoValidation(true);
-		await setDoValidation(false);
-	};
+	// const goBehavior = async () => {
+	// 	await countyAPICall();
+	// 	await setDoValidation(true);
+	// 	await setDoValidation(false);
+	// };
 
 	const isPageDataValid = () => {
 		// console.log(validCounty(fieldSelectorContext.county).valid);
@@ -356,7 +356,7 @@ const FieldSelector = (props) => {
 		<div className={'field-selector ' + themeContext}>
 			<SearchBar
 				apiCategories={apiCategories}
-				goBehavior={goBehavior}
+				// goBehavior={goBehavior}
 				isPageDataValid={isPageDataValid}
 				setResources={props.setResources}
 				handleIsLoading={handleIsLoading}
@@ -451,7 +451,7 @@ const FieldSelector = (props) => {
 			</button>
 
 			<SubmitButton
-				goBehavior={goBehavior}
+				// goBehavior={goBehavior}
 				isPageDataValid={isPageDataValid}
 				handleIsLoading={handleIsLoading}
 			/>

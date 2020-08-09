@@ -20,7 +20,7 @@ class APIWrapper {
 		//check localstorage for sessionId and if present, use it for credentials, otherwise, get new sessionId to use for credentials
 		if (JSON.parse(localStorage.getItem('sessionId'))) {
 			this.credentials['sid'] = localStorage.getItem('sessionId')[0].session_id;
-			console.log('API initalized, sessionId set from localStorage')
+			// console.log('API initalized, sessionId set from localStorage')
 		} else {
 			let data = await this.getSessionID();
 			this.credentials['sid'] = data[0]['session_id'];

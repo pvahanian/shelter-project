@@ -129,7 +129,6 @@ const CategorySelector = (props) => {
 			buttonState={props.buttonState}
 			handleButtonStateChange={props.handleButtonStateChange}
 			items={categories}
-			// onChange={props.onChange}
 			appendCategory={appendCategory}
 			key={i}
 			row={i}

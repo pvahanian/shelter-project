@@ -22,7 +22,6 @@ const API = new APIWrapper(APIKey);
 
 const FieldSelector = (props) => {
 	const themeContext = useContext(ThemeContext);
-	const apiDataContext = useContext(ApiDataContext)
 	const fieldSelectorContext = useContext(FieldSelectorContext)
 	const [apiCategories, setApiCategories] = useState([]);
 
@@ -330,7 +329,8 @@ const FieldSelector = (props) => {
 			handleCatIDChange(catID);
 			// handleServiceChange(serviceName);
 			fieldSelectorContext.setServiceName(serviceName)
-			handleButtonStateChange(buttonState);
+			// handleButtonStateChange(buttonState);
+			fieldSelectorContext.setButtonState(buttonState)
 		}
 	}, []);
 

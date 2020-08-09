@@ -10,6 +10,7 @@ import '../Assets/ExclusiveOption.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
 import { ThemeContext } from '../ThemeContext';
 import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
+import FieldSelectorState from './context/fieldSelectorContext/FieldSelectorState';
 
 const ExclusiveGroup = (props) => {
 	const [selected, setSelected] = useState(props.default ? props.default : '');
@@ -40,8 +41,16 @@ const ExclusiveGroup = (props) => {
 					...props.buttonState,
 					category: data.label,
 				});
+				fieldSelectorContext.setButtonState({
+					...props.buttonState,
+					category: data.label,
+				});
 			} else if (row === 1) {
 				props.handleButtonStateChange({
+					...props.buttonState,
+					subCat: [{ ...props.buttonState.subCat[0], subCategory: data.label }],
+				});
+				fieldSelectorContext.setButtonState({
 					...props.buttonState,
 					subCat: [{ ...props.buttonState.subCat[0], subCategory: data.label }],
 				});
@@ -55,9 +64,22 @@ const ExclusiveGroup = (props) => {
 						},
 					],
 				});
+				fieldSelectorContext.setButtonState({
+					...props.buttonState,
+					subCat: [
+						{
+							...props.buttonState.subCat[0],
+							subCatTerm: [{ sterm: data.label }],
+						},
+					],
+				});
 			}
 		} else {
 			props.handleButtonStateChange({
+				...props.buttonState,
+				category: data.label,
+			});
+			FieldSelectorState.setButtonState({
 				...props.buttonState,
 				category: data.label,
 			});

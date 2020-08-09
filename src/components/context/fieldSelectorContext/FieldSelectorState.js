@@ -38,7 +38,10 @@ export const FieldSelectorState = (props) => {
 		<FieldSelectorContext.Provider
 			value={{
                 serviceName: state.serviceName,
-                setServiceName
+                setServiceName,
+                buttonState: state.buttonState,
+                setButtonState,
+
 			}}>
 			{props.children}
 		</FieldSelectorContext.Provider>

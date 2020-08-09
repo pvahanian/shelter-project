@@ -19,9 +19,11 @@ export const FieldSelectorState = (props) => {
         categoryId: '',
         categorySelected: '',
         county: '',
-        zipcode: '',
+        zipCode: '',
         familySize: '',
-        age: ''
+        age: '',
+        gender: '',
+        possibleCounties: ''
 	};
 
 	const [state, dispatch] = useReducer(FieldSelectorReducer, initialState);
@@ -54,6 +56,10 @@ export const FieldSelectorState = (props) => {
     const setAge = (newAge) => {
         dispatch({type: 'SET_AGE', payload: newAge})
     }
+    const setPossibleCounties = (counties) => {
+        console.log(counties)
+        dispatch({type: 'SET_POSSIBLE_COUNTIES', payload: counties })
+    }
 
     
 
@@ -75,12 +81,14 @@ export const FieldSelectorState = (props) => {
                 setGender,
                 county: state.county,
                 setCounty,
-                zipCode: state.zipcode,
+                zipCode: state.zipCode,
                 setZipcode,
                 familySize: state.familySize,
                 setFamilySize,
                 age: state.age,
-                setAge
+                setAge,
+                possibleCounties: state.possibleCounties,
+                setPossibleCounties
 			}}>
 			{props.children}
 		</FieldSelectorContext.Provider>

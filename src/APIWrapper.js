@@ -74,14 +74,14 @@ class APIWrapper {
 
 	async getCountyByZipCode(obj) {
 		let parameters = { ...obj, ...this.credentials };
-		// console.log(parameters);
+		console.log(parameters);
 		let response = await fetch(
 			`https://www.navigateopen.info/pubres/api/GetCounty/?ip=${JSON.stringify(
 				parameters
 			)}`
 		);
 		let data = await response.json();
-		// console.log(data);
+		console.log(data);
 		return data;
 	}
 

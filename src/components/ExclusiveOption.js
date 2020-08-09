@@ -10,7 +10,6 @@ import '../Assets/ExclusiveOption.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
 import { ThemeContext } from '../ThemeContext';
 import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
-import FieldSelectorState from './context/fieldSelectorContext/FieldSelectorState';
 
 const ExclusiveGroup = (props) => {
 	const [selected, setSelected] = useState(props.default ? props.default : '');
@@ -24,15 +23,14 @@ const ExclusiveGroup = (props) => {
 	let invalidEntryMessage = '';
 
 	const handleClick = (event, data, id, row) => {
-		// console.log('here is the data passed into handleClick in exclusive option: ', data, id, row)
+		console.log('here is the data passed into handleClick in exclusive option: ', data, id, row)
 		setSelected(data);
 		if (typeof data === 'string' && props.appendCategory) {
-			console.log('test trigger')
 			fieldSelectorContext.setServiceName(data);
 			props.appendCategory(this.props.row, id);
 		} else if (typeof data === 'string') {
 			//this case is when a gender button is being clicked.
-			// fieldSelectorContext.setServiceName(data);
+			console.log(data)
 			fieldSelectorContext.setGender(data)
 		} else if (props.appendCategory) {
 			fieldSelectorContext.setServiceName(data.label);
@@ -81,7 +79,7 @@ const ExclusiveGroup = (props) => {
 				...props.buttonState,
 				category: data.label,
 			});
-			FieldSelectorState.setButtonState({
+			fieldSelectorContext.setButtonState({
 				...props.buttonState,
 				category: data.label,
 			});
@@ -164,25 +162,27 @@ export default ExclusiveGroup;
 // Child component of ExclusiveGroup
 const ExclusiveButton = (props) => {
 	const context = useContext(ThemeContext);
+	const fieldSelectorContext = useContext(FieldSelectorContext)
 
 	useEffect(() => {
 		//look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
 		if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
+		
 		if (props.row === undefined) {
 			props.handleSetSelected(
-				JSON.parse(localStorage.getItem('submitButtonProps')).gender
+				fieldSelectorContext.gender
 			);
 		}
 
 		if (
 			props.data.label ===
-				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
+				JSON.parse(localStorage.getItem('fsContext')).buttonState
 					.category ||
 			props.data.label ===
-				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
+				JSON.parse(localStorage.getItem('fsContext')).buttonState
 					.subCat[0].subCategory ||
 			props.data.label ===
-				JSON.parse(localStorage.getItem('submitButtonProps')).buttonState
+				JSON.parse(localStorage.getItem('fsContext')).buttonState
 					.subCat[0].subCatTerm[0].sterm
 		) {
 			props.handleSetSelected(props.data);

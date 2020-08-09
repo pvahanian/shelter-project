@@ -5,24 +5,22 @@ import { useHistory } from 'react-router-dom';
 import APIWrapper from '../../APIWrapper.js';
 import ApiDataContext from '../context/apiData/ApiDataContext'
 import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
+
 function SubmitButton(props) {
 	let history = useHistory();
 	const APIKey = process.env.REACT_APP_211_API_KEY;
 	const API = new APIWrapper(APIKey);
 	const apiDataContext = useContext(ApiDataContext)
 	const fieldSelectorContext = useContext(FieldSelectorContext)
-	// console.log('submitButton props: ', props);
 	console.log(fieldSelectorContext)
 	API.initialize();
 	let obj = {
 		sn: fieldSelectorContext.serviceName,
 		st: '',
-		// age: Number(props.age),
 		age: Number(fieldSelectorContext.age),
-		gender: props.gender,
-		zip: Number(props.zip),
-		county: props.county,
-		// catid: props.categoryID,
+		gender: fieldSelectorContext.gender,
+		zip: Number(fieldSelectorContext.zip),
+		county: fieldSelectorContext.county,
 		catid: fieldSelectorContext.categoryId,
 	};
 
@@ -49,16 +47,16 @@ function SubmitButton(props) {
 				//If subestCategory selected
 				//Make getResource call with service name data
 
-				if (props.categorySelected === 3) {
+				if (fieldSelectorContext.categorySelected === 3) {
 					obj['st'] = 's';
-					console.log(props.categorySelected);
+					console.log(fieldSelectorContext.categorySelected);
 					console.log(obj);
 					apiDataContext.setResources(await API.getResource(obj));
-				} else if (props.categorySelected === 2) {
+				} else if (fieldSelectorContext.categorySelected === 2) {
 					obj['st'] = 'sc';
 					obj['sn'] = '';
 					console.log(obj);
-					console.log(props.categorySelected);
+					console.log(fieldSelectorContext.categorySelected);
 					apiDataContext.setResources(await API.getResource(obj));
 				} else {
 					obj['st'] = 'c';

@@ -13,8 +13,8 @@ import CategorySelector from './categorySelector/categorySelector.js';
 import CountySelect from './CountySelect';
 import Spinner from '../Assets/spinner.gif';
 import SearchBar from './SearchBar/SearchBar';
-import ApiDataContext from './context/apiData/ApiDataContext'
-import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
+import ApiDataContext from './context/apiData/ApiDataContext';
+import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext';
 const CensusAPIKey = process.env.REACT_APP_CENSUS_API_KEY;
 
 const APIKey = process.env.REACT_APP_211_API_KEY;
@@ -22,7 +22,8 @@ const API = new APIWrapper(APIKey);
 
 const FieldSelector = (props) => {
 	const themeContext = useContext(ThemeContext);
-	const fieldSelectorContext = useContext(FieldSelectorContext)
+	const fieldSelectorContext = useContext(FieldSelectorContext);
+	const apiDataContext = useContext(ApiDataContext);
 	const [apiCategories, setApiCategories] = useState([]);
 
 	async function callAPI() {
@@ -134,12 +135,12 @@ const FieldSelector = (props) => {
 	};
 
 	const getAllPossibleCountiesByZip = async (zip) => {
-		setZipCode(zip); // redundent?
+		fieldSelectorContext.setZipcode(zip); 
 		if (validZIP(zip).valid) {
 			await API.getCountyByZipCode({
-				zip: zipCode,
+				zip: fieldSelectorContext.zipCode,
 			}).then((data) => {
-				setPossibleCounties(
+				fieldSelectorContext.setPossibleCounties(
 					Object.values(data).map((value) => {
 						return value['county'];
 					})
@@ -147,9 +148,6 @@ const FieldSelector = (props) => {
 			});
 		}
 
-		// if (fieldSelectorState.zip.length < 6) {
-		// 	setFieldSelectorState({ ...fieldSelectorState, possibleCounties: '' });
-		// }
 	};
 
 	const validZIP = (zip) => {
@@ -171,8 +169,6 @@ const FieldSelector = (props) => {
 	};
 
 	const validCounty = (county) => {
-		// console.log(county);
-		// console.log(isValidCounty);
 		let valid = null;
 		let message = '';
 		if (!county) {
@@ -186,12 +182,10 @@ const FieldSelector = (props) => {
 
 	const findLocation = () => {
 		// console.log(
-			"Then we'd try to find their location using a Google API. For now..."
+		"Then we'd try to find their location using a Google API. For now...";
 		// );
-		setZipCode('97206');
-		fieldSelectorContext.setZipcode('97206')
-		setCounty('Clackamas');
-		fieldSelectorContext.setCounty('Clackamas')
+		fieldSelectorContext.setZipcode('97206');
+		fieldSelectorContext.setCounty('Clackamas');
 	};
 
 	const onlyNumbers = (str) => {
@@ -290,83 +284,71 @@ const FieldSelector = (props) => {
 	};
 
 	const isPageDataValid = () => {
-		// console.log(validCounty(county).valid);
+		// console.log(validCounty(fieldSelectorContext.county).valid);
+		// console.log(validGender(fieldSelectorContext.gender).valid);
+		// console.log(validAge(fieldSelectorContext.age).valid);
+		// console.log(validZIP(fieldSelectorContext.zipCode).valid);
+		// console.log(validFamilySize(fieldSelectorContext.familySize).valid);
 		return (
-			validCounty(county).valid &&
-			validGender(gender).valid &&
-			validAge(age).valid &&
-			validZIP(zipCode).valid &&
-			validFamilySize(familySize).valid
+			validCounty(fieldSelectorContext.county).valid &&
+			validGender(fieldSelectorContext.gender).valid &&
+			validAge(fieldSelectorContext.age).valid &&
+			validZIP(fieldSelectorContext.zipCode).valid &&
+			validFamilySize(fieldSelectorContext.familySize).valid
 		);
 	};
 
 	useEffect(() => {
 		// console.log('trigger useEffect1');
 		callAPI();
-		console.log(JSON.parse(localStorage.getItem('fsContext')))
-		if (JSON.parse(localStorage.getItem('submitButtonProps'))) {
+		if (JSON.parse(localStorage.getItem('fsContext'))) {
 			const age = JSON.parse(localStorage.getItem('fsContext')).age;
-		
 			const familySize = JSON.parse(localStorage.getItem('fsContext'))
 				.familySize;
-	
-			const zipcode = JSON.parse(localStorage.getItem('fsContext'))
-				.zipCode;
-
-			const county = JSON.parse(localStorage.getItem('fsContext'))
-				.county;
-
-			const gender = JSON.parse(localStorage.getItem('fsContext'))
-				.gender;
-
-			const categorySelected = JSON.parse(
-				localStorage.getItem('fsContext')
-			).categorySelected;
-
+			const zipcode = JSON.parse(localStorage.getItem('fsContext')).zipCode;
+			const county = JSON.parse(localStorage.getItem('fsContext')).county;
+			const gender = JSON.parse(localStorage.getItem('fsContext')).gender;
+			const categorySelected = JSON.parse(localStorage.getItem('fsContext'))
+				.categorySelected;
 			const catID = JSON.parse(localStorage.getItem('fsContext')).categoryId;
-			
 			const serviceName = JSON.parse(localStorage.getItem('fsContext'))
 				.serviceName;
-
 			const buttonState = JSON.parse(localStorage.getItem('fsContext'))
 				.buttonState;
-
-			fieldSelectorContext.setAge(age)
-			fieldSelectorContext.setFamilySize(familySize)
+			fieldSelectorContext.setAge(age);
+			fieldSelectorContext.setFamilySize(familySize);
 			fieldSelectorContext.setZipcode(zipcode);
-			// handleCountyChange(county);
-			fieldSelectorContext.setCounty(county)
-			fieldSelectorContext.setGender(gender)
+			fieldSelectorContext.setCounty(county);
+			fieldSelectorContext.setGender(gender);
 			fieldSelectorContext.setCategorySelected(categorySelected);
-			fieldSelectorContext.setCategoryId(catID)
-			fieldSelectorContext.setServiceName(serviceName)
-			fieldSelectorContext.setButtonState(buttonState)
+			fieldSelectorContext.setCategoryId(catID);
+			fieldSelectorContext.setServiceName(serviceName);
+			fieldSelectorContext.setButtonState(buttonState);
 		}
 	}, []);
 
 	useEffect(() => {
-		// console.log('trigger useEffect2');
 		const handleValidZip = async () => {
-			if (validZIP(zipCode).valid) {
-				// console.log('trigger valid zipcode');
+			if (validZIP(fieldSelectorContext.zipCode).valid) {
+				console.log('trigger valid zipcode');
 				await API.getCountyByZipCode({
-					zip: zipCode,
+					zip: fieldSelectorContext.zipCode,
 				})
 					.then((data) => {
-						setCounty(data[0]['county']);
-						getAllPossibleCountiesByZip(zipCode);
+						fieldSelectorContext.setCounty(data[0]['county']);/////////////////
+						getAllPossibleCountiesByZip(fieldSelectorContext.zipCode);
 					})
 					.catch((err) => {
 						// TODO: we'll probably want to take action here to resolve the error
-						// console.log(err);
+						console.log(err);
 					});
 			}
 		};
 
 		handleValidZip();
-	}, [zipCode]);
+	}, [fieldSelectorContext.zipCode]);
 
-	if (apiCategories.length === 0 || isLoading) {
+	if (apiDataContext.categories.length === 0 || isLoading) {
 		return <img src={Spinner} style={{ width: '200px' }} />;
 	}
 
@@ -375,13 +357,11 @@ const FieldSelector = (props) => {
 			<SearchBar
 				apiCategories={apiCategories}
 				goBehavior={goBehavior}
-				changeAPIData={props.changeAPIData}
 				isPageDataValid={isPageDataValid}
 				setResources={props.setResources}
 				handleIsLoading={handleIsLoading}
 				handleServiceChange={handleServiceChange}
 				serviceName={serviceName}
-				serviceName={fieldSelectorContext.serviceName}
 				categoryID={categoryID}
 				categorySelected={categorySelected}
 				age={age}
@@ -394,17 +374,8 @@ const FieldSelector = (props) => {
 
 			<InputLabel label='Service'>
 				<CategorySelector
-					handleServiceChange={handleServiceChange}
 					handleButtonStateChange={handleButtonStateChange}
 					buttonState={buttonState}
-					// apiCategories={apiCategories}
-					// apiCategories={apiDataContext.categories}
-					// handleCatIDChange={handleCatIDChange}
-					handleCatIDChange={fieldSelectorContext.setCategoryId}
-					handleCategorySelected={handleCategorySelected}
-					categorySelected={categorySelected}
-					// catID={categoryID}
-					catID={fieldSelectorContext.categoryId}
 				/>
 			</InputLabel>
 
@@ -413,20 +384,17 @@ const FieldSelector = (props) => {
 					items={['Male', 'Female', 'Trans Male', 'Trans Female']}
 					validator={validGender}
 					shouldValidate={doValidation}
-					onChange={handleGenderChange}
 				/>
 			</InputLabel>
 
 			<InputLabel label='Age'>
 				<TextInput
 					name='Age'
-					// value={age}
 					value={fieldSelectorContext.age}
 					filter={onlyNumbers}
 					validator={validAge}
 					placeholder='32'
-					onChange={handleAgeChange}
-					contextAgeChange={fieldSelectorContext.setAge}
+					onChange={fieldSelectorContext.setAge}
 					shouldValidate={doValidation}
 				/>
 			</InputLabel>
@@ -435,38 +403,32 @@ const FieldSelector = (props) => {
 				<InputLabel label='ZIP'>
 					<TextInput
 						name='ZIP'
-						// value={zipCode}
 						value={fieldSelectorContext.zipCode}
 						filter={onlyNumbers}
 						validator={validZIP}
 						placeholder='97333'
-						onChange={handleZIPChange}
-						contextZipChange={fieldSelectorContext.setZipcode}
+						onChange={fieldSelectorContext.setZipcode}
 						shouldValidate={doValidation}
 					/>
 				</InputLabel>
-
-				{possibleCounties ? (
+				{fieldSelectorContext.possibleCounties ? (
 					<InputLabel label='County'>
 						<CountySelect
 							name='County'
 							value={fieldSelectorContext.county}
 							validator={validCounty}
-							onChange={handleCountyChange}
-							contextCountyChange={fieldSelectorContext.setCounty}
+							onChange={fieldSelectorContext.setCounty}
 							shouldValidate={doValidation}
-							counties={possibleCounties}></CountySelect>
+							counties={fieldSelectorContext.possibleCounties}></CountySelect>
 					</InputLabel>
 				) : (
 					<InputLabel label='County'>
 						<TextInput
 							name='County'
-							// value={county}
 							value={fieldSelectorContext.county}
 							validator={validCounty}
 							placeholder='Multnomah'
-							onChange={handleCountyChange}
-							contextCountyChange={fieldSelectorContext.setCounty}
+							onChange={fieldSelectorContext.setCounty}
 							shouldValidate={doValidation}
 						/>
 					</InputLabel>
@@ -475,12 +437,10 @@ const FieldSelector = (props) => {
 				<InputLabel label='Family Size'>
 					<TextInput
 						name='famliysize'
-						// value={familySize}
 						value={fieldSelectorContext.familySize}
 						validator={validFamilySize}
 						placeholder='How many people are in your family?'
-						onChange={handleFamilySizeChange}
-						contextFamilyChange={fieldSelectorContext.setFamilySize}
+						onChange={fieldSelectorContext.setFamilySize}
 						shouldValidate={doValidation}
 					/>
 				</InputLabel>
@@ -492,20 +452,8 @@ const FieldSelector = (props) => {
 
 			<SubmitButton
 				goBehavior={goBehavior}
-				changeAPIData={props.changeAPIData}
 				isPageDataValid={isPageDataValid}
-				// setResources={props.setResources}
-				apiCategories={apiCategories}
 				handleIsLoading={handleIsLoading}
-				serviceName={serviceName}
-				categoryID={categoryID}
-				categorySelected={categorySelected}
-				age={age}
-				familySize={familySize}
-				zipCode={zipCode}
-				county={county}
-				gender={gender}
-				buttonState={buttonState}
 			/>
 		</div>
 	);

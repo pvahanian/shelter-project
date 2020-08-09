@@ -6,6 +6,7 @@ import { ThemeContext } from '../../ThemeContext';
 
 import ApiDataContext from '../context/apiData/ApiDataContext'
 import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
+import FieldSelectorState from '../context/fieldSelectorContext/FieldSelectorState';
 
 const CategorySelector = (props) => {
 	const themeContext = useContext(ThemeContext);
@@ -21,7 +22,7 @@ const CategorySelector = (props) => {
 		);
 		setCategories([labelsWithImages]);
 
-		//look for categorySelector in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
+		//look for categorySelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
 		if (JSON.parse(localStorage.getItem('categories')))
 			setCategories(JSON.parse(localStorage.getItem('categories')));
 
@@ -60,9 +61,7 @@ const CategorySelector = (props) => {
 			localStorage.setItem('categories', JSON.stringify(categories));
 			localStorage.setItem('keyz', JSON.stringify(keyz));
 
-			props.handleCatIDChange('');
-			fieldSelectorContext.setCategoryId('')
-			props.handleCategorySelected(3);
+			fieldSelectorContext.setCategoryId('');
 			fieldSelectorContext.setCategorySelected(3)
 
 			return;
@@ -78,9 +77,7 @@ const CategorySelector = (props) => {
 			setKey(id);
 			localStorage.setItem('categories', JSON.stringify(newCategory));
 			localStorage.setItem('keyz', JSON.stringify(keyz));
-			props.handleCatIDChange(apiDataContext.categories[id]['categoryID']);
-			fieldSelectorContext.setCategoryId(apiDataContext.categories[id]['categoryID'])
-			props.handleCategorySelected(1);
+			fieldSelectorContext.setCategoryId(apiDataContext.categories[id]['categoryID']);
 			fieldSelectorContext.setCategorySelected(1)
 		}
 		//subcategory has been selectd. Show subbestCategory.
@@ -93,14 +90,22 @@ const CategorySelector = (props) => {
 				setCategories(newCategory);
 				localStorage.setItem('categories', JSON.stringify(newCategory));
 				localStorage.setItem('keyz', JSON.stringify(keyz));
-				props.handleCatIDChange(
+				fieldSelectorContext.setCategoryId(
 					apiDataContext.categories[keyz[0]]['subcat'][id]['subcategoryID']
 				);
 				fieldSelectorContext.setCategoryId(apiDataContext.categories[keyz[0]]['subcat'][id]['subcategoryID'])
 				setKey(id);
-				props.handleCategorySelected(2);
 				fieldSelectorContext.setCategorySelected(2)
 				props.handleButtonStateChange({
+					...props.buttonState,
+					subCat: [
+						{
+							...props.buttonState.subCat[0],
+							subCatTerm: [{ sterm: null }],
+						},
+					],
+				});
+				fieldSelectorContext.setButtonState({
 					...props.buttonState,
 					subCat: [
 						{

@@ -13,6 +13,8 @@ class CountySelect extends React.Component {
   render () {
     let value = this.props.value
 
+    console.log('countySelect Trigger')
+    console.log(this.props)
     return (
 
       <select

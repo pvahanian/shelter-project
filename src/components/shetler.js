@@ -11,7 +11,6 @@ const Shelters = ({ shelters }) => {
   console.log(apiDataContext)
 	return (
 		<div>
-			{/* {console.log(shelters)} */}
 			<h1> Relevant Shelters </h1>
 			<ul className='shetlerList'>
 				{apiDataContext.resources &&
@@ -20,12 +19,6 @@ const Shelters = ({ shelters }) => {
 							<ShelterCard {...resource} />
 						</li>
 					))}
-				{/* {shelters &&
-					shelters.map((shelter) => (
-						<li key={shelter.Id}>
-							<ShelterCard {...shelter} />
-						</li>
-					))} */}
 			</ul>
 		</div>
 	);

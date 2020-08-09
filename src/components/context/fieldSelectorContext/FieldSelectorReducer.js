@@ -9,7 +9,6 @@ const FieldSelectorReducer = (state, action) => {
 		case 'SET_CATEGORY_ID':
 			return { ...state, categoryId: action.payload };
 		case 'SET_CATEGORY_SELECTED':
-			console.log(action.payload)
 			return { ...state, categorySelected: action.payload };
 		case 'SET_GENDER':
 			return { ...state, gender: action.payload };
@@ -20,7 +19,10 @@ const FieldSelectorReducer = (state, action) => {
 		case 'SET_AGE':
 			return { ...state, age: action.payload };
 		case 'SET_ZIPCODE':
-			return { ...state, zipcode: action.payload };
+			return { ...state, zipCode: action.payload };
+		case 'SET_POSSIBLE_COUNTIES':
+			console.log(action.payload)
+			return { ...state, possibleCounties: action.payload };
 
 		default:
 			return;

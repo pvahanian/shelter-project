@@ -106,7 +106,8 @@ const ExclusiveGroup = (props) => {
 		if (validityObject.valid === true) invalidEntryMessage = '';
 	};
 
-	if (props.shouldValidate) validate();
+	// if (props.shouldValidate) validate();
+	if (fieldSelectorContext.doValidation) validate();
 	if (typeof props.appendCategory == 'function') {
 		return (
 			<div className='exclusive-group-container'>

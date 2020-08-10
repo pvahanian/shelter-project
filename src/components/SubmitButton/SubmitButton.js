@@ -1,20 +1,21 @@
+/** @format */
 
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import './SubmitButton.css';
 import { useHistory } from 'react-router-dom';
 import APIWrapper from '../../APIWrapper.js';
-import ApiDataContext from '../context/apiData/ApiDataContext'
+import ApiDataContext from '../context/apiData/ApiDataContext';
 import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
 
 function SubmitButton(props) {
 	let history = useHistory();
 	const APIKey = process.env.REACT_APP_211_API_KEY;
 	const API = new APIWrapper(APIKey);
-	const apiDataContext = useContext(ApiDataContext)
-	const fieldSelectorContext = useContext(FieldSelectorContext)
+	const apiDataContext = useContext(ApiDataContext);
+	const fieldSelectorContext = useContext(FieldSelectorContext);
 
-	console.log(fieldSelectorContext)
-	
+	console.log(fieldSelectorContext);
+
 	API.initialize();
 	let obj = {
 		sn: fieldSelectorContext.serviceName,
@@ -26,16 +27,18 @@ function SubmitButton(props) {
 		catid: fieldSelectorContext.categoryId,
 	};
 
+
 	async function handleClick() {
 		console.log('trigger submit');
-		console.log(fieldSelectorContext)
+		console.log(fieldSelectorContext);
 		try {
 			props.handleIsLoading();
 			// await props.goBehavior();
-			await fieldSelectorContext.goBehavior()
-			console.log(props.isPageDataValid());
-			if (props.isPageDataValid()) {
-
+			await fieldSelectorContext.goBehavior();
+			// console.log(props.isPageDataValid());
+			// console.log(fieldSelectorContext.validCounty)
+			// console.log(fieldSelectorContext.isPageDataValid())
+			if (fieldSelectorContext.isPageDataValid()) {
 				//save submit button state to local storage for use if / when user navigates backwards
 				localStorage.setItem('submitButtonProps', JSON.stringify(props));
 				localStorage.setItem('fsContext', JSON.stringify(fieldSelectorContext));

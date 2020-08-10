@@ -1,4 +1,3 @@
-/** @format */
 
 import React, { useState, useContext, useEffect } from 'react';
 import ExclusiveOption from '../ExclusiveOption';

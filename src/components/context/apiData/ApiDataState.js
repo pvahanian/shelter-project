@@ -28,6 +28,7 @@ export const ApiDataState = (props) => {
 
 
     useEffect( () => { 
+		
         const getCategories = async () => {
             const categories = await api.getCategories()
             setCategories(categories)

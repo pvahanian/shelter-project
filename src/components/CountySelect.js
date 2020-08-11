@@ -31,7 +31,6 @@ const CountySelect = (props) =>  {
        counties = {fieldSelectorContext.counties}
       >
         <option value = '' disabled>Choose your county:</option>
-        {/* {props.counties.map((county,index) => { */}
         {fieldSelectorContext.possibleCounties.map((county,index) => {
           return (
             <option key = {index} value = {county}>{county}</option>

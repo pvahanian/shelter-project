@@ -37,50 +37,33 @@ const ExclusiveGroup = (props) => {
 			props.appendCategory(props.row, id);
 			//save service button selections to buttonState, which in turn is saved to localstorage on form submit
 			if (row === 0) {
-				props.handleButtonStateChange({
-					...props.buttonState,
-					category: data.label,
-				});
+
 				fieldSelectorContext.setButtonState({
-					...props.buttonState,
+					...fieldSelectorContext.buttonState,
 					category: data.label,
 				});
 			} else if (row === 1) {
-				props.handleButtonStateChange({
-					...props.buttonState,
-					subCat: [{ ...props.buttonState.subCat[0], subCategory: data.label }],
-				});
+	
 				fieldSelectorContext.setButtonState({
-					...props.buttonState,
-					subCat: [{ ...props.buttonState.subCat[0], subCategory: data.label }],
+					...fieldSelectorContext.buttonState,
+					subCat: [{ ...fieldSelectorContext.buttonState.subCat[0], subCategory: data.label }],
 				});
 			} else {
-				props.handleButtonStateChange({
-					...props.buttonState,
-					subCat: [
-						{
-							...props.buttonState.subCat[0],
-							subCatTerm: [{ sterm: data.label }],
-						},
-					],
-				});
+
 				fieldSelectorContext.setButtonState({
-					...props.buttonState,
+					...fieldSelectorContext.buttonState,
 					subCat: [
 						{
-							...props.buttonState.subCat[0],
+							...fieldSelectorContext.buttonState.subCat[0],
 							subCatTerm: [{ sterm: data.label }],
 						},
 					],
 				});
 			}
 		} else {
-			props.handleButtonStateChange({
-				...props.buttonState,
-				category: data.label,
-			});
+
 			fieldSelectorContext.setButtonState({
-				...props.buttonState,
+				...fieldSelectorContext.buttonState,
 				category: data.label,
 			});
 			fieldSelectorContext.setServiceName(data.label);

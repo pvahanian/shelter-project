@@ -13,7 +13,6 @@ const FieldSelectorReducer = (state, action) => {
 		case 'SET_GENDER':
 			return { ...state, gender: action.payload };
 		case 'SET_COUNTY':
-			console.log('trigger set county', action.payload)
 			return { ...state, county: action.payload };
 		case 'SET_FAMILY_SIZE':
 			return { ...state, familySize: action.payload };
@@ -24,15 +23,19 @@ const FieldSelectorReducer = (state, action) => {
 		case 'SET_POSSIBLE_COUNTIES':
 			return { ...state, possibleCounties: action.payload };
 		case 'SET_VALID_COUNTY':
-			console.log('trigger valid county' , action.payload)
 			return { ...state, validCounty: action.payload };
 		case 'SET_DO_VALIDATION':
-			console.log('trigger dovalidation')
 			return { ...state, doValidation: action.payload };
 		case 'SET_IS_COUNTY_VALID':
 			return { ...state, isCountyValid: action.payload };
 		case 'SET_IS_ZIP_CODE_VALID':
 			return { ...state, isZipCodeValid: action.payload };
+		case 'SET_IS_AGE_VALID':
+			return { ...state, isAgeValid: action.payload };
+		case 'SET_IS_FAMILY_SIZE_VALID':
+			return { ...state, isFamilySizeValid: action.payload };
+		case 'SET_IS_GENDER_VALID':
+			return { ...state, isFamilySizeValid: action.payload };
 
 
 

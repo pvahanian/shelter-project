@@ -31,30 +31,6 @@ const FieldSelector = (props) => {
 		setIsLoading(!isLoading);
 	};
 
-	const [buttonState, setButtonState] = useState({
-		category: '',
-		subCat: [{ subCategory: '', subCatTerm: [{ sterm: '' }] }],
-	});
-
-	const handleButtonStateChange = (newState) => {
-		setButtonState(newState);
-	};
-
-	const getAllPossibleCountiesByZip = async (zip) => {
-		fieldSelectorContext.setZipcode(zip); 
-		if (fieldSelectorContext.setIsZipCodeValid(zip).valid) {
-			await API.getCountyByZipCode({
-				zip: fieldSelectorContext.zipCode,
-			}).then((data) => {
-				fieldSelectorContext.setPossibleCounties(
-					Object.values(data).map((value) => {
-						return value['county'];
-					})
-				);
-			});
-		}
-
-	};
 
 	const findLocation = () => {
 		// // console.log(
@@ -64,17 +40,8 @@ const FieldSelector = (props) => {
 		fieldSelectorContext.setCounty('Clackamas');
 	};
 
-	const onlyNumbers = (str) => {
-		let characterArray = str.split('');
-		let numberArray = characterArray.filter(
-			(character) => '0123456789'.indexOf(character) !== -1
-		);
-		return numberArray.join('');
-	};
-
 	//restores form state upon backwards navigation
 	useEffect(() => {
-		// console.log('trigger useEffect1');
 		callAPI();
 		if (JSON.parse(localStorage.getItem('fsContext'))) {
 			const age = JSON.parse(localStorage.getItem('fsContext')).age;
@@ -102,15 +69,21 @@ const FieldSelector = (props) => {
 		}
 	}, []);
 
+
+	//monitors the state of fieldSelector.zipCode. When it becomes a valid zip, 
+	//an api call is made to populate an array with all the possible counties that zipcode could be in.
 	useEffect(() => {
 		const handleValidZip = async () => {
-			if (fieldSelectorContext.setIsZipCodeValid(fieldSelectorContext.zipCode).valid) {
+			if (
+				fieldSelectorContext.setIsZipCodeValid(fieldSelectorContext.zipCode)
+					.valid
+			) {
 				await API.getCountyByZipCode({
 					zip: fieldSelectorContext.zipCode,
 				})
 					.then((data) => {
-						fieldSelectorContext.setCounty(data[0]['county']);/////////////////
-						getAllPossibleCountiesByZip(fieldSelectorContext.zipCode);
+						fieldSelectorContext.setCounty(data[0]['county']); 
+						fieldSelectorContext.getAllPossibleCountiesByZip(fieldSelectorContext.zipCode);
 					})
 					.catch((err) => {
 						// TODO: we'll probably want to take action here to resolve the error
@@ -118,96 +91,67 @@ const FieldSelector = (props) => {
 					});
 			}
 		};
-
 		handleValidZip();
 	}, [fieldSelectorContext.zipCode]);
 
+	//return a spinner while waiting for data from api to populate category buttons
 	if (apiDataContext.categories.length === 0 || isLoading) {
 		return <img src={Spinner} style={{ width: '200px' }} />;
 	}
 
 	return (
 		<div className={'field-selector ' + themeContext}>
-			<SearchBar
-				apiCategories={apiDataContext.categories}
-				// isPageDataValid={isPageDataValid} // get it from context later
-				setResources={apiDataContext.setResources}
-				handleIsLoading={handleIsLoading}
-				handleServiceChange={fieldSelectorContext.setService}
-				serviceName={fieldSelectorContext.serviceName}
-				categoryID={fieldSelectorContext.categoryID}
-				categorySelected={fieldSelectorContext.categorySelected}
-				age={fieldSelectorContext.age}
-				familySize={fieldSelectorContext.familySize}
-				zipCode={fieldSelectorContext.zipCode}
-				county={fieldSelectorContext.county}
-				gender={fieldSelectorContext.gender}
-				buttonState={fieldSelectorContext.buttonState}
-			/>
-
+			<SearchBar handleIsLoading={handleIsLoading} />
 			<InputLabel label='Service'>
-				<CategorySelector
-					handleButtonStateChange={handleButtonStateChange}
-					buttonState={buttonState}
-				/>
+				<CategorySelector />
 			</InputLabel>
-
 			<InputLabel label='Gender'>
 				<ExclusiveOption
 					items={['Male', 'Female', 'Trans Male', 'Trans Female']}
-					validator={fieldSelectorContext.setIsValidGender}
+					validator={fieldSelectorContext.setIsGenderValid}
 				/>
 			</InputLabel>
-
 			<InputLabel label='Age'>
 				<TextInput
-					name='Age'
+					name='age'
 					value={fieldSelectorContext.age}
-					filter={onlyNumbers}
 					validator={fieldSelectorContext.setIsAgeValid}
 					placeholder='32'
-					onChange={fieldSelectorContext.setAge}
-					shouldValidate={fieldSelectorContext.doValidation}
+					// onChange={fieldSelectorContext.setAge}
 				/>
 			</InputLabel>
-
 			<div id='zip-and-county'>
 				<InputLabel label='ZIP'>
 					<TextInput
-						name='ZIP'
+						name='zip'
 						value={fieldSelectorContext.zipCode}
-						filter={onlyNumbers}
 						validator={fieldSelectorContext.setIsZipCodeValid}
 						placeholder='97333'
-						onChange={fieldSelectorContext.setZipcode}
-						shouldValidate={fieldSelectorContext.doValidation}
+						// onChange={fieldSelectorContext.setZipcode}
 					/>
 				</InputLabel>
 				{fieldSelectorContext.possibleCounties ? (
 					<InputLabel label='County'>
-						<CountySelect name='County'/>
+						<CountySelect name='County' />
 					</InputLabel>
 				) : (
 					<InputLabel label='County'>
 						<TextInput
-							name='County'
+							name='county'
 							value={fieldSelectorContext.county}
 							validator={fieldSelectorContext.setIsCountyValid}
 							placeholder='Multnomah'
-							onChange={fieldSelectorContext.setCounty}
-							shouldValidate={fieldSelectorContext.doValidation}
+							// onChange={fieldSelectorContext.setCounty}
 						/>
 					</InputLabel>
 				)}
-
 				<InputLabel label='Family Size'>
 					<TextInput
-						name='famliysize'
+						name='familySize'
 						value={fieldSelectorContext.familySize}
 						validator={fieldSelectorContext.setIsFamilySizeValid}
 						placeholder='How many people are in your family?'
-						onChange={fieldSelectorContext.setFamilySize}
-						shouldValidate={fieldSelectorContext.doValidation}
+						// onChange={fieldSelectorContext.setFamilySize}
 					/>
 				</InputLabel>
 			</div>
@@ -216,9 +160,7 @@ const FieldSelector = (props) => {
 				Your location
 			</button>
 
-			<SubmitButton
-				handleIsLoading={handleIsLoading}
-			/>
+			<SubmitButton handleIsLoading={handleIsLoading} />
 		</div>
 	);
 };

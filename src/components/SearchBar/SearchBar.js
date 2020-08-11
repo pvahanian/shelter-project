@@ -1,47 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import APIWrapper from '../../APIWrapper';
 import SubmitButton from '../SubmitButton/SubmitButton';
 
-const SearchBar = ({
-  apiCategories,
-  goBehavior,
-  changeAPIData,
-  isPageDataValid,
-  fieldSelectorState,
-  setResources,
-  categorySelected,
-  handleIsLoading,
-  handleServiceChange,
-  serviceName,
-  age,
-  gender,
-  zipcode,
-  county,
-  familySize,
-  categoryID,
-  buttonState
+import ApiDataContext from '../context//apiData/ApiDataContext'
+import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext'
 
+const SearchBar = ({
+  fieldSelectorState,
+  handleIsLoading,
 }) => {
+  const apiDataContext = useContext(ApiDataContext)
+  const fieldSelectorContext = useContext(FieldSelectorContext)
   const [search, setSearch] = useState('');
   const [filtered, setFiltered] = useState([]);
   const history = useHistory();
+
   let obj = {
-		sn: serviceName,
+		sn: fieldSelectorContext.serviceName,
 		st: '',
-		age: Number(age),
-		gender: gender,
-		zip: Number(zipcode),
-		county: county,
-		catid: categoryID,
+		age: Number(fieldSelectorContext.age),
+		gender: fieldSelectorContext.gender,
+		zip: Number(fieldSelectorContext.zipCode),
+		county: fieldSelectorContext.county,
+		catid: fieldSelectorContext.categoryId,
   };
+  
   const APIKey = process.env.REACT_APP_211_API_KEY;
   const API = new APIWrapper(APIKey);
   API.initialize();
   //here we unpack the return object from API.getCategories() into the searchTermsArray.
   const searchTermsArr = [];
-  if(apiCategories) {
-  apiCategories.forEach((entry) => {
+
+
+
+
+  if(apiDataContext.categories) {
+  apiDataContext.categories.forEach((entry) => {
     searchTermsArr.push(entry.category);
     entry.subcat.forEach((subentry) => {
       searchTermsArr.push(subentry.subcategory);
@@ -51,6 +46,7 @@ const SearchBar = ({
     });
   });
   }
+
   //here we filter through the searchTerms on keypress.
   const handleChange = (e) => {
     console.log(e.target.value);
@@ -67,44 +63,51 @@ const SearchBar = ({
     //activate spinner
     handleIsLoading();
     //set service name in fieldSelector state
-    handleServiceChange(item);
+    fieldSelectorContext.setServiceName(item)
     // county validation
-    await goBehavior();
+    await fieldSelectorContext.goBehavior();
     //if form inputs have valid entries /////////////////////////////
-    if (isPageDataValid()) {
+    if (fieldSelectorContext.setIsPageDataValid()) {
       //save field selector state to local storage for use if / when user navigates backwards
       localStorage.setItem(
         'fieldSelectorState',
         JSON.stringify(fieldSelectorState)
       );
+      localStorage.setItem(
+        'fsContext',
+        JSON.stringify(fieldSelectorContext)
+      );
       obj.sn = item
-      setResources(await API.getKeywords(obj))
-      history.push('/info');
+				//apiDataContext.setResources(await API.getKeywords(obj))
+        history.push('/info');
       //If category selected
       //Make getResource call with category data
       //If subCategory selected
       ////Make getResource call with subCategory data
       //If subestCategory selected
       ////Make getResource call with service name data
-      if (categorySelected === 3) {
+      if (fieldSelectorContext.categorySelected === 3) {
         obj['st'] = 's';
-        console.log(await API.getResource(obj));
-        setResources(await API.getResource(obj));
-      } else if (categorySelected === 2) {
+        console.log(fieldSelectorContext.categorySelected);
+        console.log(obj);
+        apiDataContext.setResources(await API.getResource(obj));
+      } else if (fieldSelectorContext.categorySelected === 2) {
         obj['st'] = 'sc';
         obj['sn'] = '';
-        console.log(await API.getResource(obj));
-        setResources(await API.getResource(obj));
+        console.log(obj);
+        console.log(fieldSelectorContext.categorySelected);
+        apiDataContext.setResources(await API.getResource(obj));
       } else {
         obj['st'] = 'c';
         obj['sn'] = '';
         console.log(obj);
-        setResources(await API.getResource(obj));
+        console.log(fieldSelectorContext.categorySelected);
+        apiDataContext.setResources(await API.getResource(obj));
       }
     }
     // the getResource call below works because the options are all hardcoded. Above, it doesn't work becasue obj is missing many required properties. 
     //this will be fixed when the refactor is complete and ispagedatavalid passes, as well and obj being fully populated with necessary data
-    setResources(await API.getResource({
+    apiDataContext.setResources(await API.getResource({
       APIKey: 'J7R0W5XK',
       catid: '2603',
       sn: '',
@@ -133,20 +136,9 @@ const SearchBar = ({
           />
         </label>
         <SubmitButton
-          fieldSelectorState={fieldSelectorState}
-          goBehavior={goBehavior}
-          changeAPIData={changeAPIData}
-          isPageDataValid={isPageDataValid}
-          setResources={setResources}
-          apiCategories={apiCategories}
-          categorySelected={categorySelected}
+
           handleIsLoading={handleIsLoading}
-          age={age}
-				familySize={familySize}
-				zipcode={zipcode}
-				county={county}
-				gender={gender}
-				buttonState={buttonState}
+
         >
           Submit
         </SubmitButton>
@@ -167,3 +159,4 @@ const SearchBar = ({
 };
 
 export default SearchBar;
+

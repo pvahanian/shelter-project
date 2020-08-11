@@ -22,7 +22,7 @@ function SubmitButton(props) {
 		st: '',
 		age: Number(fieldSelectorContext.age),
 		gender: fieldSelectorContext.gender,
-		zip: Number(fieldSelectorContext.zip),
+		zip: Number(fieldSelectorContext.zipCode),
 		county: fieldSelectorContext.county,
 		catid: fieldSelectorContext.categoryId,
 	};
@@ -37,8 +37,7 @@ function SubmitButton(props) {
 			await fieldSelectorContext.goBehavior();
 			// console.log(props.isPageDataValid());
 			// console.log(fieldSelectorContext.validCounty)
-			// console.log(fieldSelectorContext.isPageDataValid())
-			if (fieldSelectorContext.isPageDataValid()) {
+			if (fieldSelectorContext.setIsPageDataValid()) {
 				//save submit button state to local storage for use if / when user navigates backwards
 				localStorage.setItem('submitButtonProps', JSON.stringify(props));
 				localStorage.setItem('fsContext', JSON.stringify(fieldSelectorContext));

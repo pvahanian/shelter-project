@@ -25,7 +25,11 @@ export const FieldSelectorState = (props) => {
 		possibleCounties: '',
 		doValidation: '',
 		validCounty: 'null', //bool
-		isCountyValid: '' // obj
+		isCountyValid: '', // obj
+		isAgeValid: '',
+		isZipCodeValid: '',
+		isFamilySizeValid: '',
+		isGenderValid: ''
 	};
 
 	const [state, dispatch] = useReducer(FieldSelectorReducer, initialState);
@@ -80,13 +84,13 @@ export const FieldSelectorState = (props) => {
 			return { valid: false, message: 'Required entry.' };
 		} else if (state.validCounty) {
 			dispatch({ type: 'SET_IS_COUNTY_VALID', payload: { valid: true, message } });
-			// return { valid: true, message };
+			return { valid: true, message };
 		} else if (!state.validCounty) {
 			dispatch({
 				type: 'SET_IS_COUNTY_VALID',
 				payload: { valid: false, message: 'This is not an OR or WA county.' },
 			});
-			// return { valid: false, message: 'This is not an OR or WA county.' };
+			return { valid: false, message: 'This is not an OR or WA county.' };
 		}
 	};
 
@@ -98,7 +102,7 @@ export const FieldSelectorState = (props) => {
 
 		let valid = familySize >= 0 && familySize <= 16;
 		if (!valid) message = 'You don have that many chilren!';
-
+		dispatch({ type: 'SET_IS_FAMILY_SIZE_VALID', payload: { valid: true, message } });
 		return { valid, message };
 	};
 
@@ -109,6 +113,7 @@ export const FieldSelectorState = (props) => {
 		if (empty) message = 'Required entry.';
 
 		let valid = !empty;
+		dispatch({ type: 'SET_IS_GENDER_VALID', payload: { valid: true, message } });
 
 		return { valid, message };
 	};
@@ -129,7 +134,7 @@ export const FieldSelectorState = (props) => {
 			message = "It's unlikely this age is correct. Is this a typo?";
 
 		let valid = isPositiveInteger && !isReallyOld;
-
+		dispatch({ type: 'SET_IS_AGE_VALID', payload: { valid: true, message } });
 		return { valid, message };
 	};
 
@@ -148,22 +153,24 @@ export const FieldSelectorState = (props) => {
 			message = 'ZIP codes are usually 5 digits long. Is this mistyped?';
 
 		let valid = correctLength && isPositiveInteger;
-
+		console.log(valid)
 		dispatch({ type: 'SET_IS_ZIP_CODE_VALID', payload: { valid, message } });
 		return { valid, message };
 	};
 
 
-	const isPageDataValid = () => {
+	const setIsPageDataValid = () => {
 		console.log('trigger')
 		console.log(state)
-		// console.log(setIsCountyValid(state.county).valid);
+		console.log(state.county)
+		console.log(setIsCountyValid(state.county))
+		console.log(setIsCountyValid(state.county).valid);
 		console.log(setIsGenderValid(state.gender).valid);
 		console.log(setIsAgeValid(state.age).valid);
 		console.log(setIsZipCodeValid(state.zipCode).valid);
 		console.log(setIsFamilySizeValid(state.familySize).valid);
 		return (
-			// setIsCountyValid(state.county).valid &&
+			setIsCountyValid(state.county).valid &&
 			setIsGenderValid(state.gender).valid &&
 			setIsAgeValid(state.age).valid &&
 			setIsZipCodeValid(state.zipCode).valid &&
@@ -195,7 +202,6 @@ export const FieldSelectorState = (props) => {
 					)
 				);
 				countiesORWA.shift();
-				console.log(countiesORWA);
 				if (countiesORWA.includes(state.county.toLowerCase())) {
 					setValidCounty(true);
 				} else {
@@ -254,8 +260,22 @@ export const FieldSelectorState = (props) => {
 			});
 	};
 
+	const getAllPossibleCountiesByZip = async (zip) => {
+		setZipcode(zip);
+		if (setIsZipCodeValid(zip).valid) {
+			await api.getCountyByZipCode({
+				zip: state.zipCode,
+			}).then((data) => {
+				setPossibleCounties(
+					Object.values(data).map((value) => {
+						return value['county'];
+					})
+				);
+			});
+		}
+	};
+
 	const goBehavior = async () => {
-		console.log('trigger go behavior');
 		await countyAPICall();
 		await setDoValidation(true);
 		await setDoValidation(false);
@@ -288,12 +308,20 @@ export const FieldSelectorState = (props) => {
 				setDoValidation,
 				validCounty: state.validCounty,
 				setValidCounty,
+				getAllPossibleCountiesByZip,
 				countyAPICall,
+				setIsPageDataValid,
 				goBehavior,
 				isCountyValid: state.isCountyValid,
 				setIsCountyValid,
+				isZipCodeValid: state.isZipCodeValid,
 				setIsZipCodeValid,
-				isPageDataValid
+				isAgeValid: state.isAgeValid,
+				setIsAgeValid,
+				isGenderValid: state.isGenderValid,
+				setIsGenderValid,
+				isFamilySizeValid: state.isFamilySizeValid,
+				setIsFamilySizeValid
 			}}>
 			{props.children}
 		</FieldSelectorContext.Provider>

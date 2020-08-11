@@ -125,8 +125,6 @@ const CategorySelector = (props) => {
 
 	return categories.map((categories, i) => (
 		<ExclusiveOption
-			buttonState={props.buttonState}
-			handleButtonStateChange={props.handleButtonStateChange}
 			items={categories}
 			appendCategory={appendCategory}
 			key={i}

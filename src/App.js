@@ -1,11 +1,13 @@
+/** @format */
 
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import APIWrapper from './APIWrapper.js';
 import FieldSelector from './components/FieldSelector';
 import Shelter from './components/shetler.js';
-import ApiDataState from './components/context/apiData/ApiDataState'
-import FieldSelectorState from './components/context/fieldSelectorContext/FieldSelectorState'
+import ApiDataState from './components/context/apiData/ApiDataState';
+import FieldSelectorState from './components/context/fieldSelectorContext/FieldSelectorState';
+import ThemeDataState from './components/context/themeData/ThemeDataState'
 
 import { ThemeContext } from './ThemeContext';
 import {
@@ -62,18 +64,7 @@ const App = () => {
 		//when user hits refresh, navigates away from the page or closes the browser tab, remove state values from localstorage.
 		//after 30 minutes, remove users sessionId from localStorage.
 		//TODO remove the event listeners after refactor
-		// window.addEventListener(
-		// 	'beforeunload',
-		// 	localStorage.removeItem('appState')
-		// );
-		// window.addEventListener(
-		// 	'beforeunload',
-		// 	localStorage.removeItem('fieldSelectorState')
-		// );
-		// window.addEventListener(
-		// 	'beforeunload',
-		// 	localStorage.removeItem('submitButtonProps')
-		// );
+
 		window.addEventListener(
 			'beforeunload',
 			localStorage.removeItem('fsContext')
@@ -82,10 +73,7 @@ const App = () => {
 			'beforeunload',
 			localStorage.removeItem('categorySelectorState')
 		);
-		window.addEventListener(
-			'beforeunload',
-			localStorage.removeItem('keyz')
-		);
+		window.addEventListener('beforeunload', localStorage.removeItem('keyz'));
 		window.addEventListener(
 			'beforeunload',
 			localStorage.removeItem('categories')
@@ -96,45 +84,43 @@ const App = () => {
 	}, []);
 
 	return (
-		<FieldSelectorState>
+		<ThemeDataState>
+			<FieldSelectorState>
+				<ApiDataState>
+					<ThemeContext.Provider value={appState.themeColor}>
+						<Router>
+							<div className={'app ' + appState.themeColor}>
+								<div id='left-gutter-container'>
+									<button
+										onClick={(e) =>
+											setAppState({
+												...appState,
+												themeColor:
+													appState.themeColor === 'light' ? 'dark' : 'light',
+											})
+										}>
+										Swap Theme
+									</button>
+									Left Gutter
+								</div>
 
-		<ApiDataState>
-		<ThemeContext.Provider value={appState.themeColor}>
-			<Router>
-				<div className={'app ' + appState.themeColor}>
-					<div id='left-gutter-container'>
-						<button
-							onClick={(e) =>
-								setAppState({
-									...appState,
-									themeColor:
-										appState.themeColor === 'light' ? 'dark' : 'light',
-								})
-							}>
-							Swap Theme
-						</button>
-						Left Gutter
-					</div>
+								<div id='main-container'>
+									Main Container
+									<Route exact path='/'>
+										<FieldSelector />
+									</Route>
+									<Route path='/info'>
+										<Shelter />
+									</Route>
+								</div>
 
-					<div id='main-container'>
-						Main Container
-						<Route exact path='/'>
-							{/* <FieldSelector setResources={setResources} /> */}
-							<FieldSelector />
-						</Route>
-						<Route path='/info'>
-							{/* <Shelter shelters={appState.resources} /> */}
-							<Shelter  />
-						</Route>
-					</div>
-
-					<div id='right-gutter-container'>Right Gutter</div>
-				</div>
-			</Router>
-		</ThemeContext.Provider>
-		</ApiDataState>
-		</FieldSelectorState>
-
+								<div id='right-gutter-container'>Right Gutter</div>
+							</div>
+						</Router>
+					</ThemeContext.Provider>
+				</ApiDataState>
+			</FieldSelectorState>
+		</ThemeDataState>
 	);
 };
 

@@ -150,14 +150,14 @@ const ExclusiveButton = (props) => {
 
 	useEffect(() => {
 		//look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
-		if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
+		// if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
 		
 		if (props.row === undefined) {
 			props.handleSetSelected(
 				fieldSelectorContext.gender
 			);
 		}
-
+		if(JSON.parse(localStorage.getItem('fsContext')))
 		if (
 			props.data.label ===
 				JSON.parse(localStorage.getItem('fsContext')).buttonState

@@ -38,7 +38,7 @@ const TextInput = (props) => {
 				name: props.name,
 				value: fieldSelectorContext.zipCode,
 				validator: fieldSelectorContext.setIsZipCodeValid,
-				onChange: fieldSelectorContext.setZipCode
+				onChange: fieldSelectorContext.setZipcode
 			}
 			break
 			case 'county':

@@ -44,32 +44,36 @@ const App = () => {
 		resources: [],
 	});
 
-	const setResources = (resources) => {
-		localStorage.setItem('appState', JSON.stringify(appState));
-		setAppState({ ...appState, resources: resources });
-	};
+	// const setResources = (resources) => {
+	// 	localStorage.setItem('appState', JSON.stringify(appState));
+	// 	setAppState({ ...appState, resources: resources });
+	// };
 
 	useEffect(() => {
-		if (JSON.parse(localStorage.getItem('appState'))) {
-			console.log('trigger local storage');
-			setAppState(JSON.parse(localStorage.getItem('appState')));
-		}
+		// if (JSON.parse(localStorage.getItem('apiDataState'))) {
+		// 	console.log('trigger local storage');
+		// 	setAppState(JSON.parse(localStorage.getItem('appState')));
+		// }
+		// if (JSON.parse(localStorage.getItem('appState'))) {
+		// 	console.log('trigger local storage');
+		// 	setAppState(JSON.parse(localStorage.getItem('appState')));
+		// }
 
 		//when user hits refresh, navigates away from the page or closes the browser tab, remove state values from localstorage.
 		//after 30 minutes, remove users sessionId from localStorage.
 		//TODO remove the event listeners after refactor
-		window.addEventListener(
-			'beforeunload',
-			localStorage.removeItem('appState')
-		);
-		window.addEventListener(
-			'beforeunload',
-			localStorage.removeItem('fieldSelectorState')
-		);
-		window.addEventListener(
-			'beforeunload',
-			localStorage.removeItem('submitButtonProps')
-		);
+		// window.addEventListener(
+		// 	'beforeunload',
+		// 	localStorage.removeItem('appState')
+		// );
+		// window.addEventListener(
+		// 	'beforeunload',
+		// 	localStorage.removeItem('fieldSelectorState')
+		// );
+		// window.addEventListener(
+		// 	'beforeunload',
+		// 	localStorage.removeItem('submitButtonProps')
+		// );
 		window.addEventListener(
 			'beforeunload',
 			localStorage.removeItem('fsContext')

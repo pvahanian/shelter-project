@@ -1,19 +1,18 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import ExclusiveOption from '../ExclusiveOption';
-// import { ThemeContext } from '../../ThemeContext';
-
 import ApiDataContext from '../context/apiData/ApiDataContext'
 import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
 import ThemeDataContext from '../context/themeData/ThemeDataContext'
-const CategorySelector = (props) => {
-	// const themeContext = useContext(ThemeContext);
+
+const CategorySelector = () => {
 	const apiDataContext = useContext(ApiDataContext)
 	const fieldSelectorContext = useContext(FieldSelectorContext)
 	const themeDataContext = useContext(ThemeDataContext)
 	const [categories, setCategories] = useState([]);
 	const [keyz, setTheKeyz] = useState([]);
 
+	//
 	useEffect(() => {
 		const labelsWithImages = createLabelWithImage(
 			apiDataContext.categories,
@@ -21,7 +20,8 @@ const CategorySelector = (props) => {
 		);
 		setCategories([labelsWithImages]);
 
-		//look for categorySelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
+		//look for categorySelectorState in localStorage. if its there, use it to determine which tier of buttons should be expanded or collapsed when navigating backwards..
+		//TODO change this refference to localStorage.getItem().apiDataContext.categories
 		if (JSON.parse(localStorage.getItem('categories')))
 			setCategories(JSON.parse(localStorage.getItem('categories')));
 
@@ -95,20 +95,11 @@ const CategorySelector = (props) => {
 				fieldSelectorContext.setCategoryId(apiDataContext.categories[keyz[0]]['subcat'][id]['subcategoryID'])
 				setKey(id);
 				fieldSelectorContext.setCategorySelected(2)
-				props.handleButtonStateChange({
-					...props.buttonState,
-					subCat: [
-						{
-							...props.buttonState.subCat[0],
-							subCatTerm: [{ sterm: null }],
-						},
-					],
-				});
 				fieldSelectorContext.setButtonState({
-					...props.buttonState,
+					...fieldSelectorContext.buttonState,
 					subCat: [
 						{
-							...props.buttonState.subCat[0],
+							...fieldSelectorContext.buttonState.subCat[0],
 							subCatTerm: [{ sterm: null }],
 						},
 					],
@@ -116,7 +107,7 @@ const CategorySelector = (props) => {
 			} catch (error) {
 				console.log(
 					apiDataContext.categories[id]['subcat'] +
-						'does not have subCategories' +
+						'does not have subCategories ' +
 						error
 				);
 			}

@@ -1,4 +1,3 @@
-/** @format */
 
 import React, { useContext } from 'react';
 import './SubmitButton.css';
@@ -14,9 +13,8 @@ function SubmitButton(props) {
 	const apiDataContext = useContext(ApiDataContext);
 	const fieldSelectorContext = useContext(FieldSelectorContext);
 
-	console.log(fieldSelectorContext);
 
-	API.initialize();
+	// API.initialize();
 	let obj = {
 		sn: fieldSelectorContext.serviceName,
 		st: '',
@@ -29,20 +27,17 @@ function SubmitButton(props) {
 
 
 	async function handleClick() {
-		console.log('trigger submit');
-		console.log(fieldSelectorContext);
+
 		try {
 			props.handleIsLoading();
-			// await props.goBehavior();
 			await fieldSelectorContext.goBehavior();
-			// console.log(props.isPageDataValid());
-			// console.log(fieldSelectorContext.validCounty)
 			if (fieldSelectorContext.setIsPageDataValid()) {
 				//save submit button state to local storage for use if / when user navigates backwards
-				localStorage.setItem('submitButtonProps', JSON.stringify(props));
+				localStorage.setItem('apiDataContext', JSON.stringify(apiDataContext));
 				localStorage.setItem('fsContext', JSON.stringify(fieldSelectorContext));
 
 				//apiDataContext.setResources(await API.getKeywords(obj))
+				
 				history.push('/info');
 
 				//If category selected
@@ -54,20 +49,14 @@ function SubmitButton(props) {
 
 				if (fieldSelectorContext.categorySelected === 3) {
 					obj['st'] = 's';
-					console.log(fieldSelectorContext.categorySelected);
-					console.log(obj);
 					apiDataContext.setResources(await API.getResource(obj));
 				} else if (fieldSelectorContext.categorySelected === 2) {
 					obj['st'] = 'sc';
 					obj['sn'] = '';
-					console.log(obj);
-					console.log(fieldSelectorContext.categorySelected);
 					apiDataContext.setResources(await API.getResource(obj));
 				} else {
 					obj['st'] = 'c';
 					obj['sn'] = '';
-					console.log(obj);
-					console.log(props.categorySelected);
 					apiDataContext.setResources(await API.getResource(obj));
 				}
 			}

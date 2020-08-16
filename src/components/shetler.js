@@ -8,7 +8,6 @@ import ApiDataContext from './context/apiData/ApiDataContext';
 const Shelters = ({ shelters }) => {
 
   const apiDataContext = useContext(ApiDataContext)
-  console.log(apiDataContext)
 	return (
 		<div>
 			<h1> Relevant Shelters </h1>

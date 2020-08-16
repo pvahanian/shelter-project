@@ -1,4 +1,3 @@
-/** @format */
 
 const FieldSelectorReducer = (state, action) => {
 	switch (action.type) {

@@ -1,4 +1,3 @@
-/** @format */
 
 import React, { useReducer, useEffect } from 'react';
 import ApiDataContext from './ApiDataContext';

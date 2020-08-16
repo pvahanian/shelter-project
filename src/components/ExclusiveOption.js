@@ -5,16 +5,18 @@
  * pressed).
  *
  */
+
 import React, { useState, useEffect, useContext } from 'react';
 import '../Assets/ExclusiveOption.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
-import ThemeDataContext from './context/themeData/ThemeDataContext'
-import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
+import ThemeDataContext from './context/themeData/ThemeDataContext';
+import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext';
 
 const ExclusiveGroup = (props) => {
 	const [selected, setSelected] = useState(props.default ? props.default : '');
-	const fieldSelectorContext = useContext(FieldSelectorContext)
-	//set selected state during exclusiveButton componentWillMount
+	const fieldSelectorContext = useContext(FieldSelectorContext);
+
+	//a wrapper function for setting state of variable 'selected', determines buttons style (chosen, not chosen)
 	const handleSetSelected = (data) => {
 		setSelected(data);
 	};
@@ -22,34 +24,36 @@ const ExclusiveGroup = (props) => {
 	let valid = null;
 	let invalidEntryMessage = '';
 
+	//sets Selected state, saves information about buttons state in fieldSelectorContext, to be saved later in localStorage.
 	const handleClick = (event, data, id, row) => {
-		console.log('here is the data passed into handleClick in exclusive option: ', data, id, row)
 		setSelected(data);
 		if (typeof data === 'string' && props.appendCategory) {
 			fieldSelectorContext.setServiceName(data);
 			props.appendCategory(this.props.row, id);
 		} else if (typeof data === 'string') {
 			//this case is when a gender button is being clicked.
-			console.log(data)
-			fieldSelectorContext.setGender(data)
+			console.log(data);
+			fieldSelectorContext.setGender(data);
 		} else if (props.appendCategory) {
 			fieldSelectorContext.setServiceName(data.label);
 			props.appendCategory(props.row, id);
 			//save service button selections to buttonState, which in turn is saved to localstorage on form submit
 			if (row === 0) {
-
 				fieldSelectorContext.setButtonState({
 					...fieldSelectorContext.buttonState,
 					category: data.label,
 				});
 			} else if (row === 1) {
-	
 				fieldSelectorContext.setButtonState({
 					...fieldSelectorContext.buttonState,
-					subCat: [{ ...fieldSelectorContext.buttonState.subCat[0], subCategory: data.label }],
+					subCat: [
+						{
+							...fieldSelectorContext.buttonState.subCat[0],
+							subCategory: data.label,
+						},
+					],
 				});
 			} else {
-
 				fieldSelectorContext.setButtonState({
 					...fieldSelectorContext.buttonState,
 					subCat: [
@@ -61,7 +65,6 @@ const ExclusiveGroup = (props) => {
 				});
 			}
 		} else {
-
 			fieldSelectorContext.setButtonState({
 				...fieldSelectorContext.buttonState,
 				category: data.label,
@@ -72,25 +75,20 @@ const ExclusiveGroup = (props) => {
 
 	const validate = () => {
 		if (!props.validator) return { valid: true, message: '' };
-
 		let value = selected;
 		let validEntryClass = '';
 		let invalidEntryMessage = '';
-
 		// Check if given value is valid
 		let validityObject = props.validator(value);
-
 		// Note the results for reference in the render
 		valid = validityObject.valid;
-
 		if (validityObject.valid === false)
 			invalidEntryMessage = validityObject.message;
-
 		if (validityObject.valid === true) invalidEntryMessage = '';
 	};
 
-	// if (props.shouldValidate) validate();
 	if (fieldSelectorContext.doValidation) validate();
+	
 	if (typeof props.appendCategory == 'function') {
 		return (
 			<div className='exclusive-group-container'>
@@ -146,31 +144,28 @@ export default ExclusiveGroup;
 // Child component of ExclusiveGroup
 const ExclusiveButton = (props) => {
 	const themeDataContext = useContext(ThemeDataContext);
-	const fieldSelectorContext = useContext(FieldSelectorContext)
+	const fieldSelectorContext = useContext(FieldSelectorContext);
 
 	useEffect(() => {
 		//look for fieldSelectorState in localStorage. if its there, use it to determine which buttons should be styled when navigating backwards.
 		// if (!JSON.parse(localStorage.getItem('submitButtonProps'))) return;
-		
+
 		if (props.row === undefined) {
-			props.handleSetSelected(
-				fieldSelectorContext.gender
-			);
+			props.handleSetSelected(fieldSelectorContext.gender);
 		}
-		if(JSON.parse(localStorage.getItem('fsContext')))
-		if (
-			props.data.label ===
-				JSON.parse(localStorage.getItem('fsContext')).buttonState
-					.category ||
-			props.data.label ===
-				JSON.parse(localStorage.getItem('fsContext')).buttonState
-					.subCat[0].subCategory ||
-			props.data.label ===
-				JSON.parse(localStorage.getItem('fsContext')).buttonState
-					.subCat[0].subCatTerm[0].sterm
-		) {
-			props.handleSetSelected(props.data);
-		}
+		if (JSON.parse(localStorage.getItem('fsContext')))
+			if (
+				props.data.label ===
+					JSON.parse(localStorage.getItem('fsContext')).buttonState.category ||
+				props.data.label ===
+					JSON.parse(localStorage.getItem('fsContext')).buttonState.subCat[0]
+						.subCategory ||
+				props.data.label ===
+					JSON.parse(localStorage.getItem('fsContext')).buttonState.subCat[0]
+						.subCatTerm[0].sterm
+			) {
+				props.handleSetSelected(props.data);
+			}
 	}, []);
 
 	if (typeof props.data !== 'string' && props.appendCategory) {
@@ -178,7 +173,9 @@ const ExclusiveButton = (props) => {
 		return (
 			<button
 				className={
-					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + themeDataContext.themeColor
+					'exclusive-button ' +
+					(props.selected ? 'selected ' : ' ') +
+					themeDataContext.themeColor
 				} // changes CSS and appearance when an option is selected/deselected
 				onClick={(e) => {
 					props.onClick(e, props.data, props.id, props.row);
@@ -195,7 +192,9 @@ const ExclusiveButton = (props) => {
 		return (
 			<button
 				className={
-					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + themeDataContext.themeColor
+					'exclusive-button ' +
+					(props.selected ? 'selected ' : ' ') +
+					themeDataContext.themeColor
 				} // changes CSS and appearance when an option is selected/deselected
 				onClick={(e) => {
 					props.onClick(e, props.data, props.id);
@@ -210,7 +209,9 @@ const ExclusiveButton = (props) => {
 	return (
 		<button
 			className={
-				'exclusive-button ' + (props.selected ? 'selected ' : ' ') + themeDataContext.themeColor
+				'exclusive-button ' +
+				(props.selected ? 'selected ' : ' ') +
+				themeDataContext.themeColor
 			} // changes CSS and appearance when an option is selected/deselected
 			onClick={(e) => {
 				props.onClick(e, props.data, props.id);

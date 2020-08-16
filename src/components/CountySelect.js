@@ -12,8 +12,6 @@ const CountySelect = (props) =>  {
   let valid = null
 
     let value = fieldSelectorContext.county
-
-    console.log('countySelect Trigger', value)
     
     return (
 

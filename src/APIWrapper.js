@@ -1,4 +1,3 @@
-/** @format */
 
 class APIWrapper {
 	constructor(APIKey) {
@@ -16,15 +15,14 @@ class APIWrapper {
 	}
 
 	async initialize() {
-
 		//check localstorage for sessionId and if present, use it for credentials, otherwise, get new sessionId to use for credentials
 		if (JSON.parse(localStorage.getItem('sessionId'))) {
 			this.credentials['sid'] = localStorage.getItem('sessionId')[0].session_id;
-			// console.log('API initalized, sessionId set from localStorage')
+			console.log('sessionId set from localStorage');
 		} else {
 			let data = await this.getSessionID();
 			this.credentials['sid'] = data[0]['session_id'];
-			console.log("API initalized, new sessionID")
+			console.log('API initalized, new sessionID');
 		}
 	}
 
@@ -38,14 +36,12 @@ class APIWrapper {
 			localStorage.setItem('sessionId', JSON.stringify(data));
 			return data;
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 		}
-
 	}
 
 	async getCategories() {
 		let parameters = this.credentials;
-
 		let response = await fetch(
 			`https://www.navigateopen.info/pubres/api/GetCategories/?ip=${JSON.stringify(
 				parameters
@@ -59,29 +55,23 @@ class APIWrapper {
 	//TODO: This function will have to loop/map to different shelter info components or shelter info maps them
 	async getResource(obj) {
 		let parameters = { ...this.credentials, ...obj };
-		console.log(JSON.stringify(parameters))
-		console.log('getResource', parameters);
 		let response = await fetch(
 			`https://www.navigateopen.info/pubres/api/ServiceProviders/?ip=${JSON.stringify(
 				parameters
 			)}`
 		);
-		//for DEBUGGING
-		let jsonReturn = await response.json();
-		// console.log(jsonReturn);
-		return jsonReturn;
+		let data = await response.json();
+		return data;
 	}
 
 	async getCountyByZipCode(obj) {
 		let parameters = { ...obj, ...this.credentials };
-		console.log(parameters);
 		let response = await fetch(
 			`https://www.navigateopen.info/pubres/api/GetCounty/?ip=${JSON.stringify(
 				parameters
 			)}`
 		);
 		let data = await response.json();
-		console.log(data);
 		return data;
 	}
 

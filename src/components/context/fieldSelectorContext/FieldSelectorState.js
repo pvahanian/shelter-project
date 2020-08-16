@@ -1,4 +1,3 @@
-/** @format */
 
 import React, { useReducer, useEffect } from 'react';
 import FieldSelectorContext from './FieldSelectorContext';
@@ -50,7 +49,6 @@ export const FieldSelectorState = (props) => {
 		dispatch({ type: 'SET_GENDER', payload: newGender });
 	};
 	const setCounty = (newCounty) => {
-		console.log(newCounty)
 		dispatch({ type: 'SET_COUNTY', payload: newCounty });
 	};
 	const setZipcode = (newZip) => {
@@ -153,16 +151,12 @@ export const FieldSelectorState = (props) => {
 			message = 'ZIP codes are usually 5 digits long. Is this mistyped?';
 
 		let valid = correctLength && isPositiveInteger;
-		console.log(valid)
 		dispatch({ type: 'SET_IS_ZIP_CODE_VALID', payload: { valid, message } });
 		return { valid, message };
 	};
 
 
 	const setIsPageDataValid = () => {
-		console.log('trigger')
-		console.log(state)
-		console.log(state.county)
 		console.log(setIsCountyValid(state.county))
 		console.log(setIsCountyValid(state.county).valid);
 		console.log(setIsGenderValid(state.gender).valid);

@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import ExclusiveOption from './ExclusiveOption';
 import TextInput from './TextInput';
 import '../Assets/FieldSelector.scss';
-// import { ThemeContext } from '../ThemeContext';
 import APIWrapper from '../APIWrapper.js';
 import InputLabel from './InputLabel';
 import SubmitButton from './SubmitButton/SubmitButton.js';
@@ -19,21 +18,22 @@ const APIKey = process.env.REACT_APP_211_API_KEY;
 const API = new APIWrapper(APIKey);
 
 const FieldSelector = (props) => {
-	// const themeContext = useContext(ThemeContext);
 	const fieldSelectorContext = useContext(FieldSelectorContext);
 	const apiDataContext = useContext(ApiDataContext);
-	const themeDataContext = useContext(ThemeDataContext)
-	console.log(themeDataContext)
+	const themeDataContext = useContext(ThemeDataContext);
 
 	async function callAPI() {
-		await API.initialize();
+		//check category state to see if it has already been populated from local storage, possibly avoid making another api call (even though it would be with the same session id)
+		console.log('trigger callAPI');
+		console.log(apiDataContext.categories.length);
+		if (apiDataContext.categories.length === 0) await API.initialize();
 	}
 
+	//TODO move this last piece of state and handler function into context.....which context?
 	const [isLoading, setIsLoading] = useState(false);
 	const handleIsLoading = () => {
 		setIsLoading(!isLoading);
 	};
-
 
 	const findLocation = () => {
 		// // console.log(
@@ -72,8 +72,7 @@ const FieldSelector = (props) => {
 		}
 	}, []);
 
-
-	//monitors the state of fieldSelector.zipCode. When it becomes a valid zip, 
+	//monitors the state of fieldSelector.zipCode. When it becomes a valid zip,
 	//an api call is made to populate an array with all the possible counties that zipcode could be in.
 	useEffect(() => {
 		const handleValidZip = async () => {
@@ -85,8 +84,10 @@ const FieldSelector = (props) => {
 					zip: fieldSelectorContext.zipCode,
 				})
 					.then((data) => {
-						fieldSelectorContext.setCounty(data[0]['county']); 
-						fieldSelectorContext.getAllPossibleCountiesByZip(fieldSelectorContext.zipCode);
+						fieldSelectorContext.setCounty(data[0]['county']);
+						fieldSelectorContext.getAllPossibleCountiesByZip(
+							fieldSelectorContext.zipCode
+						);
 					})
 					.catch((err) => {
 						// TODO: we'll probably want to take action here to resolve the error
@@ -99,7 +100,7 @@ const FieldSelector = (props) => {
 
 	//return a spinner while waiting for data from api to populate category buttons
 	if (apiDataContext.categories.length === 0 || isLoading) {
-		return <img src={Spinner} style={{ width: '200px' }} />;
+		return <img src={Spinner} style={{ width: '200px' }} alt='a spinner gif, indicating that something is still loading'/>;
 	}
 
 	return (
@@ -120,7 +121,6 @@ const FieldSelector = (props) => {
 					value={fieldSelectorContext.age}
 					validator={fieldSelectorContext.setIsAgeValid}
 					placeholder='32'
-					// onChange={fieldSelectorContext.setAge}
 				/>
 			</InputLabel>
 			<div id='zip-and-county'>
@@ -130,7 +130,6 @@ const FieldSelector = (props) => {
 						value={fieldSelectorContext.zipCode}
 						validator={fieldSelectorContext.setIsZipCodeValid}
 						placeholder='97333'
-						// onChange={fieldSelectorContext.setZipcode}
 					/>
 				</InputLabel>
 				{fieldSelectorContext.possibleCounties ? (
@@ -144,7 +143,6 @@ const FieldSelector = (props) => {
 							value={fieldSelectorContext.county}
 							validator={fieldSelectorContext.setIsCountyValid}
 							placeholder='Multnomah'
-							// onChange={fieldSelectorContext.setCounty}
 						/>
 					</InputLabel>
 				)}
@@ -154,7 +152,6 @@ const FieldSelector = (props) => {
 						value={fieldSelectorContext.familySize}
 						validator={fieldSelectorContext.setIsFamilySizeValid}
 						placeholder='How many people are in your family?'
-						// onChange={fieldSelectorContext.setFamilySize}
 					/>
 				</InputLabel>
 			</div>

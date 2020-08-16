@@ -9,9 +9,7 @@ import Shelter from './components/shetler.js';
 import ApiDataState from './components/context/apiData/ApiDataState';
 import FieldSelectorState from './components/context/fieldSelectorContext/FieldSelectorState';
 import ThemeDataState from './components/context/themeData/ThemeDataState';
-import ThemeDataContext from './components/context/themeData/ThemeDataContext';
-
-import { ThemeContext } from './ThemeContext';
+import ApiDataContext from './components/context/apiData/ApiDataContext';
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -20,6 +18,7 @@ import {
 	Redirect,
 } from 'react-router-dom';
 
+// can we get rid of this?
 const navbar = {};
 navbar.brand = { linkTo: '#', text: 'Portland Shelters' };
 navbar.links = [
@@ -38,30 +37,16 @@ navbar.links = [
 const APIKey = process.env.REACT_APP_211_API_KEY;
 const API = new APIWrapper(APIKey);
 
-//TODO figure out why appstate leaves localstorage after hitting refresh AFTER navigating backwards from results page
 const App = () => {
-	// console.log('app rendered');
-	// const [appState, setAppState] = useState({
-	// 	themeColor: 'light',
-	// 	// sessionID: null,
-	// 	categories: [],
-	// 	resources: [],
-	// });
-
-	// const setResources = (resources) => {
-	// 	localStorage.setItem('appState', JSON.stringify(appState));
-	// 	setAppState({ ...appState, resources: resources });
-	// };
-
+	//search localStorage for saved apiDataState and use it to set categories if found.
+	const apiDataContext = useContext(ApiDataContext);
 	useEffect(() => {
-		// if (JSON.parse(localStorage.getItem('apiDataState'))) {
-		// 	console.log('trigger local storage');
-		// 	setAppState(JSON.parse(localStorage.getItem('appState')));
-		// }
-		// if (JSON.parse(localStorage.getItem('appState'))) {
-		// 	console.log('trigger local storage');
-		// 	setAppState(JSON.parse(localStorage.getItem('appState')));
-		// }
+		if (JSON.parse(localStorage.getItem('apiDataState'))) {
+			console.log('trigger local storage');
+			apiDataContext.setCategories(
+				JSON.parse(localStorage.getItem('appState'))
+			);
+		}
 
 		//when user hits refresh, navigates away from the page or closes the browser tab, remove state values from localstorage.
 		//after 30 minutes, remove users sessionId from localStorage.
@@ -73,12 +58,12 @@ const App = () => {
 		);
 		window.addEventListener(
 			'beforeunload',
-			localStorage.removeItem('categorySelectorState')
+			localStorage.removeItem('apiDataContext')
 		);
 		window.addEventListener('beforeunload', localStorage.removeItem('keyz'));
 		window.addEventListener(
 			'beforeunload',
-			localStorage.removeItem('categories')
+			localStorage.removeItem('categories') // this is redundant, remove and change refferences to apiDataContext.categories
 		);
 		setTimeout(() => {
 			localStorage.removeItem('sessionId');
@@ -89,7 +74,6 @@ const App = () => {
 		<FieldSelectorState>
 			<ApiDataState>
 				<ThemeDataState>
-					{/* <ThemeContext.Provider value={appState.themeColor}> */}
 					<MainLayout>
 						<Router>
 							<Route exact path='/'>
@@ -100,7 +84,6 @@ const App = () => {
 							</Route>
 						</Router>
 					</MainLayout>
-					{/* </ThemeContext.Provider> */}
 				</ThemeDataState>
 			</ApiDataState>
 		</FieldSelectorState>

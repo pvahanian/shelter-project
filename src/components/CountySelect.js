@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ThemeContext} from '../ThemeContext';
+import ThemeDataContext from './context/themeData/ThemeDataContext'
 import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
 import '../Assets/CountySelect.scss';
 
@@ -8,7 +8,7 @@ const CountySelect = (props) =>  {
 
 
   const fieldSelectorContext = useContext(FieldSelectorContext) 
-  const contextType = useContext(ThemeContext)
+  const themeDataContext = useContext(ThemeDataContext)
   let valid = null
 
     let value = fieldSelectorContext.county
@@ -20,7 +20,7 @@ const CountySelect = (props) =>  {
       <select
         value = {value}
         id= {props.name.toLowerCase()+'input'}
-        className= {'text-input' + contextType + ' county-select'}
+        className= {'text-input' + themeDataContext.themeColor + ' county-select'}
         onChange= {e => {
             let newValue = e.currentTarget.value
             if(props.filter)

@@ -1,13 +1,15 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './App.scss';
 import APIWrapper from './APIWrapper.js';
+import MainLayout from './components/mainLayout/MainLayout';
 import FieldSelector from './components/FieldSelector';
 import Shelter from './components/shetler.js';
 import ApiDataState from './components/context/apiData/ApiDataState';
 import FieldSelectorState from './components/context/fieldSelectorContext/FieldSelectorState';
-import ThemeDataState from './components/context/themeData/ThemeDataState'
+import ThemeDataState from './components/context/themeData/ThemeDataState';
+import ThemeDataContext from './components/context/themeData/ThemeDataContext';
 
 import { ThemeContext } from './ThemeContext';
 import {
@@ -39,12 +41,12 @@ const API = new APIWrapper(APIKey);
 //TODO figure out why appstate leaves localstorage after hitting refresh AFTER navigating backwards from results page
 const App = () => {
 	// console.log('app rendered');
-	const [appState, setAppState] = useState({
-		themeColor: 'light',
-		// sessionID: null,
-		categories: [],
-		resources: [],
-	});
+	// const [appState, setAppState] = useState({
+	// 	themeColor: 'light',
+	// 	// sessionID: null,
+	// 	categories: [],
+	// 	resources: [],
+	// });
 
 	// const setResources = (resources) => {
 	// 	localStorage.setItem('appState', JSON.stringify(appState));
@@ -84,43 +86,24 @@ const App = () => {
 	}, []);
 
 	return (
-		<ThemeDataState>
-			<FieldSelectorState>
-				<ApiDataState>
-					<ThemeContext.Provider value={appState.themeColor}>
+		<FieldSelectorState>
+			<ApiDataState>
+				<ThemeDataState>
+					{/* <ThemeContext.Provider value={appState.themeColor}> */}
+					<MainLayout>
 						<Router>
-							<div className={'app ' + appState.themeColor}>
-								<div id='left-gutter-container'>
-									<button
-										onClick={(e) =>
-											setAppState({
-												...appState,
-												themeColor:
-													appState.themeColor === 'light' ? 'dark' : 'light',
-											})
-										}>
-										Swap Theme
-									</button>
-									Left Gutter
-								</div>
-
-								<div id='main-container'>
-									Main Container
-									<Route exact path='/'>
-										<FieldSelector />
-									</Route>
-									<Route path='/info'>
-										<Shelter />
-									</Route>
-								</div>
-
-								<div id='right-gutter-container'>Right Gutter</div>
-							</div>
+							<Route exact path='/'>
+								<FieldSelector />
+							</Route>
+							<Route path='/info'>
+								<Shelter />
+							</Route>
 						</Router>
-					</ThemeContext.Provider>
-				</ApiDataState>
-			</FieldSelectorState>
-		</ThemeDataState>
+					</MainLayout>
+					{/* </ThemeContext.Provider> */}
+				</ThemeDataState>
+			</ApiDataState>
+		</FieldSelectorState>
 	);
 };
 

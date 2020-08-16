@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import '../Assets/ExclusiveOption.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
-import { ThemeContext } from '../ThemeContext';
+import ThemeDataContext from './context/themeData/ThemeDataContext'
 import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext'
 
 const ExclusiveGroup = (props) => {
@@ -145,7 +145,7 @@ export default ExclusiveGroup;
 
 // Child component of ExclusiveGroup
 const ExclusiveButton = (props) => {
-	const context = useContext(ThemeContext);
+	const themeDataContext = useContext(ThemeDataContext);
 	const fieldSelectorContext = useContext(FieldSelectorContext)
 
 	useEffect(() => {
@@ -178,7 +178,7 @@ const ExclusiveButton = (props) => {
 		return (
 			<button
 				className={
-					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + context
+					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + themeDataContext.themeColor
 				} // changes CSS and appearance when an option is selected/deselected
 				onClick={(e) => {
 					props.onClick(e, props.data, props.id, props.row);
@@ -195,7 +195,7 @@ const ExclusiveButton = (props) => {
 		return (
 			<button
 				className={
-					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + context
+					'exclusive-button ' + (props.selected ? 'selected ' : ' ') + themeDataContext.themeColor
 				} // changes CSS and appearance when an option is selected/deselected
 				onClick={(e) => {
 					props.onClick(e, props.data, props.id);
@@ -210,7 +210,7 @@ const ExclusiveButton = (props) => {
 	return (
 		<button
 			className={
-				'exclusive-button ' + (props.selected ? 'selected ' : ' ') + context
+				'exclusive-button ' + (props.selected ? 'selected ' : ' ') + themeDataContext.themeColor
 			} // changes CSS and appearance when an option is selected/deselected
 			onClick={(e) => {
 				props.onClick(e, props.data, props.id);

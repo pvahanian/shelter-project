@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ExclusiveOption from './ExclusiveOption';
 import TextInput from './TextInput';
 import '../Assets/FieldSelector.scss';
-import { ThemeContext } from '../ThemeContext';
+// import { ThemeContext } from '../ThemeContext';
 import APIWrapper from '../APIWrapper.js';
 import InputLabel from './InputLabel';
 import SubmitButton from './SubmitButton/SubmitButton.js';
@@ -13,14 +13,17 @@ import Spinner from '../Assets/spinner.gif';
 import SearchBar from './SearchBar/SearchBar';
 import ApiDataContext from './context/apiData/ApiDataContext';
 import FieldSelectorContext from './context/fieldSelectorContext/FieldSelectorContext';
+import ThemeDataContext from './context/themeData/ThemeDataContext';
 
 const APIKey = process.env.REACT_APP_211_API_KEY;
 const API = new APIWrapper(APIKey);
 
 const FieldSelector = (props) => {
-	const themeContext = useContext(ThemeContext);
+	// const themeContext = useContext(ThemeContext);
 	const fieldSelectorContext = useContext(FieldSelectorContext);
 	const apiDataContext = useContext(ApiDataContext);
+	const themeDataContext = useContext(ThemeDataContext)
+	console.log(themeDataContext)
 
 	async function callAPI() {
 		await API.initialize();
@@ -100,7 +103,7 @@ const FieldSelector = (props) => {
 	}
 
 	return (
-		<div className={'field-selector ' + themeContext}>
+		<div className={'field-selector ' + themeDataContext.themeColor}>
 			<SearchBar handleIsLoading={handleIsLoading} />
 			<InputLabel label='Service'>
 				<CategorySelector />

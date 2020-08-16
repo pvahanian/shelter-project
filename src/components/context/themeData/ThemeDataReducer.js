@@ -3,7 +3,7 @@ const ThemeDataReducer = (state, action) => {
         case 'SET_THEME_COLOR':
             return {...state, themeColor: action.payload}
             default: 
-            return {...state}
+            return
     }
 
 }

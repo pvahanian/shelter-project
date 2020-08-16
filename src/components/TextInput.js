@@ -3,12 +3,12 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import '../Assets/TextInput.scss';
 import InvalidEntryMessage from './InvalidEntryMessage';
-import { ThemeContext } from '../ThemeContext';
+import ThemeDataContext from './context/themeData/ThemeDataContext'
 import FieldSelectorContext from '../components/context/fieldSelectorContext/FieldSelectorContext';
 
 const TextInput = (props) => {
 	const fieldSelectorContext = useContext(FieldSelectorContext);
-	const themeContext = useContext(ThemeContext);
+	const themeDataContext = useContext(ThemeDataContext);
 	let invalidEntryMessage = '';
 	let valid = null;
 
@@ -22,7 +22,6 @@ const TextInput = (props) => {
 
 	let textInputState = useRef({})
 	useEffect(() => {
-		console.log(props)
 		const inputName = props.name
 		switch(inputName) {
 			case 'age':
@@ -64,7 +63,6 @@ const TextInput = (props) => {
 	}, [fieldSelectorContext])
 
 
-	console.log(textInputState)
 	const handleChange = (e) => {
 		let newValue = e.currentTarget.value;
 		if (props.name === 'Age' || props.name === 'ZIP') newValue = onlyNumbers(newValue);
@@ -72,7 +70,6 @@ const TextInput = (props) => {
 	};
 
 
-	///////////////////////////////////////
 	const validate = () => {
 		if (!props.validator) return { valid: true, message: '' };
 		let value = props.value;
@@ -112,11 +109,11 @@ const TextInput = (props) => {
 				value={value}
 				placeholder={props.placeholder}
 				id={props.name.toLowerCase() + '-input'}
-				className={'text-input ' + validEntryClass + themeContext}
+				className={'text-input ' + validEntryClass + themeDataContext.themeColor}
 				onChange={handleChange}
 				type='text'
 			/>
-			<div className={'underline ' + validEntryClass + themeContext}></div>
+			<div className={'underline ' + validEntryClass + themeDataContext.themeColor}></div>
 			<InvalidEntryMessage message={invalidEntryMessage} />
 		</>
 	);

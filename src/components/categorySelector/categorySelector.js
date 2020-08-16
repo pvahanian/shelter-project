@@ -1,16 +1,16 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import ExclusiveOption from '../ExclusiveOption';
-import { ThemeContext } from '../../ThemeContext';
+// import { ThemeContext } from '../../ThemeContext';
 
 import ApiDataContext from '../context/apiData/ApiDataContext'
 import FieldSelectorContext from '../context/fieldSelectorContext/FieldSelectorContext';
-import FieldSelectorState from '../context/fieldSelectorContext/FieldSelectorState';
-
+import ThemeDataContext from '../context/themeData/ThemeDataContext'
 const CategorySelector = (props) => {
-	const themeContext = useContext(ThemeContext);
+	// const themeContext = useContext(ThemeContext);
 	const apiDataContext = useContext(ApiDataContext)
 	const fieldSelectorContext = useContext(FieldSelectorContext)
+	const themeDataContext = useContext(ThemeDataContext)
 	const [categories, setCategories] = useState([]);
 	const [keyz, setTheKeyz] = useState([]);
 
@@ -36,7 +36,7 @@ const CategorySelector = (props) => {
 
 	//categoryType needs to be 'category' or 'subcategory'
 	const createLabelWithImage = (array, categoryType) => {
-		const svgPathEndings = themeContext === 'light' ? '-black.svg' : '-white.svg';
+		const svgPathEndings = themeDataContext.themeColor === 'light' ? '-black.svg' : '-white.svg';
 		let objArray = [];
 		for (const item of array) {
 			let obj = {};
